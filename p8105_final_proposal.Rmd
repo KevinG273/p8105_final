@@ -1,0 +1,7 @@
+---
+title: "P8105 Final Project Proposal"
+authors: "Xuanyu Guo, Riya Nadkarni, Christiana Odewumi,Shehzrin Shah "
+output: github_document
+date: "2024-11-07"
+---
+
