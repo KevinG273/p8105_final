@@ -1,4 +1,4 @@
-# P8105 Final
+# P8105 Final Project
 
 This repository contains code for the Final Project in P8105. 
 
