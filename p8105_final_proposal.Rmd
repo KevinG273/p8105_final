@@ -45,7 +45,7 @@ Gun violence is a public health and safety issue in the United States, which con
 - **Trend analysis** to observe changes over years or seasonal trends in gun violence (see whether incidents are increasing or decreasing over time)  
 - **Temporal and spatial analysis** 
 -- Which times of the year (seasons, holidays, years) and which locations 
--- Identify states and cities with the highest frequency of mass shootings.
+-- Identify states and cities with the highest frequency of mass shootings
 -- Heatmaps of incidents by state/city 
 - **Demographic/incident characteristics analysis** to analyze different types of gun violence incidence and demographics affected 
 -- Bar charts to compare incident types and demographic impacts
@@ -53,8 +53,8 @@ Gun violence is a public health and safety issue in the United States, which con
 
 ### Planned Timeline 
 
-- **November 8 by 1:00 pm**: Team Registration & Proposal Document Submission on GitHub
-- **November 11 - 15**: Project Review Meeting 
+- **November 8 by 1:00 pm**: Team registration, proposal document submission on GitHub
+- **November 11 - 15**: Project review meeting 
 - **November 11 - 20**: Data collection, cleaning, initial data analysis and visualizations 
 - **November 20 - 30**: Full data analysis, coding completion, focus on screencast
-- **December 1 - 6**: final report, webpage completion, peer assessment 
+- **December 1 - 6**: Final report, webpage completion, peer assessment 
