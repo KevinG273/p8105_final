@@ -1,0 +1,18 @@
+---
+title: "EDA/Data Analysis"
+output: html_document
+---
+
+## Loading Libraries and Reading Data
+
+```{r}
+library(tidyverse) 
+library(lubridate)
+library(ggplot2)
+```
+
+```{r, include = FALSE, message = FALSE, warning = FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	warning = FALSE,
+  fig.width =
