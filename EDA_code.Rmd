@@ -32,7 +32,7 @@ scale_fill_discrete = scale_fill_viridis_d
 ```
 
 ```{r}
-gun_df = read.csv("./data/mass_shootings_2018_2024_cleaned.csv") |>
+gun_df = read.csv("data/mass_shootings_2018_2024_cleaned.csv") |>
   janitor::clean_names()
 ```
 
@@ -185,6 +185,27 @@ gun_df |>
 Sunday stands out as the most dangerous day, with incidents far exceeding 900. Saturdays follow closely with around 900 incidents. Fridays show a moderate increase with about 450 incidents, marking the start of the weekend.Meanwhile, weekdays see significantly lower numbers, with Tuesday recording the fewest incidents at around 200, followed by Thursday at about 350, Wednesday at 375, and Monday at 440. This trend show the influence of weekends or leisure culture on the frequency of incidents, with weekdays being relatively safer perhaps due to structured routines and fewer late-night activities. 
 
 
+# Load necessary libraries
+```{r}
+library(leaflet)
+library(dplyr)
+```
+
+## incidents with highet number of victims
+
+```{r}
+top_incidents <- gun_df %>%
+  arrange(desc(total)) %>% 
+  slice(1:10) 
+knitr::kable(
+  top_incidents %>% select(date, city, state, dead, injured, total, description),
+  caption = "Top 10 Incidents with the Highest Numbers of Victims"
+)
+
+```
+
+The above shows the 10 most severe gun-related incidents in the dataset, ranked by the total number of victims (dead and injured). The incidents range from mass shootings at public events to tragic attacks in schools and other locations. Each entry provides details on the location, date, fatalities, injuries, and a brief description of the event, offering insights into the magnitude and context of these tragedies.
 
 
+## Interactive Map of the Incidents
 
