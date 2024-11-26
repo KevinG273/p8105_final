@@ -194,18 +194,19 @@ library(dplyr)
 ## incidents with highet number of victims
 
 ```{r}
-top_incidents <- gun_df %>%
-  arrange(desc(total)) %>% 
-  slice(1:10) 
-knitr::kable(
-  top_incidents %>% select(date, city, state, dead, injured, total, description),
-  caption = "Top 10 Incidents with the Highest Numbers of Victims"
-)
+top_incidents <- gun_df |> select(date, city, state, dead, injured, total, description) |> 
+  arrange(desc(total)) |> slice(1:13)
 
+top_incidents
 ```
 
 The above shows the 10 most severe gun-related incidents in the dataset, ranked by the total number of victims (dead and injured). The incidents range from mass shootings at public events to tragic attacks in schools and other locations. Each entry provides details on the location, date, fatalities, injuries, and a brief description of the event, offering insights into the magnitude and context of these tragedies.
 
+## Interactive Map of the Incidents with highest numbers of victims
 
-## Interactive Map of the Incidents
+```{r}
+
+```
+
+
 
