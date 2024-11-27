@@ -254,8 +254,10 @@ The bar graph above shows the number of incidents by city. Chichago has the high
 
 
 ```{r}
-gun_df <- read.csv("data/mass_shootings_2018_2024_cleaned.csv")
-uscities <- read.csv("data/simplemaps_uscities/uscities.csv")
+gun_df <- read.csv("data/mass_shootings_2018_2024_cleaned.csv") |>
+  janitor::clean_names()
+uscities <- read.csv("data/simplemaps_uscities/uscities.csv") |>
+  janitor::clean_names()
 ```
 
 # Load necessary libraries
@@ -267,11 +269,13 @@ library(dplyr)
 
 # Merge datasets to add lat and lon to gun_df
 ```{r}
-gun_df <- gun_df %>%
-  rename(City = City, State = State)
+gun_df <- gun_df |>
+  left_join(
+    uscities |> select(city, state_name, lat, lng),
+    by = c("city" = "city", "state" = "state_name")
+  )
 
-uscities <- uscities %>%
-  rename("city" = "City", "state_name" = "State")
+write.csv(gun_df, "gun_df.csv")
 
 ```
 
@@ -280,9 +284,6 @@ uscities <- uscities %>%
 ```{r}
 top_incidents <- gun_df |> select(date, city, state, dead, injured, total, description, latitude, longitude) |> 
   arrange(desc(total)) |> slice(1:13)
-
-
-Top10 <- gun %>% select(incident_id, date, n_killed, n_injured, victims, location_description, city_or_county, state, latitude, longitude) %>% rename(Incident_Id=incident_id, Date=date, Killed=n_killed, Injured=n_injured, Victims=victims, Location=location_description, City=city_or_county) %>%
   
 top_incidents
 ```
@@ -292,8 +293,5 @@ The above shows the 10 most severe gun-related incidents in the dataset, ranked 
 ## Interactive Map of the Incidents with highest numbers of victims
 
 ```{r}
-colnames(gun_df)
-
-head(gun_df)
 
 ```
