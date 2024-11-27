@@ -184,7 +184,73 @@ gun_df |>
 
 Sunday stands out as the most dangerous day, with incidents far exceeding 900. Saturdays follow closely with around 900 incidents. Fridays show a moderate increase with about 450 incidents, marking the start of the weekend.Meanwhile, weekdays see significantly lower numbers, with Tuesday recording the fewest incidents at around 200, followed by Thursday at about 350, Wednesday at 375, and Monday at 440. This trend show the influence of weekends or leisure culture on the frequency of incidents, with weekdays being relatively safer perhaps due to structured routines and fewer late-night activities. 
 
+## Incidents by state
 
+```{r}
+gun_df[, c('state', 'city')] <- lapply(gun_df[, c('state', 'city')], as.factor)
+str(gun_df$state)
+str(gun_df$city)
+
+plotly::ggplotly(gun_df %>% 
+                   count(state) %>%
+        ggplot(aes(x=reorder(state, n), y=n, fill=n, text=state)) +
+        geom_bar(stat='identity', fill='red') +
+        theme(axis.text.x = element_text(angle = 80, hjust = 1))+
+        labs(x='', y='Number of incidents'),
+        tooltip=c("text", "y"))
+```
+
+The interactive bar graph above shows absolute number of gun violence by states. Hovering over the bars shows a label with the absolute Number of Incidents for a State. Illinois has the highest number of gun violence cases followed by California.
+
+## Victims by state
+```{r}
+gun_df$victims <- gun_df$dead + gun_df$injured
+
+VictimsByState <- gun_df %>% 
+  group_by(state) %>% 
+  summarize(sumVic=sum(victims), sumInj=sum(injured), sumDeath=sum(dead), PercDeath=round(sumDeath/sumVic,2), sumIncidents=n(), vicPerInc=round(sumVic/sumIncidents,2))
+head(VictimsByState)
+
+
+```
+
+```{r}
+VictimsByState %>% 
+  filter(vicPerInc>0.8) %>%
+        ggplot(aes(x=reorder(state, -vicPerInc), y=vicPerInc)) + geom_bar(stat='identity', fill='red') +
+        labs(x='State', y='Victims per incidents') +
+        theme(axis.text.x = element_text(angle = 80, hjust = 1))
+```
+
+The bar graph above shows the number of victims per incident by state. Maine has the highest victims by incidents followed by Washington Dc followed by Puerto Rico.
+
+## Incidents by city
+
+```{r}
+incidentsByCity <- gun_df%>% 
+  select(city, state) %>% 
+  group_by(city, state) %>% 
+  summarize(cityIncidents=n())
+```
+
+```{r}
+incidentsByCity[(incidentsByCity$city %in% c('Brooklyn', 'Bronx', 'Queens', 'Staten Island','New York (Manhattan)')) & incidentsByCity$state=='New York',]
+```
+
+```{r}
+sumNewYork <- sum(incidentsByCity$cityIncidents[(incidentsByCity$city %in% c('Brooklyn', 'Bronx', 'Queens', 'Staten Island','New York (Manhattan)')) & incidentsByCity$state=='New York'])
+
+NewYork <- data.frame(city='New York', state='New York', cityIncidents=sumNewYork)
+incidentsByCity <- as.tibble(rbind(as.data.frame(incidentsByCity), NewYork))
+```
+
+```{r}
+incidentsByCity %>% top_n(20, wt=cityIncidents) %>%
+        ggplot(aes(x=reorder(city, cityIncidents), y=cityIncidents)) + geom_bar(stat='identity', fill='red') +
+        labs(x='City', y='Number of incidents') + coord_flip()
+```
+
+The bar graph above shows the number of incidents by city. Chichago has the highest number of incidents (~260) followed by Philadelphia (~130) followed by New York city (~90).
 
 ### Geocoding the Locations
 latitude and longitude are not present in your dataset, I will need to geocode the locations to obtain geographic coordinates based on the city and state columns.
@@ -224,6 +290,3 @@ The above shows the 10 most severe gun-related incidents in the dataset, ranked 
 ```{r}
 
 ```
-
-
-
