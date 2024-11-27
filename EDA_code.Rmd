@@ -274,9 +274,6 @@ gun_df <- gun_df |>
     uscities |> select(city, state_name, lat, lng),
     by = c("city" = "city", "state" = "state_name")
   )
-
-write.csv(gun_df, "gun_df.csv")
-
 ```
 
 ## incidents with highet number of victims
