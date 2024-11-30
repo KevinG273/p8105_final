@@ -1,0 +1,601 @@
+---
+title: "Modeling"
+# author: "Xuanyu Guo"
+# date: "2024-11-27"
+output: html_document
+---
+## Modeling Total Shootings for each State using Regression
+
+### Data Preprocessing
+We start by merging the datasets and scaling the numeric variables for better interpretability in modeling.
+```{r message=FALSE}
+library(dplyr)
+library(tidyr)
+library(MASS) 
+library(modelr) 
+library(ggplot2)
+
+# Load and clean mass shootings data
+mass_shootings <- read.csv("data/mass_shootings_2018_2024_cleaned.csv") |>
+  mutate(State = case_when(
+    State == "Washington, D.C." ~ "District of Columbia",
+    TRUE ~ State
+  ))
+
+# Load and clean census data
+census_data <- read.csv("state_data.csv") |>
+  rename(State = NAME) |>
+  mutate(across(where(is.numeric), ~ as.numeric(scale(.))))
+
+# Merge datasets by State
+scaled_data <- mass_shootings |>
+  group_by(State) |>
+  summarise(total_shootings = n(),
+            total_deaths = sum(Dead, na.rm = TRUE),
+            total_injuries = sum(Injured, na.rm = TRUE)) |>
+  left_join(census_data, by = "State")
+
+```
+
+### Correlation Analysis
+Before modeling, we explore the relationships between shooting frequencies and socio-economic variables. First we have to remove NAs before doing correlation analysis.
+```{r}
+scaled_data <- scaled_data %>%
+  drop_na(total_shootings, total_populationE, median_incomeE, 
+          unemployment_rate, poverty_rate, bachelors_and_higher)
+```
+
+```{r}
+library(ggcorrplot)
+
+# Compute correlation matrix for scaled data
+cor_matrix <- scaled_data %>%
+  dplyr::select(total_shootings, total_populationE, median_incomeE, unemployment_rate, 
+                poverty_rate, bachelors_and_higher) %>%
+  cor()
+
+# Visualize correlation matrix
+ggcorrplot(cor_matrix, 
+           method = "circle", 
+           type = "lower", 
+           lab = TRUE, 
+           lab_size = 3, 
+           title = "Correlation Matrix of Variables",
+           colors = c("blue", "white", "red"))
+```
+
+The correlation matrix highlights strong positive relationships, particularly between total_shootings and total_populationE (r=0.82), indicating that states with larger populations experience more shootings. Other variables, such as poverty_rate and bachelors_and_higher, show weaker correlations with shootings, suggesting less direct influence.
+```{r message=FALSE}
+library(GGally)
+
+# Select relevant variables for pair plot
+pair_data <- scaled_data |>
+  dplyr::select(total_shootings, total_populationE, median_incomeE, 
+         unemployment_rate, poverty_rate, bachelors_and_higher, uninsured_rate)
+
+# Plot pairwise relationships
+ggpairs(pair_data, 
+        title = "Pair Plot of Key Variables")
+```
+
+The pair plot shows total_shootings is positively correlated with total_populationE and is right-skewed, indicating a few high-shooting states. Scatterplots confirm strong relationships with population, while other variables like poverty_rate show weaker trends. This supports further investigation into population as a key factor.
+
+### Poisson Regression
+Poisson regression is used for modeling count data, like the total number of shootings per state.
+```{r}
+# Poisson regression model
+poisson_model <- glm(total_shootings ~ total_populationE + median_incomeE + 
+                       unemployment_rate + poverty_rate + bachelors_and_higher + 
+                       uninsured_rate + vacancy_rate, 
+                     family = poisson(link = "log"), 
+                     data = scaled_data)
+summary(poisson_model)
+
+```
+The Poisson regression model provides a good initial framework to analyze count data, like the total number of shootings. The coefficients indicate the log-relative rate of shootings for each predictor. For instance:
+
+- total_populationE has a positive coefficient, meaning states with larger populations are associated with higher shooting rates.
+
+- median_incomeE have significant negative coefficients, suggesting states with higher income levels experience fewer shootings.
+
+- The residual deviance (820.49) is much smaller than the null deviance (4124.31), indicating the model explains a substantial portion of the variability.
+
+**Dispersion Test:** To determine if overdispersion exists (dispersion parameter >> 1), calculate the dispersion ratio:
+```{r}
+dispersion_ratio <- summary(poisson_model)$deviance / summary(poisson_model)$df.residual
+dispersion_ratio
+```
+
+Since the dispersion ratio is significantly greater than 1, it indicates overdispersion, and a Negative Binomial regression model should be used.
+
+### Negative Binomial Regression for Overdispersion
+```{r}
+# Negative binomial regression model
+negbin_model <- glm.nb(total_shootings ~ total_populationE + median_incomeE +
+                         unemployment_rate + poverty_rate + bachelors_and_higher + 
+                         uninsured_rate + vacancy_rate, 
+                       data = scaled_data)
+summary(negbin_model)
+```
+
+When analyzing the results, I noticed something intriguing about the coefficient for `poverty_rate` in the Negative Binomial regression model. Its coefficient is negative (**-1.13688**), which suggests that as the poverty rate increases by one unit (typically 1\%), the expected log count of shootings decreases. Translating this into real-world terms using the exponential transformation:
+
+\[
+\text{Relative Rate Change} = e^{-1.13688} \approx 0.32
+\]
+
+This means that for every 1\% increase in the poverty rate, the total shootings decrease by approximately 68\%. At first glance, this seems counterintuitive because, logically, higher poverty rates are often associated with more social stress and potentially higher levels of violence.
+
+My first suspicion was multicollinearity. Since poverty rate often correlates with other socio-economic factors, such as `median_incomeE` and `unemployment_rate`, it’s possible that the model distributes the explanatory power across these variables.
+
+To test this, let's calculated the Variance Inflation Factor (VIF):
+```{r message=FALSE}
+library(car)
+vif(negbin_model)
+```
+
+The VIF results reveal multicollinearity, particularly for median_incomeE (VIF = 13.11) and poverty_rate (VIF = 15.17), suggesting their effects overlap with each other and unemployment_rate (VIF = 6.43). This multicollinearity may distort the coefficients, especially for poverty_rate, which shows a counterintuitive negative relationship.
+
+### Steps to Address Multicollinearity
+#### Test Reduced Models:
+- Exclude `poverty_rate`:
+```{r}
+model_no_poverty <- glm.nb(total_shootings ~ total_populationE + median_incomeE +
+                            unemployment_rate + bachelors_and_higher + 
+                            uninsured_rate + vacancy_rate, 
+                          data = scaled_data)
+
+summary(model_no_poverty)
+```
+Check the VIF of model_no_poverty
+```{r}
+vif(model_no_poverty)
+```
+There is still a multicollinearity, let's exclude `bachelors_and_higher`
+```{r}
+model_no_poverty_educate <- glm.nb(total_shootings ~ total_populationE + median_incomeE +
+                            unemployment_rate + 
+                            uninsured_rate + vacancy_rate, 
+                          data = scaled_data)
+summary(model_no_poverty_educate)
+```
+
+Check the VIF of model_no_poverty_educate
+```{r}
+vif(model_no_poverty_educate)
+```
+All VIF values are below 2, indicating that multicollinearity is no longer a concern in the model.
+
+Removing `poverty_rate` and `bachelors_and_higher` resolved the previous collinearity issues, allowing for a more interpretable model.
+
+
+### Model Selection
+#### Stepwise Selection
+```{r}
+stepwise_model <- stepAIC(model_no_poverty_educate, direction = "both")
+summary(stepwise_model)
+```
+
+#### Nested Model Hypothesis Testing
+
+**Hypotheses:**
+
+- Null Hypothesis (H₀): The simpler model (without unemployment_rate) is sufficient; adding `unemployment_rate` does not improve model fit significantly.
+
+- Alternative Hypothesis (H₁): The more complex model (with `unemployment_rate`) significantly improves model fit.
+```{r}
+nested_model <- glm.nb(total_shootings ~ total_populationE + median_incomeE + uninsured_rate + vacancy_rate, 
+                       data = scaled_data)
+anova(nested_model, model_no_poverty_educate, test = "Chisq")
+```
+
+**Result:**
+
+Since the p-value is 0.5083, We fail to reject the null hypothesis (H₀). This means that adding `unemployment_rate` does not significantly improve the model fit.
+
+### Validation with Bootstrap and Cross-Validation
+#### Bootstrap
+Create bootstrap samples and fit the Negative Binomial model to each sample:
+```{r warning=FALSE,message=FALSE}
+library(purrr)
+set.seed(123) 
+boot_samples <- bootstrap(scaled_data, 1000)
+
+boot_results <- boot_samples |>
+  mutate(model = map(strap, ~ glm.nb(total_shootings ~ total_populationE + median_incomeE + 
+                                       uninsured_rate + vacancy_rate, data = .x)),
+         coefficients = map(model, broom::tidy))  # Extract coefficients
+
+```
+Extract and summarize the bootstrap coefficients to calculate mean estimates and confidence intervals:
+```{r}
+boot_coefficients <- boot_results |>
+  unnest(coefficients) |>
+  group_by(term) |>
+  summarize(mean_estimate = mean(estimate),
+            conf_low = quantile(estimate, 0.025),
+            conf_high = quantile(estimate, 0.975))
+
+boot_coefficients
+```
+
+The bootstrap results closely align with the original model, confirming stability and robustness. All coefficients fall within their respective confidence intervals, with significant effects maintained for `total_populationE`, `median_incomeE`, `uninsured_rate`, and `vacancy_rate`, supporting the reliability of the model.
+
+#### Monte Carlo Cross-Validation
+Use `crossv_mc` to split the data into training and testing sets 100 times. And then apply the Negative Binomial model to the training sets and evaluate performance on the test sets.
+```{r}
+set.seed(123)  
+
+# Generate 100 Monte Carlo train-test splits
+cv_df <- crossv_mc(scaled_data, 100) |>
+  mutate(
+    train = map(train, as_tibble), 
+    test = map(test, as_tibble)    
+  )
+
+# Fit models on training data and calculate RMSE on test data
+cv_df <- cv_df |> 
+  mutate(
+    # Model with unemployment_rate
+    model_with_unemp = map(train, \(df) glm.nb(total_shootings ~ total_populationE + 
+                                                median_incomeE + 
+                                                unemployment_rate + 
+                                                uninsured_rate + 
+                                                vacancy_rate, 
+                                              data = df)),
+    # Model without unemployment_rate
+    model_without_unemp = map(train, \(df) glm.nb(total_shootings ~ total_populationE + 
+                                                   median_incomeE + 
+                                                   uninsured_rate + 
+                                                   vacancy_rate, 
+                                                 data = df))
+  ) |> 
+  mutate(
+    # Calculate RMSE for models
+    rmse_with_unemp = map2_dbl(model_with_unemp, test, \(mod, df) {
+      predicted <- predict(mod, newdata = df, type = "response")
+      sqrt(mean((df$total_shootings - predicted)^2))
+    }),
+    rmse_without_unemp = map2_dbl(model_without_unemp, test, \(mod, df) {
+      predicted <- predict(mod, newdata = df, type = "response")
+      sqrt(mean((df$total_shootings - predicted)^2))
+    })
+  )
+
+```
+
+Calculate RMSE as a performance metric for each test set.
+```{r}
+library(forcats)
+# Reshape RMSE results for visualization
+rmse_comparison <- cv_df |> 
+  dplyr::select(starts_with("rmse")) |> 
+  pivot_longer(
+    everything(),
+    names_to = "model", 
+    values_to = "rmse",
+    names_prefix = "rmse_"
+  ) |> 
+  mutate(model = fct_inorder(model))
+
+# Plot RMSE distributions
+ggplot(rmse_comparison, aes(x = model, y = rmse)) + 
+  geom_violin() + 
+  labs(
+    title = "RMSE Comparison Between Models",
+    x = "Model",
+    y = "RMSE"
+  ) +
+  theme_minimal()
+
+
+```
+
+
+### Visualize Predictions
+
+Assess how well the model predictions align with the observed data.
+```{r}
+scaled_data <- scaled_data |>
+  mutate(predicted_shootings = predict(nested_model, type = "response"))
+
+ggplot(scaled_data, aes(x = total_shootings, y = predicted_shootings)) +
+  geom_point(alpha = 0.6) +  
+  geom_smooth(method = "lm", color = "blue", se = FALSE) +  # Add trend line
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +  # Reference line
+  labs(
+    title = "Observed vs. Predicted Shootings",
+    x = "Observed Total Shootings",
+    y = "Predicted Total Shootings"
+  ) +
+  theme_minimal()  
+
+```
+
+The plot shows that the model predicts well for lower shooting counts, as many points align with the red 45-degree line. However, for higher observed values, the model tends to underpredict, as seen by the divergence of the blue trend line from the red reference line. Outliers with high observed or predicted values suggest the model struggles with extreme cases.
+
+
+Finally, the Negative Binomial regression model is expressed as:
+
+\[
+\log(\text{E}[\text{Total Shootings}_i]) = 3.72 + 0.64 \cdot \text{Population}_i - 0.27 \cdot \text{Income}_i - 0.80 \cdot \text{Uninsured Rate}_i - 0.67 \cdot \text{Vacancy Rate}_i
+\]
+
+Interpretation of the coefficients:
+
+- Population: a 1-unit increase in scaled population is associated with a 89% increase in expected shootings 
+
+- Median Income: a 1-unit increase in scaled median income is associated with a 24% decrease in expected shootings 
+
+- Uninsured Rate: a 1-unit increase in scaled uninsured rate is associated with a 56% decrease in expected shootings 
+
+- Vacancy Rate: a 1-unit increase in scaled vacancy rate is associated with a 49% decrease in expected shootings 
+
+## Classifying Risk Levels of Regions Based on Shooting Data
+
+Now let's proceed to classify the regions into low-risk (<100), medium-risk (100-200), and high-risk (>200) categories and build a classification model based on this data. Since the dataset is small, we’ll use methods suitable for small datasets, such as Logistic Regression or Decision Trees.
+
+### Data Preparation
+```{r}
+# Add risk categories
+scaled_data <- scaled_data |> 
+  mutate(risk_category = case_when(
+    total_shootings < 100 ~ "Low",
+    total_shootings >= 100 & total_shootings <= 200 ~ "Medium",
+    total_shootings > 200 ~ "High"
+  ))
+
+# Convert to a factor for modeling
+scaled_data$risk_category <- factor(scaled_data$risk_category, levels = c("Low", "Medium", "High"))
+
+# Check the distribution of categories
+table(scaled_data$risk_category)
+
+```
+
+### Build a Classification Model
+Split the data into training and testing sets:
+```{r message=FALSE}
+set.seed(1)
+library(caret)
+train_index <- createDataPartition(scaled_data$risk_category, p = 0.8, list = FALSE)
+train_data <- scaled_data[train_index, ]
+test_data <- scaled_data[-train_index, ]
+```
+
+Fit a Multinomial Logistic Regression Model
+```{r message=FALSE}
+library(nnet)
+
+# Fit the multinomial logistic regression model
+multinom_model <- multinom(risk_category ~ total_populationE + median_incomeE + 
+                             unemployment_rate + uninsured_rate + vacancy_rate, 
+                           data = train_data)
+
+summary(multinom_model)
+```
+
+### Evaluate the Model
+#### Use k-fold cross-validation to validate model performance.
+```{r warning=FALSE, results = "hide"}
+library(caret)
+
+# Define cross-validation settings
+cv_control <- trainControl(method = "cv", number = 10)
+
+# Train the model with cross-validation
+cv_model <- train(
+  risk_category ~ total_populationE + median_incomeE + 
+    unemployment_rate + uninsured_rate + vacancy_rate,
+  data = train_data,
+  method = "multinom",
+  trControl = cv_control
+)
+
+# View cross-validation results
+print(cv_model)
+
+
+```
+#### Predict risk categories on the test dataset:
+```{r}
+# Predict on the test set
+predictions <- predict(multinom_model, newdata = test_data)
+
+# Confusion Matrix
+confusionMatrix(predictions, test_data$risk_category)
+
+```
+
+#### Create a bar plot to compare actual and predicted categories
+```{r}
+# Generate predictions for the entire scaled_data
+scaled_data <- scaled_data |> 
+  mutate(predicted_category = predict(multinom_model, newdata = scaled_data))
+
+ggplot(scaled_data, aes(x = risk_category, fill = predicted_category)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Actual vs Predicted Risk Categories",
+    x = "Actual Risk Category",
+    y = "Proportion",
+    fill = "Predicted Category"
+  ) +
+  theme_minimal()
+
+```
+
+#### ROC Curves for Multinomial Logistic Regression
+```{r message=FALSE}
+# Generate predicted probabilities for the test data
+test_data <- test_data |> 
+  mutate(predicted_probs = predict(multinom_model, newdata = test_data, type = "probs"))
+
+library(tidyr)
+library(pROC)
+
+# Reshape predicted probabilities into long format
+roc_data <- test_data |> 
+  mutate(
+    Low = predicted_probs[, "Low"],
+    Medium = predicted_probs[, "Medium"],
+    High = predicted_probs[, "High"]
+  ) |> 
+  pivot_longer(
+    cols = c(Low, Medium, High),
+    names_to = "class",
+    values_to = "probability"
+  ) |> 
+  mutate(
+    true_label = ifelse(risk_category == class, 1, 0)  # Create binary labels
+  )
+# Plot ROC curve for each class
+roc_list <- roc_data |> 
+  group_by(class) |> 
+  summarise(
+    roc_curve = list(roc(response = true_label, predictor = probability))
+  )
+
+# Plot the ROC curves
+library(ggplot2)
+ggroc(map(roc_list$roc_curve, as.list)) +
+  labs(
+    title = "ROC Curves for Multinomial Logistic Regression",
+    x = "False Positive Rate",
+    y = "True Positive Rate"
+  ) +
+  theme_minimal()
+
+```
+
+
+## Text Analysis of the Mass Shootings
+### Word Frequency Analysis
+Identify the most common words or phrases in the descriptions.
+
+- Tokenize the text into words.
+- Remove stopwords (e.g., "and," "the") and punctuation.
+- Count word frequencies.
+```{r}
+library(tidytext)
+library(dplyr)
+
+# Tokenize and count word frequencies
+word_counts <- mass_shootings |> 
+  unnest_tokens(word, Description) |> 
+  anti_join(stop_words, by = "word") |>  # Remove stopwords
+  count(word, sort = TRUE)
+
+# View top words
+head(word_counts, 20)
+
+```
+
+```{r}
+library(ggplot2)
+
+word_counts |> 
+  filter(n > 80) |>  # Filter for frequently occurring words
+  ggplot(aes(x = reorder(word, n), y = n)) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Most Common Words in Shooting Descriptions",
+       x = "Word",
+       y = "Frequency")
+
+```
+
+### Sentiment Analysis
+Measure the overall sentiment (positive/negative/neutral) of the descriptions.
+
+- Use sentiment lexicons (e.g., Bing, NRC).
+- Assign sentiment scores to words in the descriptions.
+- Aggregate scores for each description.
+```{r}
+library(tidyr)
+
+# Perform sentiment analysis
+sentiment_analysis <- mass_shootings |> 
+  unnest_tokens(word, Description) |> 
+  inner_join(get_sentiments("bing"), by = "word") |> 
+  count(sentiment) |> 
+  mutate(percentage = n / sum(n) * 100)
+
+# View results
+print(sentiment_analysis)
+
+# Plot sentiment distribution
+sentiment_analysis |> 
+  ggplot(aes(x = sentiment, y = percentage, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  labs(title = "Sentiment Analysis of Shooting Descriptions",
+       x = "Sentiment",
+       y = "Percentage")
+
+```
+
+### Topic Modeling (LDA)
+Identify underlying topics/themes in the descriptions.
+- Convert text into a document-term matrix.
+- Apply LDA to find clusters of words (topics).
+```{r}
+library(topicmodels)
+library(tidytext)
+
+# Create document-term matrix
+dtm <- mass_shootings |> 
+  unnest_tokens(word, Description) |> 
+  anti_join(stop_words, by = "word") |>
+  count(id = row_number(), word) |> 
+  cast_dtm(id, word, n)
+
+# Apply LDA
+lda_model <- LDA(dtm, k = 3, control = list(seed = 123))
+
+# Extract topics
+topics <- tidy(lda_model, matrix = "beta")
+
+# View top terms per topic
+top_terms <- topics |> 
+  group_by(topic) |> 
+  slice_max(beta, n = 10) |> 
+  ungroup()
+
+top_terms
+```
+#### Visualization:
+```{r}
+top_terms |> 
+  mutate(term = reorder_within(term, beta, topic)) |> 
+  ggplot(aes(x = term, y = beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  coord_flip() +
+  facet_wrap(~ topic, scales = "free_y") +
+  labs(title = "Top Terms per Topic",
+       x = "Term",
+       y = "Beta") +
+  theme_minimal()
+
+```
+
+### Word Cloud
+Create a visual representation of the most frequent words.
+```{r message=FALSE}
+library(wordcloud)
+
+# Generate word cloud
+wordcloud(words = word_counts$word, 
+          freq = word_counts$n, 
+          max.words = 100, 
+          colors = brewer.pal(8, "Dark2"))
+
+```
+
+
+
+
+
+
+
+
+
