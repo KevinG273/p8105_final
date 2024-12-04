@@ -1,0 +1,35 @@
+---
+title: "Analysis of Gun Violence in the United States in 2014-2023"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+
+# WELCOME
+
+Gun violence is a public health and safety issue in the United States, which consistently experiences higher levels of firearm-related incidents compared to other developed countries. This project seeks to provide an analysis of gun violence across dimensions (i.e., temporal, geographic, and demographic factors). With the constitutional right to bear arms embedded in American society, understanding patterns and trends in gun violence could help guide policymakers, law enforcement, and public health officials in informing strategies involving gun violence. 
+
+![](pictures/Gun violence Picture.jpg)
+
+### Project Objectives
+
+- **Analyze Temporal Trends**: Investigate changes in gun violence incidents over time (yearly and seasonal trends).
+- **Examine Geographic Disparities**: Identify high-risk states and cities, adjusting for population size to assess disparities.
+- **Assess Demographic Characteristics**: Explore victim demographics and incident characteristics (e.g., gang involvement, severity).
+- **Present Findings**: Use interactive visualizations and maps to communicate findings and raise awareness.
+
+### Methods
+We used publicly available data on gun violence incidents from 2014 to 2023. Key steps included:
+
+- **Data Cleaning**: Standardizing and preparing data for analysis.
+- **Visualization**: Using advanced statistical tools and interactive visualizations to explore trends and patterns.
+- **Statistical Analysis**: Conducting tests to assess geographic and temporal differences, as well as associations with demographic factors.
+
+### Data Sources
+We used publicly available datasets to analyze gun violence in the United States:
+
+- **Gun Violence Archive (2014–2023)**: Incident data including dates, locations, and demographics. ([Source](https://www.gunviolencearchive.org/))
+
+- **U.S. Census Bureau**: Population estimates for spatial normalization. ([Source](https://www2.census.gov/programs-surveys/popest/datasets/))

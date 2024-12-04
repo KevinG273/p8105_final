@@ -1,0 +1,21 @@
+name: "Yay internet!"
+output_dir: "."
+navbar:
+  title: "Home"
+  left:
+    - text: "About"
+      href: about.html
+    - text: "Modeling"
+      href: modeling.html
+    - text: "Data Cleaning"
+      href: data_cleaning.html
+    - text: "EDA Code"
+      href: eda_code.html
+  right:
+    - icon: fa-envelope fa-lg
+      href: mailto:<you@youremail.com>
+    - icon: fa-github fa-lg
+      href: https://github.com/shehzrin/p8105_final.git
+output:
+  html_document:
+    theme: flatly
