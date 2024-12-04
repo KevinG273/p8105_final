@@ -23,8 +23,7 @@ Through this project, we’ve aimed to deepen our understanding of applied biost
 - **Certificate**: Applied Biostatistics and Public Health Data Science
 
 ### Christiana Odewumi
-- **Department**: Epidemiology
-- **Certificate**: Applied Biostatistics and Public Health Data Science
+I am a second-year MPH student in Epidemiology department, with a certificate in Applied Biostatistics and Public Health Data Science at Columbia University's Mailman School of Public Health,. I have a Bachelor’s degree in Biology Pre-Med a minor in Communications from the University of Massachusetts Boston. My academic and professional experiences have fostered my passion for leveraging data and evidence-based approaches to address pressing public health challenges.
 
  <img src="Pictures/Christiana.jpg" style="width:40%;">
  
