@@ -13,7 +13,7 @@ Existing research on mass shootings has often focused on patterns of violence, g
 We started with basic questions such as:
 
 * What are the spatial and temporal trends in mass shootings from 2018-2024?
-* Are there patterns in the number of casualties (dead, injured, total) based on location or time of year?
+* Are there patterns in the number of casualties (`dead`, `injured`, `total`) based on location or time of year?
 * How does the distribution of mass shootings vary across cities and states?
 
 As the analysis progressed, additional questions emerged:
@@ -22,13 +22,21 @@ As the analysis progressed, additional questions emerged:
 * Can any seasonal patterns or significant changes across years be identified?
 
 ### Data
-Our dataset is from the [Gun Violence Archive](https://www.gunviolencearchive.org/) and covers mass shootings from 2018 to 2024. 
-Datasets
+**Sources**:
 
-* Datasets spanning 2018 to 2024 (`mass_shootings_2018` to `mass_shootings_2024`) were consolidated into a single dataset, `mass_shootings_2018_2024_cleaned.csv`. This provided a unified view of mass shooting incidents over the selected years.
-* Using data from the SimpleMaps US cities dataset, latitude (`lat`) and longitude (`lng`) were appended to each city represented in the dataset `gun_df.csv`. This was to allow for spatial analysis.
-* Rows containing any `NA` values were removed. 
-* For state-level analysis, data for each state was extracted from the U.S. Census website. This process created the final dataset, `state_data.csv`, which integrates incident details with state-level demographics and statistics.
+* **Incident Data**: Mass shooting data was sourced from [Gun Violence Archive](https://www.gunviolencearchive.org/) and covers mass shootings from 2018 to 2024. 
+* **City-Level Geographic Data**: The SimpleMaps US cities dataset provided latitude (`lat`) and longitude (`lng`) for cities represented in the mass shooting data.
+* **State-Level Demographics**: State-level demographic and socioeconomic data were obtained from the U.S. Census website for analysis. 
+
+**Processing Steps**: 
+
+* Annual datasets (`mass_shootings_2018` to `mass_shootings_2024`) were merged to create a consolidated dataset, `mass_shootings_2018_2024_cleaned.csv`.The variables included in this dataset are `date`, `city`, `state`, `dead`, `injured`, `total`, `description` for each shooting event recorded. 
+
+* Using data from the SimpleMaps US cities dataset, latitude (`lat`) and longitude (`lng`) variables were appended to each city represented in the dataset to create a new dataset `gun_df.csv`. This was to allow for spatial/geographical  visualizations/analyses. 
+
+* CLEANINGSJDNGDSN Rows containing any `NA` values were removed. 
+
+* For state-level analysis, data for each state was extracted from the U.S. Census website. This process created the final dataset, `state_data.csv`, which provides information on state-level demographics and statistics.
 
 ### Exploratory Analysis
 
