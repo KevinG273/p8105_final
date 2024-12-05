@@ -1,75 +1,48 @@
 ---
-title: "Report"
-author: "Christiana Odewumi"
-date: "2024-12-05"
+title: "Analyzing Mass Shootings in the U.S. (2018-2024)"
 output: html_document
 ---
 
+### Motivation
+Gun violence remains a significant public health issue in the United States. Our project explores gun-related incidents (mass shootings) in the U.S. from 2018 to 2024. These events, unfortunately, have become increasingly common, with significant implications for public safety, policy, and mental health. This project aims to identify trends, patterns, and geographic hotspots associated with these tragic events. These insights can inform policymakers, law enforcement, and public health initiatives targeting gun violence reduction. The analysis includes temporal trends, geographic distribution, and incident severity. 
 
-### Data cleaning
-```{r message=FALSE}
+### Related Work
+Existing research on mass shootings has often focused on patterns of violence, gun control, and the social factors that influence the occurrence of these tragic events. Our project seeks to build on this body of research by employing statistical methods to reveal more refined insights into the data. The project draws inspiration from the Gun Violence Archive (GVA) website (which aggregates mass shooting data), and from recent academic literature focusing on geographic and temporal trends in gun violence. Classroom analyses of spatial data also guided this work.
 
-# Function to clean and unify data
-clean_data <- function(data, year) {
-  # Rename columns based on the number of columns
-  col_count <- ncol(data)
-  
-  if (col_count == 6) {
-    # For 2018 data
-    colnames(data) <- c("Date", "Community", "Dead", "Injured", "Total", "Description")
-    data <- data %>%
-      separate(Community, into = c("City", "State"), sep = ", ", fill = "right")
-  } else if (col_count == 7) {
-    # For other years
-    colnames(data) <- c("Date", "City", "State", "Dead", "Injured", "Total", "Description")
-  } else {
-    stop("Unexpected number of columns in the data")
-  }
-  
-  # Data cleaning
-  data <- data %>%
-    # Remove content in parentheses or brackets
-    mutate(across(everything(), ~str_remove_all(., "\\(.*?\\)|\\[.*?\\]"))) %>%
-    # Trim whitespace and remove special characters
-    mutate(across(everything(), ~str_trim(.))) %>%
-    mutate(Date = str_replace_all(Date, "[^a-zA-Z0-9,– ]", "")) %>%
-    # Handle date ranges like "November 19–20" or "February 11–12"
-    mutate(Date = if_else(str_detect(Date, "–"), 
-                          str_extract(Date, "^[a-zA-Z]+ \\d+"), 
-                          Date)) %>%
-    # Add year to Date if missing and standardize format
-    mutate(Date = ifelse(!str_detect(Date, "\\d{4}$"), paste0(Date, ", ", year), Date)) %>%
-    # Convert to Date format
-    mutate(Date = as.Date(Date, format = "%B %d, %Y"))
-  
-  return(data)
-}
+### Initial Questions 
+We started with basic questions such as:
 
-# Load and clean each year's data
-years <- 2018:2024
-all_data <- list()
+* What are the spatial and temporal trends in mass shootings from 2018-2024?
+* Are there patterns in the number of casualties (dead, injured, total) based on location or time of year?
+* How does the distribution of mass shootings vary across cities and states?
 
-for (year in years) {
-  
-  file_path <- paste0("data/mass_shootings_", year, ".csv")
-  data <- read.csv(file_path, stringsAsFactors = FALSE)
-  
-  # Clean and store
-  cleaned_data <- clean_data(data, year)
-  all_data[[as.character(year)]] <- cleaned_data
-}
+As the analysis progressed, additional questions emerged:
 
-# Combine all years into one dataframe
-final_data <- bind_rows(all_data)
+* Are there clusters of high-casualty events in specific regions?
+* Can any seasonal patterns or significant changes across years be identified?
 
-# Remove rows with any NA values
-final_data <- final_data %>%
-  filter(complete.cases(.))
+### Data
+Our dataset is from the [Gun Violence Archive](https://www.gunviolencearchive.org/) and covers mass shootings from 2018 to 2024. 
+Datasets
 
-# Sort the data in descending order by Date
-final_data_sorted <- final_data %>%
-  arrange(desc(Date))
+* Datasets spanning 2018 to 2024 (`mass_shootings_2018` to `mass_shootings_2024`) were consolidated into a single dataset, `mass_shootings_2018_2024_cleaned.csv`. This provided a unified view of mass shooting incidents over the selected years.
+* Using data from the SimpleMaps US cities dataset, latitude (`lat`) and longitude (`lng`) were appended to each city represented in the dataset `gun_df.csv`. This was to allow for spatial analysis.
+* Rows containing any `NA` values were removed. 
+* For state-level analysis, data for each state was extracted from the U.S. Census website. This process created the final dataset, `state_data.csv`, which integrates incident details with state-level demographics and statistics.
 
-write.csv(final_data_sorted, "data/mass_shootings_2018_2024_cleaned.csv", row.names = FALSE)
+### Exploratory Analysis
 
-```
+### Additional Analysis 
+
+
+### Discussion/Conclusion/Limitations
+
+
+REPORT:
+Motivation: Provide an overview of the project goals and motivation.
+Related work: Anything that inspired you, such as a paper, a web site, or something we discussed in class.
+Initial questions: What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?
+Data: Source, scraping method, cleaning, etc.
+Exploratory analysis: Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.
+Additional analysis: If you undertake formal statistical analyses, describe these in detail
+Discussion: What were your findings? Are they what you expect? What insights into the data can you make?
