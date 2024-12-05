@@ -36,7 +36,7 @@ As the analysis progressed, additional questions emerged:
 
 * CLEANINGSJDNGDSN Rows containing any `NA` values were removed. 
 
-* For state-level analysis, data for each state was extracted from the U.S. Census website. This process created the final dataset, `state_data.csv`, which provides information on state-level demographics and statistics. They are 5-year aggregated estimates ending in 2022 (i.e., the latest 5-year American Community Survey estimates). 
+* For state-level analysis, data for each state was extracted from the U.S. Census website. This process created the final dataset, `state_data.csv`, which provides information on state-level demographics and statistics. It includes 5-year aggregated estimates ending in 2022 (i.e., the latest 5-year American Community Survey estimates). 
 
 ### Exploratory Analysis
 
