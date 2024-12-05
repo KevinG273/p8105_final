@@ -30,13 +30,13 @@ As the analysis progressed, additional questions emerged:
 
 **Processing Steps**: 
 
-* Annual datasets obtained through webscraping (`mass_shootings_2018` to `mass_shootings_2024`) were merged to create a consolidated dataset, `mass_shootings_2018_2024_cleaned.csv`.The variables included in this dataset are `date`, `city`, `state`, `dead`, `injured`, `total`, `description` for each shooting event recorded. 
+* Annual datasets obtained through webscraping (`mass_shootings_2018` to `mass_shootings_2024`) were merged to create a consolidated dataset, `mass_shootings_2018_2024_cleaned.csv`.The variables included in this dataset are `date`, `city`, `state`, `dead`, `injured`, `total`, `description` for each shooting event recorded (HOW MANY OBSERVATIONS?) 
 
 * Using data from the SimpleMaps US cities dataset, latitude (`lat`) and longitude (`lng`) variables were appended to each city represented in the dataset to create a new dataset `gun_df.csv`. This was to allow for spatial/geographical  visualizations/analyses. 
 
 * CLEANINGSJDNGDSN Rows containing any `NA` values were removed. 
 
-* For state-level analysis, data for each state was extracted from the U.S. Census website. This process created the final dataset, `state_data.csv`, which provides information on state-level demographics and statistics. It includes 5-year aggregated estimates ending in 2022 (i.e., the latest 5-year American Community Survey estimates). 
+* For state-level analysis, data for each state was extracted from the U.S. Census website. This process created the final dataset, `state_data.csv`, which provides information on state-level demographics and statistics. They are 5-year aggregated estimates ending in 2022 (i.e., the latest 5-year American Community Survey estimates). (WHAT DOES EACH ROW SHOW)
 
 ### Exploratory Analysis
 
