@@ -1,7 +1,7 @@
-name: "Yay internet!"
+name: "p8105_final"
 output_dir: "."
 navbar:
-  title: "Home"
+  title: "p8105_final"
   left:
     - text: "About"
       href: about.html
@@ -12,12 +12,10 @@ navbar:
     - text: "Modeling"
       href: modeling.html
     - text: "Shiny Dashboard"
-      href: shiny_dashboard_template.html
+      href: https://kevinguo273.shinyapps.io/shiny_dashboard/
     - text: "Report"
-      href: Report.html
+      href: report.html
   right:
-    - icon: fa-envelope fa-lg
-      href: mailto:<you@youremail.com>
     - icon: fa-github fa-lg
       href: https://github.com/shehzrin/p8105_final.git
 output:

@@ -8,28 +8,29 @@ output:
 
 
 # Thank you for visiting our site!
-We are a team of MPH students at Columbia University. Our diverse academic backgrounds and shared passion for public health have brought us together to work on this project, which focuses on the Analysis of Gun Violence in the United States (2014–2023).
+We are a team of MS and MPH students at Columbia University. Our diverse academic backgrounds and shared passion for public health have brought us together to work on this project, which focuses on the Analysis of Mass Shootings in the United States (2018–2024).
 
 Through this project, we’ve aimed to deepen our understanding of applied biostatistics, data analysis, and data visualization while tackling one of the most pressing public health issues in the country. We hope that our findings and visualizations provide meaningful insights and inspire important conversations around this critical topic.
 
 ## Meet the Team
 
 ### Xuanyu Guo 
-- **Department**: 
-- **Certificate**: 
+
+<img src="Pictures/Xuanyu.jpeg" style="width:40%;">
+
 
 ### Riya Nadkarni
 - **Department**: Epidemiology
 - **Certificate**: Applied Biostatistics and Public Health Data Science
 
+<img src="Pictures/Riya.JPG" style="width:40%;">
+
 ### Christiana Odewumi
 I am a second-year MPH student in Epidemiology department, with a certificate in Applied Biostatistics and Public Health Data Science at Columbia University's Mailman School of Public Health,. I have a Bachelor’s degree in Biology Pre-Med a minor in Communications from the University of Massachusetts Boston. My academic and professional experiences have fostered my passion for leveraging data and evidence-based approaches to address pressing public health challenges.
 
- <img src="Pictures/Christiana.jpg" style="width:40%;">
- 
+<img src="Pictures/Christiana.jpg" style="width:40%;">
 
 ### Shehzrin Shah
 I am a second-year MPH student in Health Policy and Management at Columbia University's Mailman School of Public Health, pursuing a certificate in Applied Biostatistics and Public Health Data Science. With a B.S. in Psychology from the University of Texas at Austin, I am passionate about the intersection of health, medicine, and technology. I hope to apply data-driven solutions to improve healthcare outcomes and advance public health practices.
 
- <img src="Pictures/Shez.jpg" style="width:40%;">
-
+ <img src="Pictures/Shez.jpg">

@@ -1,15 +1,20 @@
 ---
-title: "Analysis of Gun Violence in the United States in 2014-2023"
+title: "Analysis of Mass Shootings in the US in 2018-2024"
 output:
   html_document:
     toc: true
     toc_float: true
 ---
 
+<style>
+h1.title {
+    font-size: 2.3em; 
+}
+</style>
 
-# WELCOME
+<br>
 
-Gun violence is a public health and safety issue in the United States, which consistently experiences higher levels of firearm-related incidents compared to other developed countries. This project seeks to provide an analysis of gun violence across dimensions (i.e., temporal, geographic, and demographic factors). With the constitutional right to bear arms embedded in American society, understanding patterns and trends in gun violence could help guide policymakers, law enforcement, and public health officials in informing strategies involving gun violence. 
+Gun violence is a public health and safety issue in the United States, which consistently experiences higher levels of firearm-related incidents compared to other developed countries. This project seeks to provide an analysis of gun violence across dimensions (i.e., temporal, geographic, and demographic factors). With the constitutional right to bear arms embedded in American society, understanding patterns and trends in gun violence could help guide policymakers, law enforcement, and public health officials in informing strategies involving gun violence.
 
 ![](pictures/Gun violence Picture.jpg)
 
@@ -21,7 +26,7 @@ Gun violence is a public health and safety issue in the United States, which con
 - **Present Findings**: Use interactive visualizations and maps to communicate findings and raise awareness.
 
 ### Methods
-We used publicly available data on gun violence incidents from 2014 to 2023. Key steps included:
+We used publicly available data on gun violence incidents from 2018 to 2024. Key steps included:
 
 - **Data Cleaning**: Standardizing and preparing data for analysis.
 - **Visualization**: Using advanced statistical tools and interactive visualizations to explore trends and patterns.
@@ -30,6 +35,8 @@ We used publicly available data on gun violence incidents from 2014 to 2023. Key
 ### Data Sources
 We used publicly available datasets to analyze gun violence in the United States:
 
-- **Gun Violence Archive (2014–2023)**: Incident data including dates, locations, and demographics. ([Source](https://www.gunviolencearchive.org/))
+- **Wikipedia Mass Shootings in thw US (2018–2024)**: Incident data including dates, locations, and demographics. ([Source](https://en.wikipedia.org/wiki/List_of_mass_shootings_in_the_United_States_in_2024))
+
+   The link https://en.wikipedia.org/wiki/List_of_mass_shootings_in_the_United_States_in_{2018-2024} can be modified by replacing {2018-2024} with a specific year (e.g., 2018, 2019, etc.) to navigate to separate pages and access data for different years.
 
 - **U.S. Census Bureau**: Population estimates for spatial normalization. ([Source](https://www2.census.gov/programs-surveys/popest/datasets/))

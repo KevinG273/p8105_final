@@ -1,6 +1,6 @@
 ---
-title: "Untitled"
-output: github_document
+title: "Census_data"
+output: html_document
 ---
 
 ```{r}
