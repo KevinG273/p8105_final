@@ -1,0 +1,75 @@
+---
+title: "Report"
+author: "Christiana Odewumi"
+date: "2024-12-05"
+output: html_document
+---
+
+
+### Data cleaning
+```{r message=FALSE}
+
+# Function to clean and unify data
+clean_data <- function(data, year) {
+  # Rename columns based on the number of columns
+  col_count <- ncol(data)
+  
+  if (col_count == 6) {
+    # For 2018 data
+    colnames(data) <- c("Date", "Community", "Dead", "Injured", "Total", "Description")
+    data <- data %>%
+      separate(Community, into = c("City", "State"), sep = ", ", fill = "right")
+  } else if (col_count == 7) {
+    # For other years
+    colnames(data) <- c("Date", "City", "State", "Dead", "Injured", "Total", "Description")
+  } else {
+    stop("Unexpected number of columns in the data")
+  }
+  
+  # Data cleaning
+  data <- data %>%
+    # Remove content in parentheses or brackets
+    mutate(across(everything(), ~str_remove_all(., "\\(.*?\\)|\\[.*?\\]"))) %>%
+    # Trim whitespace and remove special characters
+    mutate(across(everything(), ~str_trim(.))) %>%
+    mutate(Date = str_replace_all(Date, "[^a-zA-Z0-9,– ]", "")) %>%
+    # Handle date ranges like "November 19–20" or "February 11–12"
+    mutate(Date = if_else(str_detect(Date, "–"), 
+                          str_extract(Date, "^[a-zA-Z]+ \\d+"), 
+                          Date)) %>%
+    # Add year to Date if missing and standardize format
+    mutate(Date = ifelse(!str_detect(Date, "\\d{4}$"), paste0(Date, ", ", year), Date)) %>%
+    # Convert to Date format
+    mutate(Date = as.Date(Date, format = "%B %d, %Y"))
+  
+  return(data)
+}
+
+# Load and clean each year's data
+years <- 2018:2024
+all_data <- list()
+
+for (year in years) {
+  
+  file_path <- paste0("data/mass_shootings_", year, ".csv")
+  data <- read.csv(file_path, stringsAsFactors = FALSE)
+  
+  # Clean and store
+  cleaned_data <- clean_data(data, year)
+  all_data[[as.character(year)]] <- cleaned_data
+}
+
+# Combine all years into one dataframe
+final_data <- bind_rows(all_data)
+
+# Remove rows with any NA values
+final_data <- final_data %>%
+  filter(complete.cases(.))
+
+# Sort the data in descending order by Date
+final_data_sorted <- final_data %>%
+  arrange(desc(Date))
+
+write.csv(final_data_sorted, "data/mass_shootings_2018_2024_cleaned.csv", row.names = FALSE)
+
+```
