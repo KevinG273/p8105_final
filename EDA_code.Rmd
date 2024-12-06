@@ -1,6 +1,10 @@
 ---
 title: "EDA/Data Analysis"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
 ---
 
 ## Loading Libraries and Reading Data
@@ -16,7 +20,7 @@ knitr::opts_chunk$set(
 	echo = TRUE,
 	warning = FALSE,
   fig.width = 6,
-  fig.asp = .6,
+  fig.asp = 0.6,
   out.width = "90%"
 )
 
