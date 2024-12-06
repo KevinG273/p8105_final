@@ -9,7 +9,7 @@ output:
 
 # Loading Libraries and Reading Data
 
-```{r}
+```{r message=FALSE}
 
 library(tidyverse) 
 library(lubridate)
@@ -181,7 +181,7 @@ The graph shows the number of incidents by month. Again, we see a clear seasonal
 
 Let's see the dates with the most incidents. 
 
-```{r}
+```{r message=FALSE}
 
 gun_df$day = day(gun_df$date)  
 gun_df = gun_df |> mutate(date2 = paste(month, day)) 
