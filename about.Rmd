@@ -6,18 +6,14 @@ output:
     toc_float: true
 ---
 
-
-# Thank you for visiting our site!
 We are a team of MS and MPH students at Columbia University. Our diverse academic backgrounds and shared passion for public health have brought us together to work on this project, which focuses on the Analysis of Mass Shootings in the United States (2018–2024).
 
 Through this project, we’ve aimed to deepen our understanding of applied biostatistics, data analysis, and data visualization while tackling one of the most pressing public health issues in the country. We hope that our findings and visualizations provide meaningful insights and inspire important conversations around this critical topic.
 
-## Meet the Team
-
+## Team Members:
 ### Xuanyu Guo 
 
 <img src="Pictures/Xuanyu.jpeg" style="width:40%;">
-
 
 ### Riya Nadkarni
 - **Department**: Epidemiology
