@@ -4,12 +4,12 @@ navbar:
   title: "Home"
   left:
     - text: "About"
-      href: about.html
+      href: About.html
   right:
     - text: "Data Cleaning"
       href: data_cleaning.html
     - text: "EDA and Visualizations"
-      href: eda_code.html
+      href: EDA_code.html
     - text: "Modeling"
       href: modeling.html
     - text: "Shiny Dashboard"
