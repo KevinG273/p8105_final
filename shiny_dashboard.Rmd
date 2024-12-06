@@ -1,11 +1,13 @@
 ---
 title: "Interactive Dashboard for Mass Shootings"
+runtime: shiny
 output: 
   flexdashboard::flex_dashboard:
+    theme: cosmo
     orientation: columns
     vertical_layout: fill
+    source_code: embed
     code_folding: hide
-runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
