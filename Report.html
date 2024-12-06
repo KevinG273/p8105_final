@@ -13,7 +13,7 @@
 
 <title>Analyzing Mass Shootings in the U.S. (2018-2024)</title>
 
-<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -32,8 +32,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -369,26 +369,67 @@ ending in 2022 (i.e., the latest 5-year American Community Survey
 estimates). (WHAT DOES EACH ROW SHOW)</p></li>
 </ul>
 </div>
-<div id="exploratory-analysis" class="section level3">
-<h3>Exploratory Analysis</h3>
+<div id="geographic-analysis-using-hot-zones" class="section level1">
+<h1>Geographic Analysis Using “Hot Zones”</h1>
+<p>Beyond a traditional heat map representation, the analysis utilized
+an advanced “hot zone” mapping technique, which provided a nuanced
+understanding of crime distributions at a city-wide level. Unlike simple
+density-based visualizations,these hot zones highlighted regions with
+concentrated crime activity, offering a more granular perspective on
+geographic crime patterns. This approach illuminated the spatial
+heterogeneity of criminal activity, revealing stark contrasts between
+neighborhoods and cities. The visualizations were particularly
+insightful in demonstrating how crime clusters correspond to underlying
+socioeconomic realities, enabling an explanation of how such disparities
+are spatially distributed.</p>
 </div>
-<div id="additional-analysis" class="section level3">
-<h3>Additional Analysis</h3>
+<div id="exploratory-data-analysis-and-public-health-correlations"
+class="section level1">
+<h1>Exploratory Data Analysis and Public Health Correlations</h1>
+<p>The exploratory data analysis (EDA) underscored and solidified known
+public health trends through detailed tabular and graphical summaries.
+These tools provided a robust foundation for validating hypotheses
+regarding the intersection of socioeconomic conditions and crime rates.
+Key findings reaffirmed the strong correlation between poverty rates and
+crime prevalence. States and localities with high poverty levels
+exhibited the greatest frequency of crimes and the highest number of
+victims per incident. In contrast, areas with low poverty rates
+experienced significantly lower crime rates and fewer victims per crime.
+Among the states analyzed, Louisiana and Mississippi emerged as
+consistent outliers with high crime rates, reflecting systemic
+socioeconomic challenges. Conversely, New Hampshire, Vermont, and
+Connecticut demonstrated exemplary performance with some of the lowest
+crime statistics in the dataset.</p>
 </div>
-<div id="discussionconclusionlimitations" class="section level3">
-<h3>Discussion/Conclusion/Limitations</h3>
-<p>REPORT: Motivation: Provide an overview of the project goals and
-motivation. Related work: Anything that inspired you, such as a paper, a
-web site, or something we discussed in class. Initial questions: What
-questions are you trying to answer? How did these questions evolve over
-the course of the project? What new questions did you consider in the
-course of your analysis? Data: Source, scraping method, cleaning, etc.
-Exploratory analysis: Visualizations, summaries, and exploratory
-statistical analyses. Justify the steps you took, and show any major
-changes to your ideas. Additional analysis: If you undertake formal
-statistical analyses, describe these in detail Discussion: What were
-your findings? Are they what you expect? What insights into the data can
-you make?</p>
+<div id="socioeconomic-contrasts-the-case-of-washington-d.c."
+class="section level1">
+<h1>Socioeconomic Contrasts: The Case of Washington, D.C.</h1>
+<p>Washington, D.C., stood out as a particularly notable case, embodying
+stark socioeconomic contrasts. Despite its status as one of the
+wealthiest regions in the United States, with an estimated GDP per
+capita reaching as high as $295,000 annually in certain districts, this
+wealth is highly localized to the Capitol and adjacent affluent
+neighborhoods. The surrounding areas, including suburbs and communities
+such as Tanor Park and Silver Spring, are among the nation’s most
+impoverished and crime-affected zones. This extreme socioeconomic
+inequality within a compact geographic region is a primary driver of
+D.C.’s dichotomous profile, characterized by both extraordinary wealth
+and pervasive criminality.</p>
+</div>
+<div id="anomalous-patterns-in-maine" class="section level1">
+<h1>Anomalous Patterns in Maine</h1>
+<p>One of the more unexpected findings pertained to Maine. When
+examining the number of victims per incident without adjusting for state
+population (unscaled analysis), Maine presented a higher-than-expected
+rate compared to national averages. This anomaly can be attributed to
+the state’s unique mix of urbanized areas, such as Bangor, Augusta, and
+Bar Harbor, juxtaposed with its predominantly rural landscape. The data
+suggests that criminal activity in Maine follows a consistent pattern
+across both urban and rural areas, but this uniformity leads to elevated
+per- incident victim counts when state population is not accounted for.
+While this trend does not entirely deviate from national norms, it is
+notable in the context of Maine’s demographic and geographic
+composition.</p>
 </div>
 
 
