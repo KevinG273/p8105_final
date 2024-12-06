@@ -4,7 +4,7 @@ navbar:
   title: "Home"
   left:
     - text: "About"
-      href: about.html
+      href: About.html
   right:
     - text: "Data Cleaning"
       href: data_cleaning.html
