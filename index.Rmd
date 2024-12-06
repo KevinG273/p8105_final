@@ -16,7 +16,7 @@ h1.title {
 
 Gun violence is a public health and safety issue in the United States, which consistently experiences higher levels of firearm-related incidents compared to other developed countries. This project seeks to provide an analysis of gun violence across dimensions (i.e., temporal, geographic, and demographic factors). With the constitutional right to bear arms embedded in American society, understanding patterns and trends in gun violence could help guide policymakers, law enforcement, and public health officials in informing strategies involving gun violence.
 
-![](pictures/Gun violence Picture.jpg)
+![](Pictures/massshootings.JPG)
 
 ### Project Objectives
 
