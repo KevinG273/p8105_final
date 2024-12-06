@@ -27,6 +27,6 @@ I am a second-year MPH student in Epidemiology department, with a certificate in
 <img src="Pictures/Christiana.jpg" style="width:40%;">
 
 ### Shehzrin Shah
-I am a second-year MPH student in Health Policy and Management at Columbia University's Mailman School of Public Health, pursuing a certificate in Applied Biostatistics and Public Health Data Science. With a B.S. in Psychology from the University of Texas at Austin, I am passionate about the intersection of health, medicine, and technology. I hope to apply data-driven solutions to improve healthcare outcomes and advance public health practices.
+I am a second-year MPH student in Health Policy and Management at Columbia University's Mailman School of Public Health, pursuing a certificate in Applied Biostatistics and Public Health Data Science. With a B.S. in Psychology from the University of Texas at Austin, I am passionate about the intersection of health, medicine, and technology. 
 
  <img src="Pictures/Shez.jpg">
