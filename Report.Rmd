@@ -1,0 +1,56 @@
+---
+title: "Analyzing Mass Shootings in the U.S. (2018-2024)"
+output: html_document
+---
+
+### Motivation
+Gun violence remains a significant public health issue in the United States. Our project explores gun-related incidents (mass shootings) in the U.S. from 2018 to 2024. These events, unfortunately, have become increasingly common, with significant implications for public safety, policy, and mental health. This project aims to identify trends, patterns, and geographic hotspots associated with these tragic events. These insights can inform policymakers, law enforcement, and public health initiatives targeting gun violence reduction. The analysis includes temporal trends, geographic distribution, and incident severity. 
+
+### Related Work
+Existing research on mass shootings has often focused on patterns of violence, gun control, and the social factors that influence the occurrence of these tragic events. Our project seeks to build on this body of research by employing statistical methods to reveal more refined insights into the data. The project draws inspiration from the Gun Violence Archive (GVA) website (which aggregates mass shooting data), and from recent academic literature focusing on geographic and temporal trends in gun violence. Classroom analyses of spatial data also guided this work.
+
+### Initial Questions 
+We started with basic questions such as:
+
+* What are the spatial and temporal trends in mass shootings from 2018-2024?
+* Are there patterns in the number of casualties (`dead`, `injured`, `total`) based on location or time of year?
+* How does the distribution of mass shootings vary across cities and states?
+
+As the analysis progressed, additional questions emerged:
+
+* Are there clusters of high-casualty events in specific regions?
+* Can any seasonal patterns or significant changes across years be identified?
+
+### Data
+**Sources**:
+
+* **Incident Data**: Mass shooting data was sourced from [Gun Violence Archive](https://www.gunviolencearchive.org/) and covers mass shootings from 2018 to 2024. 
+* **City-Level Geographic Data**: The SimpleMaps US cities dataset provided latitude (`lat`) and longitude (`lng`) for cities represented in the mass shooting data.
+* **State-Level Demographics**: State-level demographic and socioeconomic data were obtained from the U.S. Census website for analysis. 
+
+**Processing Steps**: 
+
+* Annual datasets obtained through webscraping (`mass_shootings_2018` to `mass_shootings_2024`) were merged to create a consolidated dataset, `mass_shootings_2018_2024_cleaned.csv`.The variables included in this dataset are `date`, `city`, `state`, `dead`, `injured`, `total`, `description` for each shooting event recorded (HOW MANY OBSERVATIONS?) 
+
+* Using data from the SimpleMaps US cities dataset, latitude (`lat`) and longitude (`lng`) variables were appended to each city represented in the dataset to create a new dataset `gun_df.csv`. This was to allow for spatial/geographical visualizations/analyses. 
+
+* CLEANINGSJDNGDSN Rows containing any `NA` values were removed. 
+
+* For state-level analysis, data for each state was extracted from the U.S. Census website. This process created the final dataset, `state_data.csv`, which provides information on state-level demographics and statistics. Inlcuded are 5-year aggregated estimates ending in 2022 (i.e., the latest 5-year American Community Survey estimates). (WHAT DOES EACH ROW SHOW)
+
+### Exploratory Analysis
+
+### Additional Analysis 
+
+
+### Discussion/Conclusion/Limitations
+
+
+REPORT:
+Motivation: Provide an overview of the project goals and motivation.
+Related work: Anything that inspired you, such as a paper, a web site, or something we discussed in class.
+Initial questions: What questions are you trying to answer? How did these questions evolve over the course of the project? What new questions did you consider in the course of your analysis?
+Data: Source, scraping method, cleaning, etc.
+Exploratory analysis: Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.
+Additional analysis: If you undertake formal statistical analyses, describe these in detail
+Discussion: What were your findings? Are they what you expect? What insights into the data can you make?

@@ -1,0 +1,23 @@
+name: "p8105_final"
+output_dir: "."
+navbar:
+  title: "Home"
+  left:
+    - text: "About"
+      href: about.html
+  right:
+    - text: "Data Cleaning"
+      href: data_cleaning.html
+    - text: "EDA and Visualizations"
+      href: eda_code.html
+    - text: "Modeling"
+      href: modeling.html
+    - text: "Shiny Dashboard"
+      href: https://kevinguo273.shinyapps.io/shiny_dashboard/
+    - text: "Report"
+      href: report.html
+    - icon: fa-github fa-lg
+      href: https://github.com/KevinG273/p8105_final.git
+output:
+  html_document:
+    theme: flatly

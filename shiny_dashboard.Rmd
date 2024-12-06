@@ -1,0 +1,155 @@
+---
+title: "Interactive Dashboard for Mass Shootings"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    code_folding: hide
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(shiny)
+library(flexdashboard)
+library(tidyverse)
+library(viridis)
+library(plotly)
+library(ggplot2)
+library(leaflet)
+library(DT)
+library(dplyr)
+```
+
+```{r}
+gun_df = read.csv("gun_df.csv") |>
+  janitor::clean_names() |>
+  mutate(
+    date = as.Date(date, "%Y-%m-%d"),
+    year = format(date, "%Y")
+  )
+```
+
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+```{r}
+selectInput(
+  inputId = "state", 
+  label = "Select State:", 
+  choices = c("All", unique(gun_df$state)), 
+  selected = "All"
+)
+
+sliderInput(
+  inputId = "year", 
+  label = "Select Year Range:", 
+  min = 2018, 
+  max = 2024, 
+  value = c(2018, 2024), 
+  step = 1, 
+  sep = ""
+)
+```
+
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Mass Shootings Map 
+
+```{r}
+renderLeaflet({
+  filtered_data = gun_df |>
+    filter(
+      (input$state == "All" | state == input$state) &
+      year >= input$year[1] &
+      year <= input$year[2]
+    )
+  
+  leaflet(filtered_data) |>
+    addTiles() |>
+    addCircleMarkers(
+      lng = ~lng, lat = ~lat,  
+      popup = ~paste0(
+        "<b>", city, ", ", state, "</b><br>",
+        "Date: ", date, "<br>",
+        "Dead: ", dead, " Injured: ", injured, "<br>",
+        "Description: ", description
+      ),
+      radius = ~total,
+      color = ~ifelse(dead > 0, "red", "blue")
+    )
+})
+```
+
+### Top States by Incidents
+
+```{r}
+renderPlotly({
+  top_n = ifelse(is.null(input$top_n), 5, as.integer(input$top_n))
+  
+  filtered_data = gun_df |>
+    filter(year >= input$year[1] & year <= input$year[2]) |>
+    group_by(state) |>
+    summarise(total_incidents = n(), .groups = "drop") |>
+    slice_max(order_by = total_incidents, n = top_n)
+  
+  plot_ly(
+    data = filtered_data,
+    x = ~reorder(state, total_incidents),
+    y = ~total_incidents,
+    type = "bar",
+    text = ~state,
+    marker = list(color = 'red')
+  ) |>
+    layout(
+      xaxis = list(title = "State", tickangle = 45),  # Rotate labels
+      yaxis = list(title = "Total Incidents"),
+      title = "Top States by Gun Violence Incidents"
+    )
+})
+```
+
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Total Incidents by State
+
+```{r}
+renderPlotly({
+  filtered_data = gun_df |>
+    filter(
+      (input$state == "All" | state == input$state) &
+      year >= input$year[1] &
+      year <= input$year[2]
+    )
+  
+  plot = ggplot(filtered_data, aes(x = reorder(state, total), y = total)) +
+    geom_bar(stat = "identity", fill = "steelblue") +
+    labs(title = "Total Incidents by State", x = "State", y = "Total Incidents") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1))  
+  
+  ggplotly(plot)
+})
+```
+
+### Gun Violence Data Table
+
+```{r}
+renderDT({
+  filtered_data = gun_df |>
+    filter(
+      (input$state == "All" | state == input$state) &
+      year >= input$year[1] &
+      year <= input$year[2]
+    ) |>
+    select(-lat, -lng)  
+  
+  datatable(filtered_data, 
+            options = list(pageLength = 20, scrollX = TRUE))
+})
+```
+

@@ -1,6 +1,10 @@
 ---
 title: "EDA/Data Analysis"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
 ---
 
 # Loading Libraries and Reading Data
@@ -23,7 +27,7 @@ knitr::opts_chunk$set(
 	echo = TRUE,
 	warning = FALSE,
   fig.width = 6,
-  fig.asp = .6,
+  fig.asp = 0.6,
   out.width = "90%"
 )
 
@@ -569,5 +573,60 @@ top_cities %>%
 ```
 
 The bar graph above shows the number of incidents by city. Chicago has the highest number of incidents followed by Philadelphia followed by New York City.
+
+```{r}
+
+uscities <- read.csv("data/simplemaps_uscities/uscities.csv") |>
+  janitor::clean_names()
+
+```
+
+# Merge datasets to add lat and lon to gun_df
+
+```{r}
+gun_df <- gun_df |>
+  left_join(
+    uscities |> select(city, state_name, lat, lng),
+    by = c("city" = "city", "state" = "state_name")
+  )
+
+write.csv(gun_df, "gun_df.csv")
+```
+
+# Incidents with highet number of victims
+
+```{r}
+top_incidents <- gun_df |> 
+  select(date, city, state, dead, injured, total, description, lat, lng) |> 
+  arrange(desc(total)) |> 
+  slice(1:13)
+
+top_incidents
+```
+
+The above shows the 13 most severe gun-related incidents in the dataset, ranked by the total number of victims (dead and injured). The incidents range from mass shootings at public events to tragic attacks in schools and other locations. Each entry provides details on the location, date, fatalities, injuries, and a brief description of the event, offering insights into the magnitude and context of these tragedies.
+
+## Interactive Map of the Incidents with highest numbers of victims
+>>>>>>> 776994d6047bb7f057054a7273120ec876bfa6f7
+
+```{r}
+labels <- paste0(
+  "<strong>Date:</strong> ", top_incidents$Date, "<br>",
+  "<strong>City:</strong> ", top_incidents$city, "<br>",
+  "<strong>State:</strong> ", top_incidents$state, "<br>",
+  "<strong>Total Victims:</strong> ", top_incidents$Total, "<br>",
+  "<strong>Description:</strong> ", top_incidents$Description
+) |> lapply(htmltools::HTML)
+
+leaflet(top_incidents) |>
+  setView(lng=-96, lat=37.8, zoom=4)|>
+  addTiles() |> 
+  addProviderTiles("CartoDB.Positron") |>
+  addCircleMarkers( ~lng, ~lat, color = "red", radius = ~sqrt(total), 
+    label = labels, 
+    fillOpacity = 0.7
+  ) 
+
+```
 
 

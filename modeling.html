@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Modeling</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="data_cleaning.html">Data Cleaning</a>
+</li>
+<li>
+  <a href="eda_code.html">EDA and Visualizations</a>
+</li>
+<li>
+  <a href="modeling.html">Modeling</a>
+</li>
+<li>
+  <a href="https://kevinguo273.shinyapps.io/shiny_dashboard/">Shiny Dashboard</a>
+</li>
+<li>
+  <a href="report.html">Report</a>
+</li>
+<li>
+  <a href="https://github.com/KevinG273/p8105_final.git">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Modeling</h1>
+
+</div>
+
+
+<div id="modeling-total-shootings-for-each-state-using-regression"
+class="section level2">
+<h2>Modeling Total Shootings for each State using Regression</h2>
+<div id="data-preprocessing" class="section level3">
+<h3>Data Preprocessing</h3>
+<p>We start by merging the datasets and scaling the numeric variables
+for better interpretability in modeling.</p>
+<pre class="r"><code>library(dplyr)
+library(tidyr)
+library(MASS) 
+library(modelr) 
+library(ggplot2)
+
+# Load and clean mass shootings data
+mass_shootings &lt;- read.csv(&quot;data/mass_shootings_2018_2024_cleaned.csv&quot;) |&gt;
+  mutate(State = case_when(
+    State == &quot;Washington, D.C.&quot; ~ &quot;District of Columbia&quot;,
+    TRUE ~ State
+  ))
+
+# Load and clean census data
+census_data &lt;- read.csv(&quot;state_data.csv&quot;) |&gt;
+  rename(State = NAME) |&gt;
+  mutate(across(where(is.numeric), ~ as.numeric(scale(.))))
+
+# Merge datasets by State
+scaled_data &lt;- mass_shootings |&gt;
+  group_by(State) |&gt;
+  summarise(total_shootings = n(),
+            total_deaths = sum(Dead, na.rm = TRUE),
+            total_injuries = sum(Injured, na.rm = TRUE)) |&gt;
+  left_join(census_data, by = &quot;State&quot;)</code></pre>
+</div>
+<div id="correlation-analysis" class="section level3">
+<h3>Correlation Analysis</h3>
+<p>Before modeling, we explore the relationships between shooting
+frequencies and socio-economic variables. First we have to remove NAs
+before doing correlation analysis.</p>
+<pre class="r"><code>scaled_data &lt;- scaled_data %&gt;%
+  drop_na(total_shootings, total_populationE, median_incomeE, 
+          unemployment_rate, poverty_rate, bachelors_and_higher)</code></pre>
+<pre class="r"><code>library(ggcorrplot)
+
+# Compute correlation matrix for scaled data
+cor_matrix &lt;- scaled_data %&gt;%
+  dplyr::select(total_shootings, total_populationE, median_incomeE, unemployment_rate, 
+                poverty_rate, bachelors_and_higher) %&gt;%
+  cor()
+
+# Visualize correlation matrix
+ggcorrplot(cor_matrix, 
+           method = &quot;circle&quot;, 
+           type = &quot;lower&quot;, 
+           lab = TRUE, 
+           lab_size = 3, 
+           title = &quot;Correlation Matrix of Variables&quot;,
+           colors = c(&quot;blue&quot;, &quot;white&quot;, &quot;red&quot;))</code></pre>
+<p><img src="modeling_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>The correlation matrix highlights strong positive relationships,
+particularly between total_shootings and total_populationE (r=0.82),
+indicating that states with larger populations experience more
+shootings. Other variables, such as poverty_rate and
+bachelors_and_higher, show weaker correlations with shootings,
+suggesting less direct influence.</p>
+<pre class="r"><code>library(GGally)
+
+# Select relevant variables for pair plot
+pair_data &lt;- scaled_data |&gt;
+  dplyr::select(total_shootings, total_populationE, median_incomeE, 
+         unemployment_rate, poverty_rate, bachelors_and_higher, uninsured_rate)
+
+# Plot pairwise relationships
+ggpairs(pair_data, 
+        title = &quot;Pair Plot of Key Variables&quot;)</code></pre>
+<p><img src="modeling_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>The pair plot shows total_shootings is positively correlated with
+total_populationE and is right-skewed, indicating a few high-shooting
+states. Scatterplots confirm strong relationships with population, while
+other variables like poverty_rate show weaker trends. This supports
+further investigation into population as a key factor.</p>
+</div>
+<div id="poisson-regression" class="section level3">
+<h3>Poisson Regression</h3>
+<p>Poisson regression is used for modeling count data, like the total
+number of shootings per state.</p>
+<pre class="r"><code># Poisson regression model
+poisson_model &lt;- glm(total_shootings ~ total_populationE + median_incomeE + 
+                       unemployment_rate + poverty_rate + bachelors_and_higher + 
+                       uninsured_rate + vacancy_rate, 
+                     family = poisson(link = &quot;log&quot;), 
+                     data = scaled_data)
+summary(poisson_model)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = total_shootings ~ total_populationE + median_incomeE + 
+##     unemployment_rate + poverty_rate + bachelors_and_higher + 
+##     uninsured_rate + vacancy_rate, family = poisson(link = &quot;log&quot;), 
+##     data = scaled_data)
+## 
+## Coefficients:
+##                      Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)           3.78983    0.02645 143.302  &lt; 2e-16 ***
+## total_populationE     0.52032    0.01385  37.565  &lt; 2e-16 ***
+## median_incomeE       -1.18236    0.06457 -18.310  &lt; 2e-16 ***
+## unemployment_rate     0.49933    0.05295   9.429  &lt; 2e-16 ***
+## poverty_rate         -1.13064    0.07441 -15.196  &lt; 2e-16 ***
+## bachelors_and_higher  0.29858    0.04118   7.251 4.12e-13 ***
+## uninsured_rate       -0.70306    0.02843 -24.726  &lt; 2e-16 ***
+## vacancy_rate         -0.60066    0.03384 -17.748  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 4124.31  on 50  degrees of freedom
+## Residual deviance:  820.49  on 43  degrees of freedom
+## AIC: 1111.5
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<p>The Poisson regression model provides a good initial framework to
+analyze count data, like the total number of shootings. The coefficients
+indicate the log-relative rate of shootings for each predictor. For
+instance:</p>
+<ul>
+<li><p>total_populationE has a positive coefficient, meaning states with
+larger populations are associated with higher shooting rates.</p></li>
+<li><p>median_incomeE have significant negative coefficients, suggesting
+states with higher income levels experience fewer shootings.</p></li>
+<li><p>The residual deviance (820.49) is much smaller than the null
+deviance (4124.31), indicating the model explains a substantial portion
+of the variability.</p></li>
+</ul>
+<p><strong>Dispersion Test:</strong> To determine if overdispersion
+exists (dispersion parameter &gt;&gt; 1), calculate the dispersion
+ratio:</p>
+<pre class="r"><code>dispersion_ratio &lt;- summary(poisson_model)$deviance / summary(poisson_model)$df.residual
+dispersion_ratio</code></pre>
+<pre><code>## [1] 19.08125</code></pre>
+<p>Since the dispersion ratio is significantly greater than 1, it
+indicates overdispersion, and a Negative Binomial regression model
+should be used.</p>
+</div>
+<div id="negative-binomial-regression-for-overdispersion"
+class="section level3">
+<h3>Negative Binomial Regression for Overdispersion</h3>
+<pre class="r"><code># Negative binomial regression model
+negbin_model &lt;- glm.nb(total_shootings ~ total_populationE + median_incomeE +
+                         unemployment_rate + poverty_rate + bachelors_and_higher + 
+                         uninsured_rate + vacancy_rate, 
+                       data = scaled_data)
+summary(negbin_model)</code></pre>
+<pre><code>## 
+## Call:
+## glm.nb(formula = total_shootings ~ total_populationE + median_incomeE + 
+##     unemployment_rate + poverty_rate + bachelors_and_higher + 
+##     uninsured_rate + vacancy_rate, data = scaled_data, init.theta = 3.254641924, 
+##     link = log)
+## 
+## Coefficients:
+##                      Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)           3.69770    0.08510  43.450  &lt; 2e-16 ***
+## total_populationE     0.60325    0.09043   6.671 2.55e-11 ***
+## median_incomeE       -1.08947    0.29819  -3.654 0.000259 ***
+## unemployment_rate     0.44184    0.21927   2.015 0.043904 *  
+## poverty_rate         -1.13688    0.32949  -3.450 0.000560 ***
+## bachelors_and_higher  0.28170    0.17230   1.635 0.102057    
+## uninsured_rate       -0.88116    0.11467  -7.684 1.54e-14 ***
+## vacancy_rate         -0.65904    0.12637  -5.215 1.84e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for Negative Binomial(3.2546) family taken to be 1)
+## 
+##     Null deviance: 234.887  on 50  degrees of freedom
+## Residual deviance:  53.801  on 43  degrees of freedom
+## AIC: 480.16
+## 
+## Number of Fisher Scoring iterations: 1
+## 
+## 
+##               Theta:  3.255 
+##           Std. Err.:  0.721 
+## 
+##  2 x log-likelihood:  -462.161</code></pre>
+<p>When analyzing the results, I noticed something intriguing about the
+coefficient for <code>poverty_rate</code> in the Negative Binomial
+regression model. Its coefficient is negative
+(<strong>-1.13688</strong>), which suggests that as the poverty rate
+increases by one unit (typically 1%), the expected log count of
+shootings decreases. Translating this into real-world terms using the
+exponential transformation:</p>
+<p><span class="math display">\[
+\text{Relative Rate Change} = e^{-1.13688} \approx 0.32
+\]</span></p>
+<p>This means that for every 1% increase in the poverty rate, the total
+shootings decrease by approximately 68%. At first glance, this seems
+counterintuitive because, logically, higher poverty rates are often
+associated with more social stress and potentially higher levels of
+violence.</p>
+<p>My first suspicion was multicollinearity. Since poverty rate often
+correlates with other socio-economic factors, such as
+<code>median_incomeE</code> and <code>unemployment_rate</code>, it’s
+possible that the model distributes the explanatory power across these
+variables.</p>
+<p>To test this, let’s calculated the Variance Inflation Factor
+(VIF):</p>
+<pre class="r"><code>library(car)
+vif(negbin_model)</code></pre>
+<pre><code>##    total_populationE       median_incomeE    unemployment_rate 
+##             1.258566            13.107502             6.427476 
+##         poverty_rate bachelors_and_higher       uninsured_rate 
+##            15.167083             4.327835             1.678355 
+##         vacancy_rate 
+##             1.915198</code></pre>
+<p>The VIF results reveal multicollinearity, particularly for
+median_incomeE (VIF = 13.11) and poverty_rate (VIF = 15.17), suggesting
+their effects overlap with each other and unemployment_rate (VIF =
+6.43). This multicollinearity may distort the coefficients, especially
+for poverty_rate, which shows a counterintuitive negative
+relationship.</p>
+</div>
+<div id="steps-to-address-multicollinearity" class="section level3">
+<h3>Steps to Address Multicollinearity</h3>
+<div id="test-reduced-models" class="section level4">
+<h4>Test Reduced Models:</h4>
+<ul>
+<li>Exclude <code>poverty_rate</code>:</li>
+</ul>
+<pre class="r"><code>model_no_poverty &lt;- glm.nb(total_shootings ~ total_populationE + median_incomeE +
+                            unemployment_rate + bachelors_and_higher + 
+                            uninsured_rate + vacancy_rate, 
+                          data = scaled_data)
+
+summary(model_no_poverty)</code></pre>
+<pre><code>## 
+## Call:
+## glm.nb(formula = total_shootings ~ total_populationE + median_incomeE + 
+##     unemployment_rate + bachelors_and_higher + uninsured_rate + 
+##     vacancy_rate, data = scaled_data, init.theta = 2.673428227, 
+##     link = log)
+## 
+## Coefficients:
+##                       Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)           3.721678   0.092403  40.277  &lt; 2e-16 ***
+## total_populationE     0.646115   0.099526   6.492 8.48e-11 ***
+## median_incomeE       -0.259945   0.192885  -1.348    0.178    
+## unemployment_rate    -0.093382   0.125529  -0.744    0.457    
+## bachelors_and_higher -0.006344   0.168355  -0.038    0.970    
+## uninsured_rate       -0.839009   0.123867  -6.773 1.26e-11 ***
+## vacancy_rate         -0.669868   0.138744  -4.828 1.38e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for Negative Binomial(2.6734) family taken to be 1)
+## 
+##     Null deviance: 196.729  on 50  degrees of freedom
+## Residual deviance:  54.162  on 44  degrees of freedom
+## AIC: 487.56
+## 
+## Number of Fisher Scoring iterations: 1
+## 
+## 
+##               Theta:  2.673 
+##           Std. Err.:  0.572 
+## 
+##  2 x log-likelihood:  -471.565</code></pre>
+<p>Check the VIF of model_no_poverty</p>
+<pre class="r"><code>vif(model_no_poverty)</code></pre>
+<pre><code>##    total_populationE       median_incomeE    unemployment_rate 
+##             1.267787             4.716443             1.902787 
+## bachelors_and_higher       uninsured_rate         vacancy_rate 
+##             3.459854             1.723762             1.944305</code></pre>
+<p>There is still a multicollinearity, let’s exclude
+<code>bachelors_and_higher</code></p>
+<pre class="r"><code>model_no_poverty_educate &lt;- glm.nb(total_shootings ~ total_populationE + median_incomeE +
+                            unemployment_rate + 
+                            uninsured_rate + vacancy_rate, 
+                          data = scaled_data)
+summary(model_no_poverty_educate)</code></pre>
+<pre><code>## 
+## Call:
+## glm.nb(formula = total_shootings ~ total_populationE + median_incomeE + 
+##     unemployment_rate + uninsured_rate + vacancy_rate, data = scaled_data, 
+##     init.theta = 2.674675624, link = log)
+## 
+## Coefficients:
+##                   Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)        3.72178    0.09229  40.325  &lt; 2e-16 ***
+## total_populationE  0.64693    0.09647   6.706 2.00e-11 ***
+## median_incomeE    -0.26685    0.11716  -2.278   0.0227 *  
+## unemployment_rate -0.09405    0.11557  -0.814   0.4158    
+## uninsured_rate    -0.83706    0.11998  -6.976 3.03e-12 ***
+## vacancy_rate      -0.66976    0.13873  -4.828 1.38e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for Negative Binomial(2.6747) family taken to be 1)
+## 
+##     Null deviance: 196.813  on 50  degrees of freedom
+## Residual deviance:  54.185  on 45  degrees of freedom
+## AIC: 485.57
+## 
+## Number of Fisher Scoring iterations: 1
+## 
+## 
+##               Theta:  2.675 
+##           Std. Err.:  0.573 
+## 
+##  2 x log-likelihood:  -471.566</code></pre>
+<p>Check the VIF of model_no_poverty_educate</p>
+<pre class="r"><code>vif(model_no_poverty_educate)</code></pre>
+<pre><code>## total_populationE    median_incomeE unemployment_rate    uninsured_rate 
+##          1.191642          1.740896          1.614003          1.618068 
+##      vacancy_rate 
+##          1.944939</code></pre>
+<p>All VIF values are below 2, indicating that multicollinearity is no
+longer a concern in the model.</p>
+<p>Removing <code>poverty_rate</code> and
+<code>bachelors_and_higher</code> resolved the previous collinearity
+issues, allowing for a more interpretable model.</p>
+</div>
+</div>
+<div id="model-selection" class="section level3">
+<h3>Model Selection</h3>
+<div id="stepwise-selection" class="section level4">
+<h4>Stepwise Selection</h4>
+<pre class="r"><code>stepwise_model &lt;- stepAIC(model_no_poverty_educate, direction = &quot;both&quot;)</code></pre>
+<pre><code>## Start:  AIC=483.57
+## total_shootings ~ total_populationE + median_incomeE + unemployment_rate + 
+##     uninsured_rate + vacancy_rate
+## 
+##                     Df    AIC
+## - unemployment_rate  1 482.00
+## &lt;none&gt;                 483.57
+## - median_incomeE     1 485.65
+## - vacancy_rate       1 499.22
+## - total_populationE  1 513.17
+## - uninsured_rate     1 514.85
+## 
+## Step:  AIC=482
+## total_shootings ~ total_populationE + median_incomeE + uninsured_rate + 
+##     vacancy_rate
+## 
+##                     Df    AIC
+## &lt;none&gt;                 482.00
+## + unemployment_rate  1 483.57
+## - median_incomeE     1 484.21
+## - vacancy_rate       1 497.98
+## - total_populationE  1 511.22
+## - uninsured_rate     1 517.53</code></pre>
+<pre class="r"><code>summary(stepwise_model)</code></pre>
+<pre><code>## 
+## Call:
+## glm.nb(formula = total_shootings ~ total_populationE + median_incomeE + 
+##     uninsured_rate + vacancy_rate, data = scaled_data, init.theta = 2.626343491, 
+##     link = log)
+## 
+## Coefficients:
+##                   Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)        3.72304    0.09308  40.000  &lt; 2e-16 ***
+## total_populationE  0.64452    0.09676   6.661 2.72e-11 ***
+## median_incomeE    -0.27433    0.11718  -2.341   0.0192 *  
+## uninsured_rate    -0.80093    0.10590  -7.563 3.94e-14 ***
+## vacancy_rate      -0.67625    0.13869  -4.876 1.08e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for Negative Binomial(2.6263) family taken to be 1)
+## 
+##     Null deviance: 193.58  on 50  degrees of freedom
+## Residual deviance:  53.77  on 46  degrees of freedom
+## AIC: 484
+## 
+## Number of Fisher Scoring iterations: 1
+## 
+## 
+##               Theta:  2.626 
+##           Std. Err.:  0.557 
+## 
+##  2 x log-likelihood:  -472.004</code></pre>
+</div>
+<div id="nested-model-hypothesis-testing" class="section level4">
+<h4>Nested Model Hypothesis Testing</h4>
+<p><strong>Hypotheses:</strong></p>
+<ul>
+<li><p>Null Hypothesis (H₀): The simpler model (without
+unemployment_rate) is sufficient; adding <code>unemployment_rate</code>
+does not improve model fit significantly.</p></li>
+<li><p>Alternative Hypothesis (H₁): The more complex model (with
+<code>unemployment_rate</code>) significantly improves model
+fit.</p></li>
+</ul>
+<pre class="r"><code>nested_model &lt;- glm.nb(total_shootings ~ total_populationE + median_incomeE + uninsured_rate + vacancy_rate, 
+                       data = scaled_data)
+anova(nested_model, model_no_poverty_educate, test = &quot;Chisq&quot;)</code></pre>
+<pre><code>## Likelihood ratio tests of Negative Binomial Models
+## 
+## Response: total_shootings
+##                                                                                    Model
+## 1                     total_populationE + median_incomeE + uninsured_rate + vacancy_rate
+## 2 total_populationE + median_incomeE + unemployment_rate + uninsured_rate + vacancy_rate
+##      theta Resid. df    2 x log-lik.   Test    df  LR stat.   Pr(Chi)
+## 1 2.626343        46       -472.0038                                 
+## 2 2.674676        45       -471.5662 1 vs 2     1 0.4376088 0.5082789</code></pre>
+<p><strong>Result:</strong></p>
+<p>Since the p-value is 0.5083, We fail to reject the null hypothesis
+(H₀). This means that adding <code>unemployment_rate</code> does not
+significantly improve the model fit.</p>
+</div>
+</div>
+<div id="validation-with-bootstrap-and-cross-validation"
+class="section level3">
+<h3>Validation with Bootstrap and Cross-Validation</h3>
+<div id="bootstrap" class="section level4">
+<h4>Bootstrap</h4>
+<p>Create bootstrap samples and fit the Negative Binomial model to each
+sample:</p>
+<pre class="r"><code>library(purrr)
+set.seed(123) 
+boot_samples &lt;- bootstrap(scaled_data, 1000)
+
+boot_results &lt;- boot_samples |&gt;
+  mutate(model = map(strap, ~ glm.nb(total_shootings ~ total_populationE + median_incomeE + 
+                                       uninsured_rate + vacancy_rate, data = .x)),
+         coefficients = map(model, broom::tidy))  # Extract coefficients</code></pre>
+<p>Extract and summarize the bootstrap coefficients to calculate mean
+estimates and confidence intervals:</p>
+<pre class="r"><code>boot_coefficients &lt;- boot_results |&gt;
+  unnest(coefficients) |&gt;
+  group_by(term) |&gt;
+  summarize(mean_estimate = mean(estimate),
+            conf_low = quantile(estimate, 0.025),
+            conf_high = quantile(estimate, 0.975))
+
+boot_coefficients</code></pre>
+<pre><code>## # A tibble: 5 × 4
+##   term              mean_estimate conf_low conf_high
+##   &lt;chr&gt;                     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)               3.73     3.50     3.93  
+## 2 median_incomeE           -0.285   -0.566   -0.0100
+## 3 total_populationE         0.701    0.438    1.18  
+## 4 uninsured_rate           -0.799   -1.03    -0.548 
+## 5 vacancy_rate             -0.682   -1.03    -0.376</code></pre>
+<p>The bootstrap results closely align with the original model,
+confirming stability and robustness. All coefficients fall within their
+respective confidence intervals, with significant effects maintained for
+<code>total_populationE</code>, <code>median_incomeE</code>,
+<code>uninsured_rate</code>, and <code>vacancy_rate</code>, supporting
+the reliability of the model.</p>
+</div>
+<div id="monte-carlo-cross-validation" class="section level4">
+<h4>Monte Carlo Cross-Validation</h4>
+<p>Use <code>crossv_mc</code> to split the data into training and
+testing sets 100 times. And then apply the Negative Binomial model to
+the training sets and evaluate performance on the test sets.</p>
+<pre class="r"><code>set.seed(123)  
+
+# Generate 100 Monte Carlo train-test splits
+cv_df &lt;- crossv_mc(scaled_data, 100) |&gt;
+  mutate(
+    train = map(train, as_tibble), 
+    test = map(test, as_tibble)    
+  )
+
+# Fit models on training data and calculate RMSE on test data
+cv_df &lt;- cv_df |&gt; 
+  mutate(
+    # Model with unemployment_rate
+    model_with_unemp = map(train, \(df) glm.nb(total_shootings ~ total_populationE + 
+                                                median_incomeE + 
+                                                unemployment_rate + 
+                                                uninsured_rate + 
+                                                vacancy_rate, 
+                                              data = df)),
+    # Model without unemployment_rate
+    model_without_unemp = map(train, \(df) glm.nb(total_shootings ~ total_populationE + 
+                                                   median_incomeE + 
+                                                   uninsured_rate + 
+                                                   vacancy_rate, 
+                                                 data = df))
+  ) |&gt; 
+  mutate(
+    # Calculate RMSE for models
+    rmse_with_unemp = map2_dbl(model_with_unemp, test, \(mod, df) {
+      predicted &lt;- predict(mod, newdata = df, type = &quot;response&quot;)
+      sqrt(mean((df$total_shootings - predicted)^2))
+    }),
+    rmse_without_unemp = map2_dbl(model_without_unemp, test, \(mod, df) {
+      predicted &lt;- predict(mod, newdata = df, type = &quot;response&quot;)
+      sqrt(mean((df$total_shootings - predicted)^2))
+    })
+  )</code></pre>
+<p>Calculate RMSE as a performance metric for each test set.</p>
+<pre class="r"><code>library(forcats)
+# Reshape RMSE results for visualization
+rmse_comparison &lt;- cv_df |&gt; 
+  dplyr::select(starts_with(&quot;rmse&quot;)) |&gt; 
+  pivot_longer(
+    everything(),
+    names_to = &quot;model&quot;, 
+    values_to = &quot;rmse&quot;,
+    names_prefix = &quot;rmse_&quot;
+  ) |&gt; 
+  mutate(model = fct_inorder(model))
+
+# Plot RMSE distributions
+ggplot(rmse_comparison, aes(x = model, y = rmse)) + 
+  geom_violin() + 
+  labs(
+    title = &quot;RMSE Comparison Between Models&quot;,
+    x = &quot;Model&quot;,
+    y = &quot;RMSE&quot;
+  ) +
+  theme_minimal()</code></pre>
+<p><img src="modeling_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+</div>
+</div>
+<div id="visualize-predictions" class="section level3">
+<h3>Visualize Predictions</h3>
+<p>Assess how well the model predictions align with the observed
+data.</p>
+<pre class="r"><code>scaled_data &lt;- scaled_data |&gt;
+  mutate(predicted_shootings = predict(nested_model, type = &quot;response&quot;))
+
+ggplot(scaled_data, aes(x = total_shootings, y = predicted_shootings)) +
+  geom_point(alpha = 0.6) +  
+  geom_smooth(method = &quot;lm&quot;, color = &quot;blue&quot;, se = FALSE) +  # Add trend line
+  geom_abline(slope = 1, intercept = 0, color = &quot;red&quot;, linetype = &quot;dashed&quot;) +  # Reference line
+  labs(
+    title = &quot;Observed vs. Predicted Shootings&quot;,
+    x = &quot;Observed Total Shootings&quot;,
+    y = &quot;Predicted Total Shootings&quot;
+  ) +
+  theme_minimal()  </code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="modeling_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p>The plot shows that the model predicts well for lower shooting
+counts, as many points align with the red 45-degree line. However, for
+higher observed values, the model tends to underpredict, as seen by the
+divergence of the blue trend line from the red reference line. Outliers
+with high observed or predicted values suggest the model struggles with
+extreme cases.</p>
+<p>Finally, the Negative Binomial regression model is expressed as:</p>
+<p><span class="math display">\[
+\log(\text{E}[\text{Total Shootings}_i]) = 3.72 + 0.64 \cdot
+\text{Population}_i - 0.27 \cdot \text{Income}_i - 0.80 \cdot
+\text{Uninsured Rate}_i - 0.67 \cdot \text{Vacancy Rate}_i
+\]</span></p>
+<p>Interpretation of the coefficients:</p>
+<ul>
+<li><p>Population: a 1-unit increase in scaled population is associated
+with a 89% increase in expected shootings</p></li>
+<li><p>Median Income: a 1-unit increase in scaled median income is
+associated with a 24% decrease in expected shootings</p></li>
+<li><p>Uninsured Rate: a 1-unit increase in scaled uninsured rate is
+associated with a 56% decrease in expected shootings</p></li>
+<li><p>Vacancy Rate: a 1-unit increase in scaled vacancy rate is
+associated with a 49% decrease in expected shootings</p></li>
+</ul>
+</div>
+</div>
+<div id="classifying-risk-levels-of-regions-based-on-shooting-data"
+class="section level2">
+<h2>Classifying Risk Levels of Regions Based on Shooting Data</h2>
+<p>Now let’s proceed to classify the regions into low-risk (&lt;100),
+medium-risk (100-200), and high-risk (&gt;200) categories and build a
+classification model based on this data. Since the dataset is small,
+we’ll use methods suitable for small datasets, such as Logistic
+Regression or Decision Trees.</p>
+<div id="data-preparation" class="section level3">
+<h3>Data Preparation</h3>
+<pre class="r"><code># Add risk categories
+scaled_data &lt;- scaled_data |&gt; 
+  mutate(risk_category = case_when(
+    total_shootings &lt; 100 ~ &quot;Low&quot;,
+    total_shootings &gt;= 100 &amp; total_shootings &lt;= 200 ~ &quot;Medium&quot;,
+    total_shootings &gt; 200 ~ &quot;High&quot;
+  ))
+
+# Convert to a factor for modeling
+scaled_data$risk_category &lt;- factor(scaled_data$risk_category, levels = c(&quot;Low&quot;, &quot;Medium&quot;, &quot;High&quot;))
+
+# Check the distribution of categories
+table(scaled_data$risk_category)</code></pre>
+<pre><code>## 
+##    Low Medium   High 
+##     36     10      5</code></pre>
+</div>
+<div id="build-a-classification-model" class="section level3">
+<h3>Build a Classification Model</h3>
+<p>Split the data into training and testing sets:</p>
+<pre class="r"><code>set.seed(1)
+library(caret)
+train_index &lt;- createDataPartition(scaled_data$risk_category, p = 0.8, list = FALSE)
+train_data &lt;- scaled_data[train_index, ]
+test_data &lt;- scaled_data[-train_index, ]</code></pre>
+<p>Fit a Multinomial Logistic Regression Model</p>
+<pre class="r"><code>library(nnet)
+
+# Fit the multinomial logistic regression model
+multinom_model &lt;- multinom(risk_category ~ total_populationE + median_incomeE + 
+                             unemployment_rate + uninsured_rate + vacancy_rate, 
+                           data = train_data)</code></pre>
+<pre><code>## # weights:  21 (12 variable)
+## initial  value 45.043104 
+## iter  10 value 7.786904
+## iter  20 value 0.116711
+## iter  30 value 0.001930
+## iter  40 value 0.001452
+## iter  50 value 0.000626
+## iter  60 value 0.000594
+## iter  70 value 0.000563
+## iter  80 value 0.000485
+## iter  90 value 0.000470
+## iter 100 value 0.000435
+## final  value 0.000435 
+## stopped after 100 iterations</code></pre>
+<pre class="r"><code>summary(multinom_model)</code></pre>
+<pre><code>## Call:
+## multinom(formula = risk_category ~ total_populationE + median_incomeE + 
+##     unemployment_rate + uninsured_rate + vacancy_rate, data = train_data)
+## 
+## Coefficients:
+##        (Intercept) total_populationE median_incomeE unemployment_rate
+## Medium   -38.99441          275.4516       15.91964         -67.61395
+## High     -83.98598          340.4495      -50.45712        -108.24227
+##        uninsured_rate vacancy_rate
+## Medium     -108.07819     64.62532
+## High        -46.03537     11.54293
+## 
+## Std. Errors:
+##        (Intercept) total_populationE median_incomeE unemployment_rate
+## Medium    23253.99          98748.66       18472.03          28480.86
+## High      16440.38         100391.35       15418.06          29012.49
+##        uninsured_rate vacancy_rate
+## Medium       41892.69    15749.963
+## High         18035.10     6585.488
+## 
+## Residual Deviance: 0.0008703844 
+## AIC: 24.00087</code></pre>
+</div>
+<div id="evaluate-the-model" class="section level3">
+<h3>Evaluate the Model</h3>
+<div id="use-k-fold-cross-validation-to-validate-model-performance."
+class="section level4">
+<h4>Use k-fold cross-validation to validate model performance.</h4>
+<pre class="r"><code>library(caret)
+
+# Define cross-validation settings
+cv_control &lt;- trainControl(method = &quot;cv&quot;, number = 10)
+
+# Train the model with cross-validation
+cv_model &lt;- train(
+  risk_category ~ total_populationE + median_incomeE + 
+    unemployment_rate + uninsured_rate + vacancy_rate,
+  data = train_data,
+  method = &quot;multinom&quot;,
+  trControl = cv_control
+)
+
+# View cross-validation results
+print(cv_model)</code></pre>
+</div>
+<div id="predict-risk-categories-on-the-test-dataset"
+class="section level4">
+<h4>Predict risk categories on the test dataset:</h4>
+<pre class="r"><code># Predict on the test set
+predictions &lt;- predict(multinom_model, newdata = test_data)
+
+# Confusion Matrix
+confusionMatrix(predictions, test_data$risk_category)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction Low Medium High
+##     Low      5      0    0
+##     Medium   2      1    0
+##     High     0      1    1
+## 
+## Overall Statistics
+##                                           
+##                Accuracy : 0.7             
+##                  95% CI : (0.3475, 0.9333)
+##     No Information Rate : 0.7             
+##     P-Value [Acc &gt; NIR] : 0.6496          
+##                                           
+##                   Kappa : 0.4737          
+##                                           
+##  Mcnemar&#39;s Test P-Value : NA              
+## 
+## Statistics by Class:
+## 
+##                      Class: Low Class: Medium Class: High
+## Sensitivity              0.7143        0.5000      1.0000
+## Specificity              1.0000        0.7500      0.8889
+## Pos Pred Value           1.0000        0.3333      0.5000
+## Neg Pred Value           0.6000        0.8571      1.0000
+## Prevalence               0.7000        0.2000      0.1000
+## Detection Rate           0.5000        0.1000      0.1000
+## Detection Prevalence     0.5000        0.3000      0.2000
+## Balanced Accuracy        0.8571        0.6250      0.9444</code></pre>
+</div>
+<div id="create-a-bar-plot-to-compare-actual-and-predicted-categories"
+class="section level4">
+<h4>Create a bar plot to compare actual and predicted categories</h4>
+<pre class="r"><code># Generate predictions for the entire scaled_data
+scaled_data &lt;- scaled_data |&gt; 
+  mutate(predicted_category = predict(multinom_model, newdata = scaled_data))
+
+ggplot(scaled_data, aes(x = risk_category, fill = predicted_category)) +
+  geom_bar(position = &quot;fill&quot;) +
+  labs(
+    title = &quot;Actual vs Predicted Risk Categories&quot;,
+    x = &quot;Actual Risk Category&quot;,
+    y = &quot;Proportion&quot;,
+    fill = &quot;Predicted Category&quot;
+  ) +
+  theme_minimal()</code></pre>
+<p><img src="modeling_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+</div>
+<div id="roc-curves-for-multinomial-logistic-regression"
+class="section level4">
+<h4>ROC Curves for Multinomial Logistic Regression</h4>
+<pre class="r"><code># Generate predicted probabilities for the test data
+test_data &lt;- test_data |&gt; 
+  mutate(predicted_probs = predict(multinom_model, newdata = test_data, type = &quot;probs&quot;))
+
+library(tidyr)
+library(pROC)
+
+# Reshape predicted probabilities into long format
+roc_data &lt;- test_data |&gt; 
+  mutate(
+    Low = predicted_probs[, &quot;Low&quot;],
+    Medium = predicted_probs[, &quot;Medium&quot;],
+    High = predicted_probs[, &quot;High&quot;]
+  ) |&gt; 
+  pivot_longer(
+    cols = c(Low, Medium, High),
+    names_to = &quot;class&quot;,
+    values_to = &quot;probability&quot;
+  ) |&gt; 
+  mutate(
+    true_label = ifelse(risk_category == class, 1, 0)  # Create binary labels
+  )
+# Plot ROC curve for each class
+roc_list &lt;- roc_data |&gt; 
+  group_by(class) |&gt; 
+  summarise(
+    roc_curve = list(roc(response = true_label, predictor = probability))
+  )
+
+# Plot the ROC curves
+library(ggplot2)
+ggroc(map(roc_list$roc_curve, as.list)) +
+  labs(
+    title = &quot;ROC Curves for Multinomial Logistic Regression&quot;,
+    x = &quot;False Positive Rate&quot;,
+    y = &quot;True Positive Rate&quot;
+  ) +
+  theme_minimal()</code></pre>
+<p><img src="modeling_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="text-analysis-of-the-mass-shootings" class="section level2">
+<h2>Text Analysis of the Mass Shootings</h2>
+<div id="word-frequency-analysis" class="section level3">
+<h3>Word Frequency Analysis</h3>
+<p>Identify the most common words or phrases in the descriptions.</p>
+<ul>
+<li>Tokenize the text into words.</li>
+<li>Remove stopwords (e.g., “and,” “the”) and punctuation.</li>
+<li>Count word frequencies.</li>
+</ul>
+<pre class="r"><code>library(tidytext)
+library(dplyr)
+
+# Tokenize and count word frequencies
+word_counts &lt;- mass_shootings |&gt; 
+  unnest_tokens(word, Description) |&gt; 
+  anti_join(stop_words, by = &quot;word&quot;) |&gt;  # Remove stopwords
+  count(word, sort = TRUE)
+
+# View top words
+head(word_counts, 20)</code></pre>
+<pre><code>##            word    n
+## 1        people 2067
+## 2      shooting 1623
+## 3        killed 1600
+## 4       injured 1587
+## 5       wounded 1502
+## 6          shot  959
+## 7  neighborhood  526
+## 8          fire  511
+## 9         party  466
+## 10       person  418
+## 11       police  409
+## 12      morning  372
+## 13         home  326
+## 14    including  310
+## 15        drive  290
+## 16      fatally  258
+## 17        woman  251
+## 18       adults  231
+## 19    escalated  231
+## 20         park  230</code></pre>
+<pre class="r"><code>library(ggplot2)
+
+word_counts |&gt; 
+  filter(n &gt; 80) |&gt;  # Filter for frequently occurring words
+  ggplot(aes(x = reorder(word, n), y = n)) +
+  geom_col() +
+  coord_flip() +
+  labs(title = &quot;Most Common Words in Shooting Descriptions&quot;,
+       x = &quot;Word&quot;,
+       y = &quot;Frequency&quot;)</code></pre>
+<p><img src="modeling_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+</div>
+<div id="sentiment-analysis" class="section level3">
+<h3>Sentiment Analysis</h3>
+<p>Measure the overall sentiment (positive/negative/neutral) of the
+descriptions.</p>
+<ul>
+<li>Use sentiment lexicons (e.g., Bing, NRC).</li>
+<li>Assign sentiment scores to words in the descriptions.</li>
+<li>Aggregate scores for each description.</li>
+</ul>
+<pre class="r"><code>library(tidyr)
+
+# Perform sentiment analysis
+sentiment_analysis &lt;- mass_shootings |&gt; 
+  unnest_tokens(word, Description) |&gt; 
+  inner_join(get_sentiments(&quot;bing&quot;), by = &quot;word&quot;) |&gt; 
+  count(sentiment) |&gt; 
+  mutate(percentage = n / sum(n) * 100)
+
+# View results
+print(sentiment_analysis)</code></pre>
+<pre><code>##   sentiment    n percentage
+## 1  negative 3574  93.413487
+## 2  positive  252   6.586513</code></pre>
+<pre class="r"><code># Plot sentiment distribution
+sentiment_analysis |&gt; 
+  ggplot(aes(x = sentiment, y = percentage, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  labs(title = &quot;Sentiment Analysis of Shooting Descriptions&quot;,
+       x = &quot;Sentiment&quot;,
+       y = &quot;Percentage&quot;)</code></pre>
+<p><img src="modeling_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+</div>
+<div id="topic-modeling-lda" class="section level3">
+<h3>Topic Modeling (LDA)</h3>
+<p>Identify underlying topics/themes in the descriptions. - Convert text
+into a document-term matrix. - Apply LDA to find clusters of words
+(topics).</p>
+<pre class="r"><code>library(topicmodels)
+library(tidytext)
+
+# Create document-term matrix
+dtm &lt;- mass_shootings |&gt; 
+  unnest_tokens(word, Description) |&gt; 
+  anti_join(stop_words, by = &quot;word&quot;) |&gt;
+  count(id = row_number(), word) |&gt; 
+  cast_dtm(id, word, n)
+
+# Apply LDA
+lda_model &lt;- LDA(dtm, k = 3, control = list(seed = 123))
+
+# Extract topics
+topics &lt;- tidy(lda_model, matrix = &quot;beta&quot;)
+
+# View top terms per topic
+top_terms &lt;- topics |&gt; 
+  group_by(topic) |&gt; 
+  slice_max(beta, n = 10) |&gt; 
+  ungroup()
+
+top_terms</code></pre>
+<pre><code>## # A tibble: 30 × 3
+##    topic term           beta
+##    &lt;int&gt; &lt;chr&gt;         &lt;dbl&gt;
+##  1     1 shooting     0.0686
+##  2     1 wounded      0.0494
+##  3     1 shot         0.0332
+##  4     1 party        0.0281
+##  5     1 killed       0.0272
+##  6     1 neighborhood 0.0233
+##  7     1 people       0.0232
+##  8     1 fatally      0.0156
+##  9     1 fire         0.0152
+## 10     1 escalated    0.0146
+## # ℹ 20 more rows</code></pre>
+<div id="visualization" class="section level4">
+<h4>Visualization:</h4>
+<pre class="r"><code>top_terms |&gt; 
+  mutate(term = reorder_within(term, beta, topic)) |&gt; 
+  ggplot(aes(x = term, y = beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  coord_flip() +
+  facet_wrap(~ topic, scales = &quot;free_y&quot;) +
+  labs(title = &quot;Top Terms per Topic&quot;,
+       x = &quot;Term&quot;,
+       y = &quot;Beta&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="modeling_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+</div>
+</div>
+<div id="word-cloud" class="section level3">
+<h3>Word Cloud</h3>
+<p>Create a visual representation of the most frequent words.</p>
+<pre class="r"><code>library(wordcloud)
+
+# Generate word cloud
+wordcloud(words = word_counts$word, 
+          freq = word_counts$n, 
+          max.words = 100, 
+          colors = brewer.pal(8, &quot;Dark2&quot;))</code></pre>
+<p><img src="modeling_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
