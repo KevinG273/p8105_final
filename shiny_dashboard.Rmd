@@ -7,7 +7,6 @@ output:
     orientation: columns
     vertical_layout: fill
     source_code: embed
-    code_folding: hide
 ---
 
 ```{r setup, include=FALSE}
