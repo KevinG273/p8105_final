@@ -38,6 +38,17 @@ As the analysis progressed, additional questions emerged:
 
 * For state-level analysis, data for each state was extracted from the U.S. Census website. This process created the final dataset, `state_data.csv`, which provides information on state-level demographics and statistics. Inlcuded are 5-year aggregated estimates ending in 2022 (i.e., the latest 5-year American Community Survey estimates). (WHAT DOES EACH ROW SHOW)
 
+## EDA and Dicussions 
+
+Our project focused on understanding trends in gun-related incidents by analyzing data across time and location. We began by identifying patterns year by year and then narrowed our focus to quarterly trends. Next, we examined geographic patterns, first by state and then by city, using GIS tools to map incident hotspots. Inspired by John Snow’s historical work on cholera mapping, we used this approach to uncover potential causes and effects of gun-related incidents across the United States. Finally, we analyzed details of individual incidents, including the number of victims, to differentiate between types of violence, such as suicides, intimate partner violence, and multi-victim crimes.
+
+Gun-related crimes were often concentrated in economically disadvantaged urban and rural areas, particularly in regions that have experienced industrial decline. Urban areas showed higher rates of multi-victim crimes, including gang violence and robberies, whereas rural areas had more single-victim incidents, often linked to suicides or domestic violence. These differences highlight how socioeconomic conditions shape the nature of gun violence.
+
+We also found that gun-related incidents tended to peak at the end of the year, possibly due to increased stress during the holiday season. Over time, however, crime rates have gradually declined, with a sharper drop in multi-victim incidents compared to single-victim cases. This suggests that while efforts to reduce violent crimes like homicides may be effective, suicides—particularly those linked to mental health struggles—remain a persistent challenge.
+
+Overall, the findings emphasize the need for targeted mental health resources and community-based interventions tailored to both urban and rural settings. By combining trend analysis with GIS mapping and socioeconomic insights, our project highlights the complex factors driving gun violence and offers a foundation for informed policy and public health strategies.
+
+Some notable items from EDA include: 
 
 ### Geographic Analysis Using “Hot Zones”
 Beyond a traditional heat map representation, the analysis utilized an advanced “hot zone” mapping technique, which provided a nuanced understanding of crime distributions at a city-wide level. Unlike simple density-based visualizations,these hot zones highlighted regions with concentrated crime activity, offering a more granular perspective on geographic crime patterns. This approach illuminated the spatial heterogeneity of criminal activity, revealing stark contrasts between neighborhoods and cities. The visualizations were particularly insightful in demonstrating how crime clusters correspond to underlying socioeconomic realities, enabling an explanation of how such disparities are spatially distributed.
@@ -51,3 +62,14 @@ Washington, D.C., stood out as a particularly notable case, embodying stark soci
 ### Anomalous Patterns in Maine
 One of the more unexpected findings pertained to Maine. When examining the number of
 victims per incident without adjusting for state population (unscaled analysis), Maine presented a higher-than-expected rate compared to national averages. This anomaly can be attributed to the state’s unique mix of urbanized areas, such as Bangor, Augusta, and Bar Harbor, juxtaposed with its predominantly rural landscape. The data suggests that criminal activity in Maine follows a consistent pattern across both urban and rural areas, but this uniformity leads to elevated per- incident victim counts when state population is not accounted for. While this trend does not entirely deviate from national norms, it is notable in the context of Maine’s demographic and geographic composition.
+
+## EDA Limitation
+
+It is important to note that the data makes to distinction between homicide and suicide, and since suicide is technically a crime, it is reported in the gun-related crime statistics without any differentiation. As public health professionals, it is important to realize that while suicide is a trajdey it the life course, personality matrix, and present economic condition that pushes an individual to suicide is often appreciable different that those who commit homicide.
+
+Finally, one last limitation is that there is no reality recent data. Being able to assess the affects of the economic downturn due to the dual problems of inflation and loss of economic activity meaning that people were making less money and the money they were making was worth less, greatly accelerating the economic pressures into criminality. 
+
+## Summary
+
+Through an analysis of general trends and basic GIS mapping of the available data, our findings aligned with established patterns in public health. We observed that both the number of crimes and the number of individuals affected by these crimes have decreased over time, reflecting broader societal improvements in reducing violence and its impacts. This decline underscores the value of continued public health efforts to address the root causes of violence and promote safer communities.
+
