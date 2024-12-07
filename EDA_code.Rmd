@@ -7,10 +7,7 @@ output:
     code_folding: hide
 ---
 
-# Loading Libraries and Reading Data
-
-```{r message=FALSE}
-
+```{r include=FALSE,message=FALSE}
 library(tidyverse) 
 library(lubridate)
 library(ggplot2)
@@ -18,10 +15,6 @@ library(knitr)
 library(plotly)
 library(sf)
 library(leaflet)
-
-```
-
-```{r}
 
 knitr::opts_chunk$set(
 	echo = TRUE,
@@ -40,40 +33,36 @@ options(
 
 scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
-
 ```
 
 ```{r}
-
 gun_df = read.csv("data/mass_shootings_2018_2024_cleaned.csv") |>
   janitor::clean_names()
-
 ```
 
-## Structure and Size of Data 
+### Structure and Size of Data
 
-The dataset contains information on gun-related incidents from 2018 to 2024 across different cities and states in the United States. There are a total of `nrow(gun_df)` observation and `ncol(gun_df)` variables. 
+The dataset contains information on gun-related incidents from 2018 to 2024 across different cities and states in the United States. There are a total of `r nrow(gun_df)` observation and `r ncol(gun_df)` variables.
 
-- `date`: Date of the incident (class: `Date`)
-- `city`: City where the incident occurred (class: `character`)
-- `state`: State where the incident occurred (class: `character`)
-- `dead`: Number of fatalities (class: `integer`)
-- `injured`: Number of injuries (class: `integer`)
-- `total`: Total number of victims (Dead + Injured) (class: `character`)
-- `description`: Textual description of incident (class: `character`)
+-   `date`: Date of the incident (class: `Date`)
+-   `city`: City where the incident occurred (class: `character`)
+-   `state`: State where the incident occurred (class: `character`)
+-   `dead`: Number of fatalities (class: `integer`)
+-   `injured`: Number of injuries (class: `integer`)
+-   `total`: Total number of victims (Dead + Injured) (class: `character`)
+-   `description`: Textual description of incident (class: `character`)
 
 ```{r}
-
 glimpse(gun_df) 
-
 ```
 
-# Comparing Number of Incidents by Year, Quarter, Month, and Weekday 
+### Comparing Number of Incidents by Year, Quarter, Month, and Weekday
 
-First, we will compare the number of incidents by year. 
+#### By Year
+
+First, we will compare the number of incidents by year.
 
 ```{r}
-
 gun_df = gun_df |>
   mutate(date = as.Date(date), 
          year = year(date)) 
@@ -95,15 +84,15 @@ gun_plot = gun_df |>
   theme(legend.position = "none")
 
 print(gun_plot)
-
 ```
 
-The graph shows a general upward trend in gun-related incidents from 2018 to 2022. The peak would be at 717 incidents. The year 2020 shows a significant increase, rising from 441 incidents in 2019 to 617 incidents, and the trend continues with 703 incidents in 2021. However, from 2023 to 2024, the number of incidents appear to decline, with 596 incidents in 2023 and 538 incidents in 2024. This suggests that while the number of incidents has increased over the past few years, the decline in recent years might reflect a shift in trends or external factors impacting the data. Further analysis would be needed to understand the variations in detail. 
+The graph shows a general upward trend in gun-related incidents from 2018 to 2022. The peak would be at 717 incidents. The year 2020 shows a significant increase, rising from 441 incidents in 2019 to 617 incidents, and the trend continues with 703 incidents in 2021. However, from 2023 to 2024, the number of incidents appear to decline, with 596 incidents in 2023 and 538 incidents in 2024. This suggests that while the number of incidents has increased over the past few years, the decline in recent years might reflect a shift in trends or external factors impacting the data. Further analysis would be needed to understand the variations in detail.
 
-We will now compare the number of incidents by quarter for each year. 
+#### By Quarter
+
+We will now compare the number of incidents by quarter for each year.
 
 ```{r}
-
 gun_df = gun_df |>
   mutate(date = as.Date(date, format = "%Y-%m-%d"),
          year = year(date),
@@ -120,13 +109,11 @@ gun1_plot = gun_df |>
     fill = "Year"
   )
 print(gun1_plot)
-
 ```
 
-Let's further break it down by years and quarters. 
+Let's further break it down by years and quarters.
 
 ```{r}
-
 q1 = gun_df |>
   filter(year != 2013) |>
   select(year, quarter) |>
@@ -151,15 +138,15 @@ q2 = gun_df |>
   theme(legend.position = "none")
 
 gridExtra::grid.arrange(q1, q2)
-
 ```
 
 The dataset on incidents of gun violence from 2018-2024 show some seasonality. We notice incidents in Q1 and Q4 are generally lower than those in Q2 and Q3. The second graph highlights that Q1 incidents increased steadily from 2018 to 2021, with smaller increases observed between 2021 and 2022, as well as between 2022 and 2023, suggesting a leveling-off trend during this period. In 2024, there is a slight decrease compared to 2023, but it is important to consider that 2024 is not yet complete. This potential plateau in Q1 incidents could signal a stabilization, though the overall trend since 2018 indicates a significant increase that still warrants attention.
 
-We will now compare the number of incidents by months. 
+#### By Month
+
+We will now compare the number of incidents by months.
 
 ```{r}
-
 gun_df$month <- month(gun_df$date, label = TRUE)
 
 gun2_plot = plotly::ggplotly(
@@ -174,15 +161,15 @@ gun2_plot = plotly::ggplotly(
 ) 
 
 gun2_plot
-
 ```
 
 The graph shows the number of incidents by month. Again, we see a clear seasonal trend. Incidents steadily rise from January through July, peaking in July (likely due to heightened activity during the summer months). A sharp decline follows from August to December, with November and December showing the lowest numbers. This could be influenced by colder weather, holiday periods, or shorter months (i.e., February). The visible trends suggest a relationship between weather (seasonal variations), social behavior, and incident rates. You can hover over the bars for exact values to compare these trends in more detail.
 
-Let's see the dates with the most incidents. 
+#### By Date
+
+Let's see the dates with the most incidents.
 
 ```{r message=FALSE}
-
 gun_df$day = day(gun_df$date)  
 gun_df = gun_df |> mutate(date2 = paste(month, day)) 
 
@@ -194,15 +181,15 @@ knitr::kable(
     arrange(desc(n)) |> 
     rename(date = date2, "total number of incidents" = n)
 )
-
 ```
 
 The table highlights the dates with the highest total number of incidents, aggregated over 2018-2024. July 5th and July 4th stand out with 49 and 48 incidents respectively, indicating that Independence Day celebrations significantly contribute to increased incidents, likely due to festivities and the use of fireworks or firearms. January 1st, with 31 incidents, suggests that New Year's Day also brings heightened risk, potentially linked to post-midnight celebrations and gatherings. The remaining dates predominantly occur in late June and July, with totals ranging from 21 to 26 incidents, reflecting a seasonal peak in incidents during summer months. May 18th, while slightly earlier, still aligns closely with this summer trend, reinforcing the pattern of increased incidents during warmer months. These results show the influence of holidays and seasonal trends on incident rates.
 
+#### By Weekday
+
 We will now compare the number of incidents by weekday.
 
 ```{r}
-
 gun_df$weekday = wday(gun_df$date, label = TRUE)
 
 gun_df |> 
@@ -212,15 +199,13 @@ gun_df |>
   scale_y_continuous(labels = scales::comma) + 
   labs(x = 'Weekday', y = 'Number of incidents', title = 'Cumulative Incidents by Weekday') +
   theme(legend.position = "none")
-
 ```
 
-Sunday stands out as the most dangerous day, with incidents far exceeding 900. Saturdays follow closely with around 900 incidents. Fridays show a moderate increase with about 450 incidents, marking the start of the weekend.Meanwhile, weekdays see significantly lower numbers, with Tuesday recording the fewest incidents at around 200, followed by Thursday at about 350, Wednesday at 375, and Monday at 440. This trend show the influence of weekends or leisure culture on the frequency of incidents, with weekdays being relatively safer perhaps due to structured routines and fewer late-night activities. 
+Sunday stands out as the most dangerous day, with incidents far exceeding 900. Saturdays follow closely with around 900 incidents. Fridays show a moderate increase with about 450 incidents, marking the start of the weekend.Meanwhile, weekdays see significantly lower numbers, with Tuesday recording the fewest incidents at around 200, followed by Thursday at about 350, Wednesday at 375, and Monday at 440. This trend show the influence of weekends or leisure culture on the frequency of incidents, with weekdays being relatively safer perhaps due to structured routines and fewer late-night activities.
 
-# Incidents by State
+### Incidents by State
 
 ```{r}
-
 plotly::ggplotly(gun_df %>% 
                    count(state) %>%
         ggplot(aes(x=reorder(state, n), y=n, fill=n, text=state, fill = state)) +
@@ -228,15 +213,13 @@ plotly::ggplotly(gun_df %>%
         theme(axis.text.x = element_text(angle = 80, hjust = 1)) +
         labs(x='', y='Number of incidents', title = 'Cumulative Incidents by State'),
         tooltip=c("text", "y"))
-
 ```
 
 The interactive bar graph above shows absolute number of gun violence by states. Hovering over the bars shows a label with the absolute number of incidents for a state. Illinois has the highest number of gun violence cases followed by Texas and California.
 
-# Incidents Relative to State Population 
+### Incidents Relative to State Population
 
-```{r}
-
+```{r message=FALSE,results='hide'}
 statesPop <- read_csv("data/PopulationUS.csv")
 
 statesPop <- statesPop %>% 
@@ -250,11 +233,9 @@ statesPop <- statesPop %>%
   rename(state=NAME)
 
 statesPop$state <- as.factor(statesPop$state)
-
 ```
 
 ```{r}
-
 incidentsByState <- gun_df %>% 
   group_by(state) %>%
   count(state)
@@ -269,15 +250,11 @@ incidentsByState <- incidentsByState %>%
 incidentsByState$Per100000 <- ((incidentsByState$n/incidentsByState$POPESTIMATE2017)*100000)
 
 kable(head(incidentsByState))
-
-incidentsByState
-
 ```
 
-This table provides the numerical values for the number of incidents, 2017 population, and the scaled number of incidents per 100,000 people. 
+This table provides the numerical values for the number of incidents, 2017 population, and the scaled number of incidents per 100,000 people.
 
 ```{r}
-
 plot <- ggplot(incidentsByState, aes(x = reorder(state, Per100000), y = Per100000, fill = Per100000)) +
   geom_bar(stat = "identity") +
   coord_flip() +
@@ -286,25 +263,21 @@ plot <- ggplot(incidentsByState, aes(x = reorder(state, Per100000), y = Per10000
   theme(legend.position = "none")
 
 ggplotly(plot, tooltip = c("y", "x"))
-
 ```
 
-This is the Number of Incidents scaled to state population. The order changes quite drastically where the District of Columbia, Louisiana, and Mississippi now lead and Idaho, Wyoming, and New Hampshire now have the lowest though the bottom is much more concentrated. 
+This is the Number of Incidents scaled to state population. The order changes quite drastically where the District of Columbia, Louisiana, and Mississippi now lead and Idaho, Wyoming, and New Hampshire now have the lowest though the bottom is much more concentrated.
 
-# Interactive Map
+#### Interactive Map of Incidents by State
 
-```{r}
-
+```{r results='hide'}
 states <- st_read(dsn = "data/cb_2017_us_state_500k/cb_2017_us_state_500k.shp", quiet = FALSE, stringsAsFactors = TRUE)
 
-class(states)
+# class(states)
 
 kable(head(st_drop_geometry(states)))
-
 ```
 
 ```{r}
-
 addPer100k <- data.frame(id=states$GEOID, 
                          name=states$NAME)
 
@@ -315,11 +288,9 @@ addPer100k <- left_join(addPer100k, incidentsByState %>%
 addPer100k$Per100000[is.na(addPer100k$Per100000)] <- 0
 
 states$per100k <- addPer100k$Per100000
-
 ```
 
 ```{r}
-
 bins <- c(0, 0.5, 1.0, 1.5, 2.0, Inf)
 
 pal <- colorBin("YlOrRd", 
@@ -367,15 +338,13 @@ leaflet(data = states) %>%
                   opacity = 0.7, 
                   title = "Incidents", 
                   position = "bottomright")
-
 ```
 
-Here an interactive map which displays the same data. It is scaled via a discrete legend so the heat map is slightly different than viridis but it conveys the same data in a more engaging format. 
+Here an interactive map which displays the same data. It is scaled via a discrete legend so the heat map is slightly different than viridis but it conveys the same data in a more engaging format.
 
-# Victims by State
+### Victims by State
 
 ```{r}
-
 VictimsByState <- gun_df %>% 
   group_by(state) %>% 
   summarize(total_victims=sum(total), 
@@ -385,14 +354,16 @@ VictimsByState <- gun_df %>%
             total_incidence=n(), 
             percent_victims_per_incidents=round(total_victims/total_incidence,2))
 
-head(VictimsByState)
+VictimsByState_table = VictimsByState |>
+  head(10) |>
+  knitr::kable()
 
+VictimsByState_table
 ```
 
 This table provides the number of victims by state and the number of victims per incident by state. This shows how many people were involved in the average incident by state.
 
 ```{r}
-
 VictimsByState %>% ggplot(aes(x = reorder(state, 
                          -percent_victims_per_incidents), 
              y = percent_victims_per_incidents, 
@@ -407,15 +378,11 @@ VictimsByState %>% ggplot(aes(x = reorder(state,
   
   theme(axis.text.x = element_text(angle = 80, 
                                    hjust = 1))
-
 ```
-
 
 The bar graph above shows the number of victims per incident by state. Maine has the highest victims by incidents followed by Washington, DC followed by Puerto Rico.
 
-
 ```{r}
-
 VictimsByState <- left_join(VictimsByState, 
                            statesPop, 
                            by="state")
@@ -440,15 +407,13 @@ plotly::ggplotly(VictimsByState %>%
           
         theme(legend.position="none"),
         tooltip=c("text", "y"))
-
 ```
 
-This shows the average number of victims per incident when we scale by state. There is another dramatic reordering with Louisiana, Mississippi, and Illinois now taking the top spot. There is no data for DC. 
+This shows the average number of victims per incident when we scale by state. There is another dramatic reordering with Louisiana, Mississippi, and Illinois now taking the top spot. There is no data for DC.
 
-# Interactive Map
+#### Interactive Map of Victims by State
 
 ```{r}
-
 addPer100k <- addPer100k %>% select(id, name)
 
 addPer100k <- left_join(addPer100k, VictimsByState %>% 
@@ -459,11 +424,9 @@ addPer100k <- left_join(addPer100k, VictimsByState %>%
 addPer100k$Per100000[is.na(addPer100k$Per100000)] <- 0
 
 states$per100k <- addPer100k$Per100000
-
 ```
 
 ```{r}
-
 bins <- c(0, 5, 10, 15, 20, Inf)
 pal <- colorBin("YlOrRd", domain = states$per100k, bins = bins)
 
@@ -506,49 +469,52 @@ leaflet(data = states) %>%
                   opacity = 0.7, 
                   title = "Victims Per Incident", 
                   position = "bottomright")
-
 ```
 
 Once again this is an interative map which helps visalize and reinforce the previous information.
 
-# Incidents by City
+### Incidents by City
 
-```{r}
+Here are the top number of incidents by city.
 
+```{r message=FALSE}
 incidentsByCity <- gun_df %>% 
   select(city, state) %>% 
   group_by(city, state) %>% 
   summarize(cityIncidents=n())
 
-incidentsByCity
+incidentsByCity_table = incidentsByCity |>
+  head(10) |>
+  knitr::kable()
 
-```
-
-Here are the top number of incidents by city.
-
-```{r}
-
-incidents_nystate <- incidentsByCity[incidentsByCity$state == 'New York', ] 
-
-incidents_nystate
-
+incidentsByCity_table
 ```
 
 Here are the top number of incidents per city within New York State.
 
 ```{r}
+incidents_nystate <- incidentsByCity[incidentsByCity$state == 'New York', ] 
 
+incidents_nystate_table = incidents_nystate |>
+  head(10) |>
+  knitr::kable()
+
+incidents_nystate_table
+```
+
+Here are the number of incidents per New York City.
+
+```{r}
 incidents_nyc <- incidentsByCity[(incidentsByCity$city %in% c('New York City')) & 
                                    incidentsByCity$state=='New York',]
 
-incidents_nyc
-
+incidents_nyc_table = incidents_nyc |>
+  knitr::kable()
 ```
 
-And here are the number of incidents per New York City. For a city of 8 million people this seems quite low. This suggest that crime has fallen dramatically, crime is under-reported, or that the data collection mechanism is selective. 
+For a city of 8 million people this seems quite low. This suggests that crime has fallen dramatically, crime is under-reported, or that the data collection mechanism is selective.
 
 ```{r}
-
 threshold <- incidentsByCity %>%
   pull(cityIncidents) %>%
   sort(decreasing = TRUE) %>%
@@ -569,21 +535,18 @@ top_cities %>%
          title = 'Top 50 Cities by Number of Incidents',
          fill = 'Number of Incidents') +
     coord_flip()
-
 ```
 
 The bar graph above shows the number of incidents by city. Chicago has the highest number of incidents followed by Philadelphia followed by New York City.
 
-```{r}
+### Merging Location Data for Incident Mapping
 
+We are merging a new dataset obtained from Simple Maps US Cities to our `gun_df` dataset to add the variables latitude (`lat`) and longitude (`lng`) of all included US cities for visualizations.
+
+```{r}
 uscities <- read.csv("data/simplemaps_uscities/uscities.csv") |>
   janitor::clean_names()
 
-```
-
-# Merge datasets to add lat and lon to gun_df
-
-```{r}
 gun_df <- gun_df |>
   left_join(
     uscities |> select(city, state_name, lat, lng),
@@ -593,21 +556,23 @@ gun_df <- gun_df |>
 write.csv(gun_df, "gun_df.csv")
 ```
 
-# Incidents with highet number of victims
+### Top Incidents by Victim Count
 
 ```{r}
 top_incidents <- gun_df |> 
-  select(date, city, state, dead, injured, total, description, lat, lng) |> 
+  select(date, city, state, dead, injured, total, lat, lng) |> 
   arrange(desc(total)) |> 
-  slice(1:13)
+  slice(1:13) 
 
-top_incidents
+top_incidents_table = top_incidents |>
+  knitr::kable()
+
+top_incidents_table
 ```
 
 The above shows the 13 most severe gun-related incidents in the dataset, ranked by the total number of victims (dead and injured). The incidents range from mass shootings at public events to tragic attacks in schools and other locations. Each entry provides details on the location, date, fatalities, injuries, and a brief description of the event, offering insights into the magnitude and context of these tragedies.
 
-## Interactive Map of the Incidents with highest numbers of victims
->>>>>>> 776994d6047bb7f057054a7273120ec876bfa6f7
+### Interactive Map of Top Incidents by Victim Count
 
 ```{r}
 labels <- paste0(
@@ -626,7 +591,5 @@ leaflet(top_incidents) |>
     label = labels, 
     fillOpacity = 0.7
   ) 
-
 ```
-
 

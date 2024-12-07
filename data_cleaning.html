@@ -29,7 +29,11 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
@@ -218,7 +222,73 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
 
 
 
@@ -228,6 +298,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -277,6 +357,14 @@ $(document).ready(function () {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Data Cleaning</h1>
@@ -284,6 +372,20 @@ $(document).ready(function () {
 </div>
 
 
+<p><br></p>
+<div id="define-the-data-cleaning-function" class="section level3">
+<h3>Define the Data Cleaning Function</h3>
+<p>The <code>clean_data</code> function standardizes the dataset
+structure and formats the dates. It adapts column names based on the
+number of columns in the dataset and handles inconsistencies such as
+parentheses, brackets, and whitespace in the data.</p>
+<ul>
+<li>Rename columns based on the structure of the dataset.</li>
+<li>Handle differences in column counts (e.g., 6 or 7 columns).</li>
+<li>Remove unnecessary characters like parentheses and brackets.</li>
+<li>Trim whitespaces and clean special characters.</li>
+<li>Standardize and format dates, adding the year if missing.</li>
+</ul>
 <pre class="r"><code>library(dplyr)
 library(tidyr)
 library(stringr)
@@ -322,9 +424,18 @@ clean_data &lt;- function(data, year) {
     mutate(Date = as.Date(Date, format = &quot;%B %d, %Y&quot;))
   
   return(data)
-}
-
-# Load and clean each year&#39;s data
+}</code></pre>
+</div>
+<div id="load-and-clean-data-for-each-year" class="section level3">
+<h3>Load and Clean Data for Each Year</h3>
+<p>The following steps are repeated for each year’s dataset
+(2018-2024):</p>
+<ul>
+<li>Load the dataset for the given year.</li>
+<li>Clean the dataset using the clean_data function.</li>
+<li>Store the cleaned dataset in a list for further processing.</li>
+</ul>
+<pre class="r"><code># Load and clean each year&#39;s data
 years &lt;- 2018:2024
 all_data &lt;- list()
 
@@ -336,9 +447,17 @@ for (year in years) {
   # Clean and store
   cleaned_data &lt;- clean_data(data, year)
   all_data[[as.character(year)]] &lt;- cleaned_data
-}
-
-# Combine all years into one dataframe
+}</code></pre>
+</div>
+<div id="combine-and-finalize-the-data" class="section level3">
+<h3>Combine and Finalize the Data</h3>
+<p>After cleaning the data for all years:</p>
+<ul>
+<li>Combine the datasets into a single dataframe.</li>
+<li>Remove rows with missing values.</li>
+<li>Sort the dataset by date in descending order.</li>
+</ul>
+<pre class="r"><code># Combine all years into one dataframe
 final_data &lt;- bind_rows(all_data)
 
 # Remove rows with any NA values
@@ -347,12 +466,19 @@ final_data &lt;- final_data %&gt;%
 
 # Sort the data in descending order by Date
 final_data_sorted &lt;- final_data %&gt;%
-  arrange(desc(Date))
+  arrange(desc(Date))</code></pre>
+</div>
+<div id="save-the-cleaned-data" class="section level3">
+<h3>Save the Cleaned Data</h3>
+<p>Export the cleaned and combined dataset to a new CSV file for future
+use.</p>
+<pre class="r"><code>write.csv(final_data_sorted, &quot;data/mass_shootings_2018_2024_cleaned.csv&quot;, row.names = FALSE)</code></pre>
+</div>
 
-write.csv(final_data_sorted, &quot;data/mass_shootings_2018_2024_cleaned.csv&quot;, row.names = FALSE)</code></pre>
 
 
-
+</div>
+</div>
 
 </div>
 
@@ -384,7 +510,41 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
