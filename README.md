@@ -1,8 +1,9 @@
 # P8105 Final Project
-**Mass Shootings in the United States (2018–2024): An Analysis**
+## Mass Shootings in the United States (2018–2024): An Analysis
 
 This project analyzes mass shootings in the United States from 2018 to 2024. Using data from Wikipedia and U.S. Census Bureau, we aim to explore trends, demographics, and geographic patterns associated with these incidents. The project also includes statistical modeling and an interactive dashboard for visualizing and interpreting the results.
 
+**Project Link:** https://keving273.github.io/p8105_final/
 
 ## Data Sources
 1. **Wikipedia**:
