@@ -40,7 +40,7 @@ gun_df = read.csv("data/mass_shootings_2018_2024_cleaned.csv") |>
   janitor::clean_names()
 ```
 
-### Structure and Size of Data
+## Structure and Size of Data
 
 The dataset contains information on gun-related incidents from 2018 to 2024 across different cities and states in the United States. There are a total of `r nrow(gun_df)` observation and `r ncol(gun_df)` variables.
 
@@ -56,9 +56,9 @@ The dataset contains information on gun-related incidents from 2018 to 2024 acro
 glimpse(gun_df) 
 ```
 
-### Comparing Number of Incidents by Year, Quarter, Month, and Weekday
+## Comparing Number of Incidents by Year, Quarter, Month, and Weekday
 
-#### By Year
+### By Year
 
 First, we will compare the number of incidents by year.
 
@@ -88,7 +88,7 @@ print(gun_plot)
 
 The graph shows a general upward trend in gun-related incidents from 2018 to 2022. The peak would be at 717 incidents. The year 2020 shows a significant increase, rising from 441 incidents in 2019 to 617 incidents, and the trend continues with 703 incidents in 2021. However, from 2023 to 2024, the number of incidents appear to decline, with 596 incidents in 2023 and 538 incidents in 2024. This suggests that while the number of incidents has increased over the past few years, the decline in recent years might reflect a shift in trends or external factors impacting the data. Further analysis would be needed to understand the variations in detail.
 
-#### By Quarter
+### By Quarter
 
 We will now compare the number of incidents by quarter for each year.
 
@@ -142,7 +142,7 @@ gridExtra::grid.arrange(q1, q2)
 
 The dataset on incidents of gun violence from 2018-2024 show some seasonality. We notice incidents in Q1 and Q4 are generally lower than those in Q2 and Q3. The second graph highlights that Q1 incidents increased steadily from 2018 to 2021, with smaller increases observed between 2021 and 2022, as well as between 2022 and 2023, suggesting a leveling-off trend during this period. In 2024, there is a slight decrease compared to 2023, but it is important to consider that 2024 is not yet complete. This potential plateau in Q1 incidents could signal a stabilization, though the overall trend since 2018 indicates a significant increase that still warrants attention.
 
-#### By Month
+### By Month
 
 We will now compare the number of incidents by months.
 
@@ -165,7 +165,7 @@ gun2_plot
 
 The graph shows the number of incidents by month. Again, we see a clear seasonal trend. Incidents steadily rise from January through July, peaking in July (likely due to heightened activity during the summer months). A sharp decline follows from August to December, with November and December showing the lowest numbers. This could be influenced by colder weather, holiday periods, or shorter months (i.e., February). The visible trends suggest a relationship between weather (seasonal variations), social behavior, and incident rates. You can hover over the bars for exact values to compare these trends in more detail.
 
-#### By Date
+### By Date
 
 Let's see the dates with the most incidents.
 
@@ -185,7 +185,7 @@ knitr::kable(
 
 The table highlights the dates with the highest total number of incidents, aggregated over 2018-2024. July 5th and July 4th stand out with 49 and 48 incidents respectively, indicating that Independence Day celebrations significantly contribute to increased incidents, likely due to festivities and the use of fireworks or firearms. January 1st, with 31 incidents, suggests that New Year's Day also brings heightened risk, potentially linked to post-midnight celebrations and gatherings. The remaining dates predominantly occur in late June and July, with totals ranging from 21 to 26 incidents, reflecting a seasonal peak in incidents during summer months. May 18th, while slightly earlier, still aligns closely with this summer trend, reinforcing the pattern of increased incidents during warmer months. These results show the influence of holidays and seasonal trends on incident rates.
 
-#### By Weekday
+### By Weekday
 
 We will now compare the number of incidents by weekday.
 
@@ -203,7 +203,7 @@ gun_df |>
 
 Sunday stands out as the most dangerous day, with incidents far exceeding 900. Saturdays follow closely with around 900 incidents. Fridays show a moderate increase with about 450 incidents, marking the start of the weekend.Meanwhile, weekdays see significantly lower numbers, with Tuesday recording the fewest incidents at around 200, followed by Thursday at about 350, Wednesday at 375, and Monday at 440. This trend show the influence of weekends or leisure culture on the frequency of incidents, with weekdays being relatively safer perhaps due to structured routines and fewer late-night activities.
 
-### Incidents by State
+## Incidents by State
 
 ```{r}
 plotly::ggplotly(gun_df %>% 
@@ -217,7 +217,7 @@ plotly::ggplotly(gun_df %>%
 
 The interactive bar graph above shows absolute number of gun violence by states. Hovering over the bars shows a label with the absolute number of incidents for a state. Illinois has the highest number of gun violence cases followed by Texas and California.
 
-### Incidents Relative to State Population
+## Incidents Relative to State Population
 
 ```{r message=FALSE,results='hide'}
 statesPop <- read_csv("data/PopulationUS.csv")
@@ -267,7 +267,7 @@ ggplotly(plot, tooltip = c("y", "x"))
 
 This is the Number of Incidents scaled to state population. The order changes quite drastically where the District of Columbia, Louisiana, and Mississippi now lead and Idaho, Wyoming, and New Hampshire now have the lowest though the bottom is much more concentrated.
 
-#### Interactive Map of Incidents by State
+### Interactive Map of Incidents by State
 
 ```{r results='hide'}
 states <- st_read(dsn = "data/cb_2017_us_state_500k/cb_2017_us_state_500k.shp", quiet = FALSE, stringsAsFactors = TRUE)
@@ -342,7 +342,7 @@ leaflet(data = states) %>%
 
 Here an interactive map which displays the same data. It is scaled via a discrete legend so the heat map is slightly different than viridis but it conveys the same data in a more engaging format.
 
-### Victims by State
+## Victims by State
 
 ```{r}
 VictimsByState <- gun_df %>% 
@@ -411,7 +411,7 @@ plotly::ggplotly(VictimsByState %>%
 
 This shows the average number of victims per incident when we scale by state. There is another dramatic reordering with Louisiana, Mississippi, and Illinois now taking the top spot. There is no data for DC.
 
-#### Interactive Map of Victims by State
+### Interactive Map of Victims by State
 
 ```{r}
 addPer100k <- addPer100k %>% select(id, name)
@@ -473,7 +473,7 @@ leaflet(data = states) %>%
 
 Once again this is an interative map which helps visalize and reinforce the previous information.
 
-### Incidents by City
+## Incidents by City
 
 Here are the top number of incidents by city.
 
@@ -539,7 +539,7 @@ top_cities %>%
 
 The bar graph above shows the number of incidents by city. Chicago has the highest number of incidents followed by Philadelphia followed by New York City.
 
-### Merging Location Data for Incident Mapping
+#### **Merging Location Data for Incident Mapping:**
 
 We are merging a new dataset obtained from Simple Maps US Cities to our `gun_df` dataset to add the variables latitude (`lat`) and longitude (`lng`) of all included US cities for visualizations.
 
@@ -556,7 +556,7 @@ gun_df <- gun_df |>
 write.csv(gun_df, "gun_df.csv")
 ```
 
-### Top Incidents by Victim Count
+## Top Incidents by Victim Count
 
 ```{r}
 top_incidents <- gun_df |> 
@@ -572,7 +572,7 @@ top_incidents_table
 
 The above shows the 13 most severe gun-related incidents in the dataset, ranked by the total number of victims (dead and injured). The incidents range from mass shootings at public events to tragic attacks in schools and other locations. Each entry provides details on the location, date, fatalities, injuries, and a brief description of the event, offering insights into the magnitude and context of these tragedies.
 
-### Interactive Map of Top Incidents by Victim Count
+## Interactive Map of Top Incidents by Victim Count
 
 ```{r}
 labels <- paste0(
