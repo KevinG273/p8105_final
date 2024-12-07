@@ -66,27 +66,27 @@ The dataset contains information on gun-related incidents from 2018 to 2024 acro
 
 First, we will compare the number of incidents by year.
 
-IMAGE
-
+![Number of incidents by year](EDA_code_files/figure-html/unnamed-chunk-4-1.png)
 The graph shows a general upward trend in gun-related incidents from 2018 to 2022. The peak would be at 717 incidents. The year 2020 shows a significant increase, rising from 441 incidents in 2019 to 617 incidents, and the trend continues with 703 incidents in 2021. However, from 2023 to 2024, the number of incidents appear to decline, with 596 incidents in 2023 and 538 incidents in 2024. This suggests that while the number of incidents has increased over the past few years, the decline in recent years might reflect a shift in trends or external factors impacting the data. Further analysis would be needed to understand the variations in detail.
 
 #### **By Quarter:**
 
 We will now compare the number of incidents by quarter for each year.
 
-IMAGE
+![Number of incidents by year](EDA_code_files/figure-html/unnamed-chunk-5-1.png)
 
 Let's further break it down by years and quarters.
 
-IMAGE
+![Number of incidents by years and quarters](EDA_code_files/figure-html/unnamed-chunk-6-1.png)
+
 
 The dataset on incidents of gun violence from 2018-2024 show some seasonality. We notice incidents in Q1 and Q4 are generally lower than those in Q2 and Q3. The second graph highlights that Q1 incidents increased steadily from 2018 to 2021, with smaller increases observed between 2021 and 2022, as well as between 2022 and 2023, suggesting a leveling-off trend during this period. In 2024, there is a slight decrease compared to 2023, but it is important to consider that 2024 is not yet complete. This potential plateau in Q1 incidents could signal a stabilization, though the overall trend since 2018 indicates a significant increase that still warrants attention.
 
 #### **By Month:**
 
 We will now compare the number of incidents by months.
+![Number of incidents by month](EDA_code_files/figure-html/by_month.png)
 
-IMAGE
 
 The graph shows the number of incidents by month. Again, we see a clear seasonal trend. Incidents steadily rise from January through July, peaking in July (likely due to heightened activity during the summer months). A sharp decline follows from August to December, with November and December showing the lowest numbers. This could be influenced by colder weather, holiday periods, or shorter months (i.e., February). The visible trends suggest a relationship between weather (seasonal variations), social behavior, and incident rates. You can hover over the bars for exact values to compare these trends in more detail.
 
@@ -94,7 +94,7 @@ The graph shows the number of incidents by month. Again, we see a clear seasonal
 
 Let's see the dates with the most incidents.
 
-IMAGE
+![Dates with most incidents](EDA_code_files/figure-html/table1.png)
 
 The table highlights the dates with the highest total number of incidents, aggregated over 2018-2024. July 5th and July 4th stand out with 49 and 48 incidents respectively, indicating that Independence Day celebrations significantly contribute to increased incidents, likely due to festivities and the use of fireworks or firearms. January 1st, with 31 incidents, suggests that New Year's Day also brings heightened risk, potentially linked to post-midnight celebrations and gatherings. The remaining dates predominantly occur in late June and July, with totals ranging from 21 to 26 incidents, reflecting a seasonal peak in incidents during summer months. May 18th, while slightly earlier, still aligns closely with this summer trend, reinforcing the pattern of increased incidents during warmer months. These results show the influence of holidays and seasonal trends on incident rates.
 
@@ -102,49 +102,48 @@ The table highlights the dates with the highest total number of incidents, aggre
 
 We will now compare the number of incidents by weekday.
 
-IMAGE
+![Incidents by weekday](EDA_code_files/figure-html/unnamed-chunk-10-1.png)
 
 Sunday stands out as the most dangerous day, with incidents far exceeding 900. Saturdays follow closely with around 900 incidents. Fridays show a moderate increase with about 450 incidents, marking the start of the weekend.Meanwhile, weekdays see significantly lower numbers, with Tuesday recording the fewest incidents at around 200, followed by Thursday at about 350, Wednesday at 375, and Monday at 440. This trend show the influence of weekends or leisure culture on the frequency of incidents, with weekdays being relatively safer perhaps due to structured routines and fewer late-night activities.
 
 ### **Incidents by State**
 
-IMAGE
+![Incidents by state](EDA_code_files/figure-html/incidents_by_state.png)
 
 The interactive bar graph above shows absolute number of gun violence by states. Hovering over the bars shows a label with the absolute number of incidents for a state. Illinois has the highest number of gun violence cases followed by Texas and California.
 
 ### **Incidents Relative to State Population**
 
-IMAGE
+![Table for Incidents Relative to State Population](EDA_code_files/figure-html/table2.png)
 
 This table provides the numerical values for the number of incidents, 2017 population, and the scaled number of incidents per 100,000 people.
 
-IMAGE
-
+![Incidents Relative to State Population](EDA_code_files/figure-html/incidents_by_statepop.png)
 This is the Number of Incidents scaled to state population. The order changes quite drastically where the District of Columbia, Louisiana, and Mississippi now lead and Idaho, Wyoming, and New Hampshire now have the lowest though the bottom is much more concentrated.
 
 #### **Interactive Map of Incidents by State:**
 
-IMAGE
+![Interactive Map of Incidents by State](EDA_code_files/figure-html/map1.png)
 
 Here an interactive map which displays the same data. It is scaled via a discrete legend so the heat map is slightly different than viridis but it conveys the same data in a more engaging format.
 
 ### **Victims by State**
 
-IMAGE
+![Table for Victims by State](EDA_code_files/figure-html/table3.png)
 
 This table provides the number of victims by state and the number of victims per incident by state. This shows how many people were involved in the average incident by state.
 
-IMAGE
+![Victims per incident by state](EDA_code_files/figure-html/unnamed-chunk-19-1.png)
 
 The bar graph above shows the number of victims per incident by state. Maine has the highest victims by incidents followed by Washington, DC followed by Puerto Rico.
 
-IMAGE
+![Victims per incident by state](EDA_code_files/figure-html/victims_statepop.png)
 
 This shows the average number of victims per incident when we scale by state. There is another dramatic reordering with Louisiana, Mississippi, and Illinois now taking the top spot. There is no data for DC.
 
 #### **Interactive Map of Victims by State:**
 
-IMAGE
+![Interactive Map of Victims by State](EDA_code_files/figure-html/map2.png)
 
 Once again this is an interative map which helps visualize and reinforce the previous information.
 
@@ -152,19 +151,20 @@ Once again this is an interative map which helps visualize and reinforce the pre
 
 Here are the top number of incidents by city.
 
-IMAGE
+![Table for incidents by city](EDA_code_files/figure-html/table4.png)
 
 Here are the top number of incidents per city within New York State.
 
-IMAGE
+![Table for incidents by city within New York State ](EDA_code_files/figure-html/table5.png)
 
-Here are the number of incidents per New York City.
 
-IMAGE
+Here are the number of incidents in New York City.
+
+![Table for incidents in New York City](EDA_code_files/figure-html/table6.png)
 
 For a city of 8 million people this seems quite low. This suggests that crime has fallen dramatically, crime is under-reported, or that the data collection mechanism is selective.
 
-IMAGE
+![Incidents by City](EDA_code_files/figure-html/unnamed-chunk-33-1.png)
 
 The bar graph above shows the number of incidents by city. Chicago has the highest number of incidents followed by Philadelphia followed by New York City.
 
@@ -174,13 +174,13 @@ We are merging a new dataset obtained from Simple Maps US Cities to our `gun_df`
 
 ### **Top Incidents by Victim Count**
 
-IMAGE
+![Table for Top Incidents by Victim Count](EDA_code_files/figure-html/table7.png)
 
-The above shows the 13 most severe gun-related incidents in the dataset, ranked by the total number of victims (dead and injured). The incidents range from mass shootings at public events to tragic attacks in schools and other locations. Each entry provides details on the location, date, fatalities, injuries, and a brief description of the event, offering insights into the magnitude and context of these tragedies.
+The table above shows the 13 most severe gun-related incidents in the dataset, ranked by the total number of victims (dead and injured). The incidents range from mass shootings at public events to tragic attacks in schools and other locations. Each entry provides details on the location, date, fatalities, injuries, and a brief description of the event, offering insights into the magnitude and context of these tragedies.
 
 #### **Interactive Map of Top Incidents by Victim Count:**
 
-IMAGE
+![Interactive Map of Top Incidents by Victim Count](EDA_code_files/figure-html/map3.png)
 
 #### **Geographic Analysis Using “Hot Zones”**:
 

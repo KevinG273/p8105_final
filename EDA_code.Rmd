@@ -510,6 +510,7 @@ incidents_nyc <- incidentsByCity[(incidentsByCity$city %in% c('New York City')) 
 
 incidents_nyc_table = incidents_nyc |>
   knitr::kable()
+incidents_nyc_table
 ```
 
 For a city of 8 million people this seems quite low. This suggests that crime has fallen dramatically, crime is under-reported, or that the data collection mechanism is selective.
@@ -570,7 +571,7 @@ top_incidents_table = top_incidents |>
 top_incidents_table
 ```
 
-The above shows the 13 most severe gun-related incidents in the dataset, ranked by the total number of victims (dead and injured). The incidents range from mass shootings at public events to tragic attacks in schools and other locations. Each entry provides details on the location, date, fatalities, injuries, and a brief description of the event, offering insights into the magnitude and context of these tragedies.
+The table above shows the 13 most severe gun-related incidents in the dataset, ranked by the total number of victims (dead and injured). The incidents range from mass shootings at public events to tragic attacks in schools and other locations. Each entry provides details on the location, date, fatalities, injuries, and a brief description of the event, offering insights into the magnitude and context of these tragedies.
 
 ## Interactive Map of Top Incidents by Victim Count
 
