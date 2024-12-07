@@ -7,9 +7,7 @@ output:
     code_folding: hide
 ---
 
-# Loading Libraries and Reading Data
-
-```{r message=FALSE}
+```{r include=FALSE,message=FALSE}
 library(tidyverse) 
 library(lubridate)
 library(ggplot2)
@@ -17,10 +15,6 @@ library(knitr)
 library(plotly)
 library(sf)
 library(leaflet)
-
-```
-
-```{r}
 
 knitr::opts_chunk$set(
 	echo = TRUE,
@@ -49,7 +43,7 @@ gun_df = read.csv("data/mass_shootings_2018_2024_cleaned.csv") |>
 
 ```
 
-## Structure and Size of Data 
+### Structure and Size of Data 
 
 The dataset contains information on gun-related incidents from 2018 to 2024 across different cities and states in the United States. There are a total of `nrow(gun_df)` observation and `ncol(gun_df)` variables. 
 
@@ -67,12 +61,11 @@ glimpse(gun_df)
 
 ```
 
-# Comparing Number of Incidents by Year, Quarter, Month, and Weekday 
+### Comparing Number of Incidents by Year, Quarter, Month, and Weekday 
 
 First, we will compare the number of incidents by year. 
 
 ```{r}
-
 gun_df = gun_df |>
   mutate(date = as.Date(date), 
          year = year(date)) 
@@ -125,7 +118,6 @@ print(gun1_plot)
 Let's further break it down by years and quarters. 
 
 ```{r}
-
 q1 = gun_df |>
   filter(year != 2013) |>
   select(year, quarter) |>
@@ -216,7 +208,7 @@ gun_df |>
 
 Sunday stands out as the most dangerous day, with incidents far exceeding 900. Saturdays follow closely with around 900 incidents. Fridays show a moderate increase with about 450 incidents, marking the start of the weekend.Meanwhile, weekdays see significantly lower numbers, with Tuesday recording the fewest incidents at around 200, followed by Thursday at about 350, Wednesday at 375, and Monday at 440. This trend show the influence of weekends or leisure culture on the frequency of incidents, with weekdays being relatively safer perhaps due to structured routines and fewer late-night activities. 
 
-# Incidents by State
+### Incidents by State
 
 ```{r}
 
@@ -232,10 +224,9 @@ plotly::ggplotly(gun_df %>%
 
 The interactive bar graph above shows absolute number of gun violence by states. Hovering over the bars shows a label with the absolute number of incidents for a state. Illinois has the highest number of gun violence cases followed by Texas and California.
 
-# Incidents Relative to State Population 
+### Incidents Relative to State Population 
 
-```{r}
-
+```{r message=FALSE,results='hide'}
 statesPop <- read_csv("data/PopulationUS.csv")
 
 statesPop <- statesPop %>% 
@@ -253,7 +244,6 @@ statesPop$state <- as.factor(statesPop$state)
 ```
 
 ```{r}
-
 incidentsByState <- gun_df %>% 
   group_by(state) %>%
   count(state)
@@ -290,20 +280,17 @@ ggplotly(plot, tooltip = c("y", "x"))
 
 This is the Number of Incidents scaled to state population. The order changes quite drastically where the District of Columbia, Louisiana, and Mississippi now lead and Idaho, Wyoming, and New Hampshire now have the lowest though the bottom is much more concentrated. 
 
-# Interactive Map
+### Interactive Map
 
-```{r}
-
+```{r results='hide'}
 states <- st_read(dsn = "data/cb_2017_us_state_500k/cb_2017_us_state_500k.shp", quiet = FALSE, stringsAsFactors = TRUE)
 
-class(states)
+# class(states)
 
 kable(head(st_drop_geometry(states)))
-
 ```
 
 ```{r}
-
 addPer100k <- data.frame(id=states$GEOID, 
                          name=states$NAME)
 
@@ -371,7 +358,7 @@ leaflet(data = states) %>%
 
 Here an interactive map which displays the same data. It is scaled via a discrete legend so the heat map is slightly different than viridis but it conveys the same data in a more engaging format. 
 
-# Victims by State
+### Victims by State
 
 ```{r}
 
@@ -409,9 +396,7 @@ VictimsByState %>% ggplot(aes(x = reorder(state,
 
 ```
 
-
 The bar graph above shows the number of victims per incident by state. Maine has the highest victims by incidents followed by Washington, DC followed by Puerto Rico.
-
 
 ```{r}
 
@@ -444,7 +429,7 @@ plotly::ggplotly(VictimsByState %>%
 
 This shows the average number of victims per incident when we scale by state. There is another dramatic reordering with Louisiana, Mississippi, and Illinois now taking the top spot. There is no data for DC. 
 
-# Interactive Map
+### Interactive Map
 
 ```{r}
 
@@ -510,10 +495,10 @@ leaflet(data = states) %>%
 
 Once again this is an interative map which helps visalize and reinforce the previous information.
 
-# Incidents by City
+### Incidents by City
 
-```{r}
-
+Here are the top number of incidents by city.
+```{r message=FALSE}
 incidentsByCity <- gun_df %>% 
   select(city, state) %>% 
   group_by(city, state) %>% 
@@ -523,31 +508,24 @@ incidentsByCity
 
 ```
 
-Here are the top number of incidents by city.
-
+Here are the top number of incidents per city within New York State.
 ```{r}
 
 incidents_nystate <- incidentsByCity[incidentsByCity$state == 'New York', ] 
 
 incidents_nystate
-
 ```
-
-Here are the top number of incidents per city within New York State.
-
+Here are the number of incidents per New York City.
 ```{r}
 
 incidents_nyc <- incidentsByCity[(incidentsByCity$city %in% c('New York City')) & 
                                    incidentsByCity$state=='New York',]
 
 incidents_nyc
-
 ```
-
-And here are the number of incidents per New York City. For a city of 8 million people this seems quite low. This suggest that crime has fallen dramatically, crime is under-reported, or that the data collection mechanism is selective. 
+For a city of 8 million people this seems quite low. This suggest that crime has fallen dramatically, crime is under-reported, or that the data collection mechanism is selective. 
 
 ```{r}
-
 threshold <- incidentsByCity %>%
   pull(cityIncidents) %>%
   sort(decreasing = TRUE) %>%
@@ -568,21 +546,16 @@ top_cities %>%
          title = 'Top 50 Cities by Number of Incidents',
          fill = 'Number of Incidents') +
     coord_flip()
-
 ```
 
 The bar graph above shows the number of incidents by city. Chicago has the highest number of incidents followed by Philadelphia followed by New York City.
 
+### Merge datasets to add lat and lon to gun_df
 ```{r}
 
 uscities <- read.csv("data/simplemaps_uscities/uscities.csv") |>
   janitor::clean_names()
 
-```
-
-# Merge datasets to add lat and lon to gun_df
-
-```{r}
 gun_df <- gun_df |>
   left_join(
     uscities |> select(city, state_name, lat, lng),
@@ -592,11 +565,11 @@ gun_df <- gun_df |>
 write.csv(gun_df, "gun_df.csv")
 ```
 
-# Incidents with highet number of victims
+### Incidents with highet number of victims
 
 ```{r}
 top_incidents <- gun_df |> 
-  select(date, city, state, dead, injured, total, description, lat, lng) |> 
+  select(date, city, state, dead, injured, total, lat, lng) |> 
   arrange(desc(total)) |> 
   slice(1:13)
 
@@ -605,8 +578,7 @@ top_incidents
 
 The above shows the 13 most severe gun-related incidents in the dataset, ranked by the total number of victims (dead and injured). The incidents range from mass shootings at public events to tragic attacks in schools and other locations. Each entry provides details on the location, date, fatalities, injuries, and a brief description of the event, offering insights into the magnitude and context of these tragedies.
 
-## Interactive Map of the Incidents with highest numbers of victims
->>>>>>> 776994d6047bb7f057054a7273120ec876bfa6f7
+### Interactive Map of the Incidents with highest numbers of victims
 
 ```{r}
 labels <- paste0(
