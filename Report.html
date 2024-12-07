@@ -13,7 +13,7 @@
 
 <title>Analyzing Mass Shootings in the U.S. (2018-2024)</title>
 
-<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -36,8 +36,8 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -536,7 +536,9 @@ significant increase that still warrants attention.</p>
 </div>
 <div id="by-month" class="section level4">
 <h4><strong>By Month:</strong></h4>
-<p>We will now compare the number of incidents by months.</p>
+<p>We will now compare the number of incidents by months. <img
+src="EDA_code_files/figure-html/by_month.png"
+alt="Number of incidents by month" /></p>
 <p>The graph shows the number of incidents by month. Again, we see a
 clear seasonal trend. Incidents steadily rise from January through July,
 peaking in July (likely due to heightened activity during the summer
@@ -550,7 +552,11 @@ bars for exact values to compare these trends in more detail.</p>
 <div id="by-date" class="section level4">
 <h4><strong>By Date:</strong></h4>
 <p>Let’s see the dates with the most incidents.</p>
-<p>IMAGE</p>
+<div class="float">
+<img src="EDA_code_files/figure-html/table1.png"
+alt="Dates with most incidents" />
+<div class="figcaption">Dates with most incidents</div>
+</div>
 <p>The table highlights the dates with the highest total number of
 incidents, aggregated over 2018-2024. July 5th and July 4th stand out
 with 49 and 48 incidents respectively, indicating that Independence Day
@@ -569,9 +575,9 @@ holidays and seasonal trends on incident rates.</p>
 <h4><strong>By Weekday:</strong></h4>
 <p>We will now compare the number of incidents by weekday.</p>
 <div class="float">
-<img src="EDA_code_files/figure-html/unnamed-chunk-9-1.png"
-alt="Number of incidents by weekday" />
-<div class="figcaption">Number of incidents by weekday</div>
+<img src="EDA_code_files/figure-html/unnamed-chunk-10-1.png"
+alt="Incidents by weekday" />
+<div class="figcaption">Incidents by weekday</div>
 </div>
 <p>Sunday stands out as the most dangerous day, with incidents far
 exceeding 900. Saturdays follow closely with around 900 incidents.
@@ -586,7 +592,11 @@ to structured routines and fewer late-night activities.</p>
 </div>
 <div id="incidents-by-state" class="section level3">
 <h3><strong>Incidents by State</strong></h3>
-<p>IMAGE</p>
+<div class="float">
+<img src="EDA_code_files/figure-html/incidents_by_state.png"
+alt="Incidents by state" />
+<div class="figcaption">Incidents by state</div>
+</div>
 <p>The interactive bar graph above shows absolute number of gun violence
 by states. Hovering over the bars shows a label with the absolute number
 of incidents for a state. Illinois has the highest number of gun
@@ -594,18 +604,28 @@ violence cases followed by Texas and California.</p>
 </div>
 <div id="incidents-relative-to-state-population" class="section level3">
 <h3><strong>Incidents Relative to State Population</strong></h3>
-<p>IMAGE</p>
+<div class="float">
+<img src="EDA_code_files/figure-html/table2.png"
+alt="Table for Incidents Relative to State Population" />
+<div class="figcaption">Table for Incidents Relative to State
+Population</div>
+</div>
 <p>This table provides the numerical values for the number of incidents,
 2017 population, and the scaled number of incidents per 100,000
 people.</p>
-<p>IMAGE</p>
-<p>This is the Number of Incidents scaled to state population. The order
-changes quite drastically where the District of Columbia, Louisiana, and
-Mississippi now lead and Idaho, Wyoming, and New Hampshire now have the
-lowest though the bottom is much more concentrated.</p>
+<p><img src="EDA_code_files/figure-html/incidents_by_statepop.png"
+alt="Incidents Relative to State Population" /> This is the Number of
+Incidents scaled to state population. The order changes quite
+drastically where the District of Columbia, Louisiana, and Mississippi
+now lead and Idaho, Wyoming, and New Hampshire now have the lowest
+though the bottom is much more concentrated.</p>
 <div id="interactive-map-of-incidents-by-state" class="section level4">
 <h4><strong>Interactive Map of Incidents by State:</strong></h4>
-<p>IMAGE</p>
+<div class="float">
+<img src="EDA_code_files/figure-html/map1.png"
+alt="Interactive Map of Incidents by State" />
+<div class="figcaption">Interactive Map of Incidents by State</div>
+</div>
 <p>Here an interactive map which displays the same data. It is scaled
 via a discrete legend so the heat map is slightly different than viridis
 but it conveys the same data in a more engaging format.</p>
@@ -613,22 +633,38 @@ but it conveys the same data in a more engaging format.</p>
 </div>
 <div id="victims-by-state" class="section level3">
 <h3><strong>Victims by State</strong></h3>
-<p>IMAGE</p>
+<div class="float">
+<img src="EDA_code_files/figure-html/table3.png"
+alt="Table for Victims by State" />
+<div class="figcaption">Table for Victims by State</div>
+</div>
 <p>This table provides the number of victims by state and the number of
 victims per incident by state. This shows how many people were involved
 in the average incident by state.</p>
-<p>IMAGE</p>
+<div class="float">
+<img src="EDA_code_files/figure-html/unnamed-chunk-19-1.png"
+alt="Victims per incident by state" />
+<div class="figcaption">Victims per incident by state</div>
+</div>
 <p>The bar graph above shows the number of victims per incident by
 state. Maine has the highest victims by incidents followed by
 Washington, DC followed by Puerto Rico.</p>
-<p>IMAGE</p>
+<div class="float">
+<img src="EDA_code_files/figure-html/victims_statepop.png"
+alt="Victims per incident by state" />
+<div class="figcaption">Victims per incident by state</div>
+</div>
 <p>This shows the average number of victims per incident when we scale
 by state. There is another dramatic reordering with Louisiana,
 Mississippi, and Illinois now taking the top spot. There is no data for
 DC.</p>
 <div id="interactive-map-of-victims-by-state" class="section level4">
 <h4><strong>Interactive Map of Victims by State:</strong></h4>
-<p>IMAGE</p>
+<div class="float">
+<img src="EDA_code_files/figure-html/map2.png"
+alt="Interactive Map of Victims by State" />
+<div class="figcaption">Interactive Map of Victims by State</div>
+</div>
 <p>Once again this is an interative map which helps visualize and
 reinforce the previous information.</p>
 </div>
@@ -636,16 +672,33 @@ reinforce the previous information.</p>
 <div id="incidents-by-city" class="section level3">
 <h3><strong>Incidents by City</strong></h3>
 <p>Here are the top number of incidents by city.</p>
-<p>IMAGE</p>
+<div class="float">
+<img src="EDA_code_files/figure-html/table4.png"
+alt="Table for incidents by city" />
+<div class="figcaption">Table for incidents by city</div>
+</div>
 <p>Here are the top number of incidents per city within New York
 State.</p>
-<p>IMAGE</p>
-<p>Here are the number of incidents per New York City.</p>
-<p>IMAGE</p>
+<div class="float">
+<img src="EDA_code_files/figure-html/table5.png"
+alt="Table for incidents by city within New York State" />
+<div class="figcaption">Table for incidents by city within New York
+State</div>
+</div>
+<p>Here are the number of incidents in New York City.</p>
+<div class="float">
+<img src="EDA_code_files/figure-html/table6.png"
+alt="Table for incidents in New York City" />
+<div class="figcaption">Table for incidents in New York City</div>
+</div>
 <p>For a city of 8 million people this seems quite low. This suggests
 that crime has fallen dramatically, crime is under-reported, or that the
 data collection mechanism is selective.</p>
-<p>IMAGE</p>
+<div class="float">
+<img src="EDA_code_files/figure-html/unnamed-chunk-33-1.png"
+alt="Incidents by City" />
+<div class="figcaption">Incidents by City</div>
+</div>
 <p>The bar graph above shows the number of incidents by city. Chicago
 has the highest number of incidents followed by Philadelphia followed by
 New York City.</p>
@@ -660,8 +713,12 @@ cities for visualizations.</p>
 </div>
 <div id="top-incidents-by-victim-count" class="section level3">
 <h3><strong>Top Incidents by Victim Count</strong></h3>
-<p>IMAGE</p>
-<p>The above shows the 13 most severe gun-related incidents in the
+<div class="float">
+<img src="EDA_code_files/figure-html/table7.png"
+alt="Table for Top Incidents by Victim Count" />
+<div class="figcaption">Table for Top Incidents by Victim Count</div>
+</div>
+<p>The table above shows the 13 most severe gun-related incidents in the
 dataset, ranked by the total number of victims (dead and injured). The
 incidents range from mass shootings at public events to tragic attacks
 in schools and other locations. Each entry provides details on the
@@ -672,7 +729,12 @@ tragedies.</p>
 class="section level4">
 <h4><strong>Interactive Map of Top Incidents by Victim
 Count:</strong></h4>
-<p>IMAGE</p>
+<div class="float">
+<img src="EDA_code_files/figure-html/map3.png"
+alt="Interactive Map of Top Incidents by Victim Count" />
+<div class="figcaption">Interactive Map of Top Incidents by Victim
+Count</div>
+</div>
 </div>
 <div id="geographic-analysis-using-hot-zones" class="section level4">
 <h4><strong>Geographic Analysis Using “Hot Zones”</strong>:</h4>
