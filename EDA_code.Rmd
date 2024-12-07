@@ -45,7 +45,7 @@ gun_df = read.csv("data/mass_shootings_2018_2024_cleaned.csv") |>
 
 ### Structure and Size of Data 
 
-The dataset contains information on gun-related incidents from 2018 to 2024 across different cities and states in the United States. There are a total of `nrow(gun_df)` observation and `ncol(gun_df)` variables. 
+The dataset contains information on gun-related incidents from 2018 to 2024 across different cities and states in the United States. There are a total of `r nrow(gun_df)` observation and `r ncol(gun_df)` variables. 
 
 - `date`: Date of the incident (class: `Date`)
 - `city`: City where the incident occurred (class: `character`)
@@ -66,6 +66,7 @@ glimpse(gun_df)
 First, we will compare the number of incidents by year. 
 
 ```{r}
+
 gun_df = gun_df |>
   mutate(date = as.Date(date), 
          year = year(date)) 
