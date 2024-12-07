@@ -1,11 +1,10 @@
 ---
-title: "MEET THE TEAM"
+title: "Meet The Team!"
 output: 
   html_document:
     toc: true
     toc_float: true
 ---
-<br>
 
 We are a team of MS and MPH students at Columbia University. Our diverse academic backgrounds and shared passion for public health have brought us together to work on this project, which focuses on the Analysis of Mass Shootings in the United States (2018–2024).
 
@@ -13,9 +12,8 @@ Through this project, we’ve aimed to deepen our understanding of applied biost
 
 <br>
 
-## Team Members:
+## **Team Members**:
 
-<br>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
