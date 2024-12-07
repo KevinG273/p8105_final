@@ -1,7 +1,22 @@
 ---
 title: 'Data Cleaning'
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
 ---
+
+<br>
+
+### Define the Data Cleaning Function
+The `clean_data` function standardizes the dataset structure and formats the dates. It adapts column names based on the number of columns in the dataset and handles inconsistencies such as parentheses, brackets, and whitespace in the data.
+
+- Rename columns based on the structure of the dataset.
+- Handle differences in column counts (e.g., 6 or 7 columns).
+- Remove unnecessary characters like parentheses and brackets.
+- Trim whitespaces and clean special characters.
+- Standardize and format dates, adding the year if missing.
 ```{r message=FALSE}
 library(dplyr)
 library(tidyr)
@@ -42,7 +57,15 @@ clean_data <- function(data, year) {
   
   return(data)
 }
+```
+### Load and Clean Data for Each Year
 
+The following steps are repeated for each year's dataset (2018-2024):
+
+- Load the dataset for the given year.
+- Clean the dataset using the clean_data function.
+- Store the cleaned dataset in a list for further processing.
+```{r}
 # Load and clean each year's data
 years <- 2018:2024
 all_data <- list()
@@ -56,7 +79,15 @@ for (year in years) {
   cleaned_data <- clean_data(data, year)
   all_data[[as.character(year)]] <- cleaned_data
 }
+```
+### Combine and Finalize the Data
 
+After cleaning the data for all years:
+
+- Combine the datasets into a single dataframe.
+- Remove rows with missing values.
+- Sort the dataset by date in descending order.
+```{r}
 # Combine all years into one dataframe
 final_data <- bind_rows(all_data)
 
@@ -67,9 +98,12 @@ final_data <- final_data %>%
 # Sort the data in descending order by Date
 final_data_sorted <- final_data %>%
   arrange(desc(Date))
+```
+### Save the Cleaned Data
 
+Export the cleaned and combined dataset to a new CSV file for future use.
+```{r}
 write.csv(final_data_sorted, "data/mass_shootings_2018_2024_cleaned.csv", row.names = FALSE)
-
 ```
 
 
