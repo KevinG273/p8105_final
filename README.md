@@ -38,7 +38,7 @@ Now you can create the website directly from RStudio by clicking the **Build Web
    ```
 6. **RShiny DashBoard:** Run `shiny_dashboard.Rmd`
    ```bash
-   rmarkdown::render("shiny_dashboard.Rmd")
+   rmarkdown::render("rshiny_dashboard/shiny_dashboard.Rmd")
    ```
 
 
