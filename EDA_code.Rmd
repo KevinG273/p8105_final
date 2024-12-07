@@ -9,12 +9,7 @@ output:
 
 # Loading Libraries and Reading Data
 
-<<<<<<< HEAD
 ```{r message=FALSE}
-
-=======
-```{r}
->>>>>>> 6d0c083 (save local change)
 library(tidyverse) 
 library(lubridate)
 library(ggplot2)
