@@ -373,8 +373,8 @@ div.tocify {
 </div>
 
 
-<div id="motivation" class="section level3">
-<h3><strong>Motivation</strong></h3>
+<div id="motivation" class="section level2">
+<h2><strong>Motivation</strong></h2>
 <p>Gun violence remains a significant public health issue in the United
 States. Our project explores gun-related incidents (mass shootings) in
 the U.S. from 2018 to 2024. These events, unfortunately, have become
@@ -386,8 +386,8 @@ health initiatives targeting gun violence reduction. The analysis
 includes temporal trends, geographic distribution, and incident
 severity.</p>
 </div>
-<div id="related-work" class="section level3">
-<h3><strong>Related Work</strong></h3>
+<div id="related-work" class="section level2">
+<h2><strong>Related Work</strong></h2>
 <p>Existing research on mass shootings has often focused on patterns of
 violence, gun control, and the social factors that influence the
 occurrence of these tragic events. Our project seeks to build on this
@@ -398,8 +398,8 @@ and from recent academic literature focusing on geographic and temporal
 trends in gun violence. Classroom analyses of spatial data also guided
 this work.</p>
 </div>
-<div id="initial-questions" class="section level3">
-<h3><strong>Initial Questions</strong></h3>
+<div id="initial-questions" class="section level2">
+<h2><strong>Initial Questions</strong></h2>
 <p>We started with basic questions such as:</p>
 <ul>
 <li>What are the spatial and temporal trends in mass shootings from
@@ -417,8 +417,8 @@ states?</li>
 identified?</li>
 </ul>
 </div>
-<div id="data" class="section level3">
-<h3><strong>Data</strong></h3>
+<div id="data" class="section level2">
+<h2><strong>Data</strong></h2>
 <p><strong>Sources</strong>:</p>
 <ul>
 <li><strong>Incident Data</strong>: Mass shooting data was sourced from
@@ -457,38 +457,212 @@ percentage of residents with a bachelor’s degree or higher, poverty
 rate, uninsured rate, and vacancy rate.</p></li>
 </ul>
 </div>
-<div id="exploratory-analysis" class="section level3">
-<h3><strong>Exploratory Analysis</strong></h3>
-<p>Our project focused on understanding trends in gun-related incidents
-by analyzing data across time and location. We began by identifying
-patterns year by year and then narrowed our focus to quarterly trends.
-Next, we examined geographic patterns, first by state and then by city,
-using GIS tools to map incident hotspots. Inspired by John Snow’s
-historical work on cholera mapping, we used this approach to uncover
-potential causes and effects of gun-related incidents across the United
-States. Finally, we analyzed details of individual incidents, including
-the number of victims, to differentiate between types of violence, such
-as suicides, intimate partner violence, and multi-victim crimes.</p>
-<p>Gun-related crimes were often concentrated in economically
-disadvantaged urban and rural areas, particularly in regions that have
-experienced industrial decline. Urban areas showed higher rates of
-multi-victim crimes, including gang violence and robberies, whereas
-rural areas had more single-victim incidents, often linked to suicides
-or domestic violence. These differences highlight how socioeconomic
-conditions shape the nature of gun violence.</p>
-<p>We also found that gun-related incidents tended to peak at the end of
-the year, possibly due to increased stress during the holiday season.
-Over time, however, crime rates have gradually declined, with a sharper
-drop in multi-victim incidents compared to single-victim cases. This
-suggests that while efforts to reduce violent crimes like homicides may
-be effective, suicides—particularly those linked to mental health
-struggles—remain a persistent challenge.</p>
-<p>Overall, the findings emphasize the need for targeted mental health
-resources and community-based interventions tailored to both urban and
-rural settings. By combining trend analysis with GIS mapping and
-socioeconomic insights, our project highlights the complex factors
-driving gun violence and offers a foundation for informed policy and
-public health strategies.</p>
+<div id="exploratory-analysis" class="section level2">
+<h2><strong>Exploratory Analysis</strong></h2>
+<div id="eda-summary" class="section level3">
+<h3><strong>EDA Summary</strong></h3>
+<p>Through an analysis of general trends and basic GIS mapping of the
+available data, our findings aligned with established patterns in public
+health. We observed that both the number of crimes and the number of
+individuals affected by these crimes have decreased over time,
+reflecting broader societal improvements in reducing violence and its
+impacts. This decline underscores the value of continued public health
+efforts to address the root causes of violence and promote safer
+communities.</p>
+<p>The dataset contains information on gun-related incidents from 2018
+to 2024 across different cities and states in the United States.</p>
+<ul>
+<li><code>date</code>: Date of the incident (class:
+<code>Date</code>)</li>
+<li><code>city</code>: City where the incident occurred (class:
+<code>character</code>)</li>
+<li><code>state</code>: State where the incident occurred (class:
+<code>character</code>)</li>
+<li><code>dead</code>: Number of fatalities (class:
+<code>integer</code>)</li>
+<li><code>injured</code>: Number of injuries (class:
+<code>integer</code>)</li>
+<li><code>total</code>: Total number of victims (Dead + Injured) (class:
+<code>character</code>)</li>
+<li><code>description</code>: Textual description of incident (class:
+<code>character</code>)</li>
+</ul>
+</div>
+<div
+id="comparing-number-of-incidents-by-year-quarter-month-and-weekday"
+class="section level3">
+<h3><strong>Comparing Number of Incidents by Year, Quarter, Month, and
+Weekday</strong></h3>
+<div id="by-year" class="section level4">
+<h4><strong>By Year:</strong></h4>
+<p>First, we will compare the number of incidents by year.</p>
+<p>IMAGE</p>
+<p>The graph shows a general upward trend in gun-related incidents from
+2018 to 2022. The peak would be at 717 incidents. The year 2020 shows a
+significant increase, rising from 441 incidents in 2019 to 617
+incidents, and the trend continues with 703 incidents in 2021. However,
+from 2023 to 2024, the number of incidents appear to decline, with 596
+incidents in 2023 and 538 incidents in 2024. This suggests that while
+the number of incidents has increased over the past few years, the
+decline in recent years might reflect a shift in trends or external
+factors impacting the data. Further analysis would be needed to
+understand the variations in detail.</p>
+</div>
+<div id="by-quarter" class="section level4">
+<h4><strong>By Quarter:</strong></h4>
+<p>We will now compare the number of incidents by quarter for each
+year.</p>
+<p>IMAGE</p>
+<p>Let’s further break it down by years and quarters.</p>
+<p>IMAGE</p>
+<p>The dataset on incidents of gun violence from 2018-2024 show some
+seasonality. We notice incidents in Q1 and Q4 are generally lower than
+those in Q2 and Q3. The second graph highlights that Q1 incidents
+increased steadily from 2018 to 2021, with smaller increases observed
+between 2021 and 2022, as well as between 2022 and 2023, suggesting a
+leveling-off trend during this period. In 2024, there is a slight
+decrease compared to 2023, but it is important to consider that 2024 is
+not yet complete. This potential plateau in Q1 incidents could signal a
+stabilization, though the overall trend since 2018 indicates a
+significant increase that still warrants attention.</p>
+</div>
+<div id="by-month" class="section level4">
+<h4><strong>By Month:</strong></h4>
+<p>We will now compare the number of incidents by months.</p>
+<p>IMAGE</p>
+<p>The graph shows the number of incidents by month. Again, we see a
+clear seasonal trend. Incidents steadily rise from January through July,
+peaking in July (likely due to heightened activity during the summer
+months). A sharp decline follows from August to December, with November
+and December showing the lowest numbers. This could be influenced by
+colder weather, holiday periods, or shorter months (i.e., February). The
+visible trends suggest a relationship between weather (seasonal
+variations), social behavior, and incident rates. You can hover over the
+bars for exact values to compare these trends in more detail.</p>
+</div>
+<div id="by-date" class="section level4">
+<h4><strong>By Date:</strong></h4>
+<p>Let’s see the dates with the most incidents.</p>
+<p>IMAGE</p>
+<p>The table highlights the dates with the highest total number of
+incidents, aggregated over 2018-2024. July 5th and July 4th stand out
+with 49 and 48 incidents respectively, indicating that Independence Day
+celebrations significantly contribute to increased incidents, likely due
+to festivities and the use of fireworks or firearms. January 1st, with
+31 incidents, suggests that New Year’s Day also brings heightened risk,
+potentially linked to post-midnight celebrations and gatherings. The
+remaining dates predominantly occur in late June and July, with totals
+ranging from 21 to 26 incidents, reflecting a seasonal peak in incidents
+during summer months. May 18th, while slightly earlier, still aligns
+closely with this summer trend, reinforcing the pattern of increased
+incidents during warmer months. These results show the influence of
+holidays and seasonal trends on incident rates.</p>
+</div>
+<div id="by-weekday" class="section level4">
+<h4><strong>By Weekday:</strong></h4>
+<p>We will now compare the number of incidents by weekday.</p>
+<p>IMAGE</p>
+<p>Sunday stands out as the most dangerous day, with incidents far
+exceeding 900. Saturdays follow closely with around 900 incidents.
+Fridays show a moderate increase with about 450 incidents, marking the
+start of the weekend.Meanwhile, weekdays see significantly lower
+numbers, with Tuesday recording the fewest incidents at around 200,
+followed by Thursday at about 350, Wednesday at 375, and Monday at 440.
+This trend show the influence of weekends or leisure culture on the
+frequency of incidents, with weekdays being relatively safer perhaps due
+to structured routines and fewer late-night activities.</p>
+</div>
+</div>
+<div id="incidents-by-state" class="section level3">
+<h3><strong>Incidents by State</strong></h3>
+<p>IMAGE</p>
+<p>The interactive bar graph above shows absolute number of gun violence
+by states. Hovering over the bars shows a label with the absolute number
+of incidents for a state. Illinois has the highest number of gun
+violence cases followed by Texas and California.</p>
+</div>
+<div id="incidents-relative-to-state-population" class="section level3">
+<h3><strong>Incidents Relative to State Population</strong></h3>
+<p>IMAGE</p>
+<p>This table provides the numerical values for the number of incidents,
+2017 population, and the scaled number of incidents per 100,000
+people.</p>
+<p>IMAGE</p>
+<p>This is the Number of Incidents scaled to state population. The order
+changes quite drastically where the District of Columbia, Louisiana, and
+Mississippi now lead and Idaho, Wyoming, and New Hampshire now have the
+lowest though the bottom is much more concentrated.</p>
+<div id="interactive-map-of-incidents-by-state" class="section level4">
+<h4><strong>Interactive Map of Incidents by State:</strong></h4>
+<p>IMAGE</p>
+<p>Here an interactive map which displays the same data. It is scaled
+via a discrete legend so the heat map is slightly different than viridis
+but it conveys the same data in a more engaging format.</p>
+</div>
+</div>
+<div id="victims-by-state" class="section level3">
+<h3><strong>Victims by State</strong></h3>
+<p>IMAGE</p>
+<p>This table provides the number of victims by state and the number of
+victims per incident by state. This shows how many people were involved
+in the average incident by state.</p>
+<p>IMAGE</p>
+<p>The bar graph above shows the number of victims per incident by
+state. Maine has the highest victims by incidents followed by
+Washington, DC followed by Puerto Rico.</p>
+<p>IMAGE</p>
+<p>This shows the average number of victims per incident when we scale
+by state. There is another dramatic reordering with Louisiana,
+Mississippi, and Illinois now taking the top spot. There is no data for
+DC.</p>
+<div id="interactive-map-of-victims-by-state" class="section level4">
+<h4><strong>Interactive Map of Victims by State:</strong></h4>
+<p>IMAGE</p>
+<p>Once again this is an interative map which helps visualize and
+reinforce the previous information.</p>
+</div>
+</div>
+<div id="incidents-by-city" class="section level3">
+<h3><strong>Incidents by City</strong></h3>
+<p>Here are the top number of incidents by city.</p>
+<p>IMAGE</p>
+<p>Here are the top number of incidents per city within New York
+State.</p>
+<p>IMAGE</p>
+<p>Here are the number of incidents per New York City.</p>
+<p>IMAGE</p>
+<p>For a city of 8 million people this seems quite low. This suggests
+that crime has fallen dramatically, crime is under-reported, or that the
+data collection mechanism is selective.</p>
+<p>IMAGE</p>
+<p>The bar graph above shows the number of incidents by city. Chicago
+has the highest number of incidents followed by Philadelphia followed by
+New York City.</p>
+<div id="merging-location-data-for-incident-mapping"
+class="section level4">
+<h4><strong>Merging Location Data for Incident Mapping:</strong></h4>
+<p>We are merging a new dataset obtained from Simple Maps US Cities to
+our <code>gun_df</code> dataset to add the variables latitude
+(<code>lat</code>) and longitude (<code>lng</code>) of all included US
+cities for visualizations.</p>
+</div>
+</div>
+<div id="top-incidents-by-victim-count" class="section level3">
+<h3><strong>Top Incidents by Victim Count</strong></h3>
+<p>IMAGE</p>
+<p>The above shows the 13 most severe gun-related incidents in the
+dataset, ranked by the total number of victims (dead and injured). The
+incidents range from mass shootings at public events to tragic attacks
+in schools and other locations. Each entry provides details on the
+location, date, fatalities, injuries, and a brief description of the
+event, offering insights into the magnitude and context of these
+tragedies.</p>
+<div id="interactive-map-of-top-incidents-by-victim-count"
+class="section level4">
+<h4><strong>Interactive Map of Top Incidents by Victim
+Count:</strong></h4>
+<p>IMAGE</p>
+</div>
 <div id="geographic-analysis-using-hot-zones" class="section level4">
 <h4><strong>Geographic Analysis Using “Hot Zones”</strong>:</h4>
 <p>Beyond a traditional heat map representation, the analysis utilized
@@ -553,8 +727,42 @@ While this trend does not entirely deviate from national norms, it is
 notable in the context of Maine’s demographic and geographic
 composition.</p>
 </div>
-<div id="eda-limitations" class="section level4">
-<h4><strong>EDA Limitations</strong>:</h4>
+</div>
+</div>
+<div id="discussion" class="section level2">
+<h2><strong>Discussion</strong></h2>
+<p>Our project focused on understanding trends in gun-related incidents
+by analyzing data across time and location. We began by identifying
+patterns year by year and then narrowed our focus to quarterly trends.
+Next, we examined geographic patterns, first by state and then by city,
+using GIS tools to map incident hotspots. Inspired by John Snow’s
+historical work on cholera mapping, we used this approach to uncover
+potential causes and effects of gun-related incidents across the United
+States. Finally, we analyzed details of individual incidents, including
+the number of victims, to differentiate between types of violence, such
+as suicides, intimate partner violence, and multi-victim crimes.</p>
+<p>Gun-related crimes were often concentrated in economically
+disadvantaged urban and rural areas, particularly in regions that have
+experienced industrial decline. Urban areas showed higher rates of
+multi-victim crimes, including gang violence and robberies, whereas
+rural areas had more single-victim incidents, often linked to suicides
+or domestic violence. These differences highlight how socioeconomic
+conditions shape the nature of gun violence.</p>
+<p>We also found that gun-related incidents tended to peak at the end of
+the year, possibly due to increased stress during the holiday season.
+Over time, however, crime rates have gradually declined, with a sharper
+drop in multi-victim incidents compared to single-victim cases. This
+suggests that while efforts to reduce violent crimes like homicides may
+be effective, suicides—particularly those linked to mental health
+struggles—remain a persistent challenge.</p>
+<p>Overall, the findings emphasize the need for targeted mental health
+resources and community-based interventions tailored to both urban and
+rural settings. By combining trend analysis with GIS mapping and
+socioeconomic insights, our project highlights the complex factors
+driving gun violence and offers a foundation for informed policy and
+public health strategies.</p>
+<div id="limitations" class="section level3">
+<h3><strong>Limitations</strong></h3>
 <p>Our analysis was constrained by several limitations in the data.
 First, the data did not distinguish between homicides and suicides,
 categorizing both as gun-related crimes. This lack of differentiation is
@@ -571,23 +779,6 @@ opportunities—likely exacerbated economic pressures, potentially driving
 increases in criminal behavior. Addressing these limitations in future
 research would provide a clearer understanding of how contemporary
 economic and social factors influence gun-related violence.</p>
-</div>
-<div id="eda-summary" class="section level4">
-<h4><strong>EDA Summary</strong>:</h4>
-<p>Through an analysis of general trends and basic GIS mapping of the
-available data, our findings aligned with established patterns in public
-health. We observed that both the number of crimes and the number of
-individuals affected by these crimes have decreased over time,
-reflecting broader societal improvements in reducing violence and its
-impacts. This decline underscores the value of continued public health
-efforts to address the root causes of violence and promote safer
-communities.</p>
-</div>
-</div>
-<div id="discussion" class="section level3">
-<h3><strong>Discussion</strong></h3>
-<div id="limitations" class="section level4">
-<h4><strong>Limitations</strong>:</h4>
 <p>This project has limitations that should be considered when
 interpreting the findings. First, the dataset may suffer from reporting
 bias and incomplete records, as mass shooting incidents are not
@@ -610,8 +801,8 @@ the findings. Future work should explore more granular, longitudinal
 data and possible non-linear modeling techniques to better capture the
 fluctuations in mass shootings and their predictors.</p>
 </div>
-<div id="conclusion" class="section level4">
-<h4><strong>Conclusion</strong>:</h4>
+<div id="conclusion" class="section level3">
+<h3><strong>Conclusion</strong></h3>
 <p>The exploratory data analysis of the dataset (which covers related
 incidents in the U.S. from 2018 to 2024) reveals a few noteworthy trends
 and patterns. Incidents have generally increased over the years, peaking
