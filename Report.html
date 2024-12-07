@@ -29,7 +29,11 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
@@ -218,7 +222,73 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
 
 
 
@@ -228,6 +298,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -277,6 +357,14 @@ $(document).ready(function () {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Analyzing Mass Shootings in the U.S.
@@ -286,7 +374,7 @@ $(document).ready(function () {
 
 
 <div id="motivation" class="section level3">
-<h3>Motivation</h3>
+<h3><strong>Motivation</strong></h3>
 <p>Gun violence remains a significant public health issue in the United
 States. Our project explores gun-related incidents (mass shootings) in
 the U.S. from 2018 to 2024. These events, unfortunately, have become
@@ -299,7 +387,7 @@ includes temporal trends, geographic distribution, and incident
 severity.</p>
 </div>
 <div id="related-work" class="section level3">
-<h3>Related Work</h3>
+<h3><strong>Related Work</strong></h3>
 <p>Existing research on mass shootings has often focused on patterns of
 violence, gun control, and the social factors that influence the
 occurrence of these tragic events. Our project seeks to build on this
@@ -311,7 +399,7 @@ trends in gun violence. Classroom analyses of spatial data also guided
 this work.</p>
 </div>
 <div id="initial-questions" class="section level3">
-<h3>Initial Questions</h3>
+<h3><strong>Initial Questions</strong></h3>
 <p>We started with basic questions such as:</p>
 <ul>
 <li>What are the spatial and temporal trends in mass shootings from
@@ -330,7 +418,7 @@ identified?</li>
 </ul>
 </div>
 <div id="data" class="section level3">
-<h3>Data</h3>
+<h3><strong>Data</strong></h3>
 <p><strong>Sources</strong>:</p>
 <ul>
 <li><strong>Incident Data</strong>: Mass shooting data was sourced from
@@ -349,28 +437,60 @@ analysis.</li>
 <li><p>Annual datasets obtained through webscraping
 (<code>mass_shootings_2018</code> to <code>mass_shootings_2024</code>)
 were merged to create a consolidated dataset,
-<code>mass_shootings_2018_2024_cleaned.csv</code>.The variables included
-in this dataset are <code>date</code>, <code>city</code>,
+<code>mass_shootings_2018_2024_cleaned.csv</code>. The variables
+included in this dataset are <code>date</code>, <code>city</code>,
 <code>state</code>, <code>dead</code>, <code>injured</code>,
 <code>total</code>, <code>description</code> for each shooting event
-recorded (HOW MANY OBSERVATIONS?)</p></li>
+recorded from 2018 to 2024.</p></li>
 <li><p>Using data from the SimpleMaps US cities dataset, latitude
 (<code>lat</code>) and longitude (<code>lng</code>) variables were
 appended to each city represented in the dataset to create a new dataset
 <code>gun_df.csv</code>. This was to allow for spatial/geographical
 visualizations/analyses.</p></li>
-<li><p>CLEANINGSJDNGDSN Rows containing any <code>NA</code> values were
-removed.</p></li>
 <li><p>For state-level analysis, data for each state was extracted from
 the U.S. Census website. This process created the final dataset,
-<code>state_data.csv</code>, which provides information on state-level
-demographics and statistics. Inlcuded are 5-year aggregated estimates
-ending in 2022 (i.e., the latest 5-year American Community Survey
-estimates). (WHAT DOES EACH ROW SHOW)</p></li>
+<code>state_data.csv</code>. Each row in the state_data.csv dataset
+represents a specific state and its demographic, economic, and social
+statistics for a 5-year period ending in 2022. It provides information
+about the state’s total population, median income, unemployment rate,
+percentage of residents with a bachelor’s degree or higher, poverty
+rate, uninsured rate, and vacancy rate.</p></li>
 </ul>
 </div>
-<div id="geographic-analysis-using-hot-zones" class="section level3">
-<h3>Geographic Analysis Using “Hot Zones”</h3>
+<div id="exploratory-analysis" class="section level3">
+<h3><strong>Exploratory Analysis</strong></h3>
+<p>Our project focused on understanding trends in gun-related incidents
+by analyzing data across time and location. We began by identifying
+patterns year by year and then narrowed our focus to quarterly trends.
+Next, we examined geographic patterns, first by state and then by city,
+using GIS tools to map incident hotspots. Inspired by John Snow’s
+historical work on cholera mapping, we used this approach to uncover
+potential causes and effects of gun-related incidents across the United
+States. Finally, we analyzed details of individual incidents, including
+the number of victims, to differentiate between types of violence, such
+as suicides, intimate partner violence, and multi-victim crimes.</p>
+<p>Gun-related crimes were often concentrated in economically
+disadvantaged urban and rural areas, particularly in regions that have
+experienced industrial decline. Urban areas showed higher rates of
+multi-victim crimes, including gang violence and robberies, whereas
+rural areas had more single-victim incidents, often linked to suicides
+or domestic violence. These differences highlight how socioeconomic
+conditions shape the nature of gun violence.</p>
+<p>We also found that gun-related incidents tended to peak at the end of
+the year, possibly due to increased stress during the holiday season.
+Over time, however, crime rates have gradually declined, with a sharper
+drop in multi-victim incidents compared to single-victim cases. This
+suggests that while efforts to reduce violent crimes like homicides may
+be effective, suicides—particularly those linked to mental health
+struggles—remain a persistent challenge.</p>
+<p>Overall, the findings emphasize the need for targeted mental health
+resources and community-based interventions tailored to both urban and
+rural settings. By combining trend analysis with GIS mapping and
+socioeconomic insights, our project highlights the complex factors
+driving gun violence and offers a foundation for informed policy and
+public health strategies.</p>
+<div id="geographic-analysis-using-hot-zones" class="section level4">
+<h4><strong>Geographic Analysis Using “Hot Zones”</strong>:</h4>
 <p>Beyond a traditional heat map representation, the analysis utilized
 an advanced “hot zone” mapping technique, which provided a nuanced
 understanding of crime distributions at a city-wide level. Unlike simple
@@ -384,8 +504,9 @@ socioeconomic realities, enabling an explanation of how such disparities
 are spatially distributed.</p>
 </div>
 <div id="exploratory-data-analysis-and-public-health-correlations"
-class="section level3">
-<h3>Exploratory Data Analysis and Public Health Correlations</h3>
+class="section level4">
+<h4><strong>Exploratory Data Analysis and Public Health
+Correlations</strong>:</h4>
 <p>The exploratory data analysis (EDA) underscored and solidified known
 public health trends through detailed tabular and graphical summaries.
 These tools provided a robust foundation for validating hypotheses
@@ -402,8 +523,9 @@ Connecticut demonstrated exemplary performance with some of the lowest
 crime statistics in the dataset.</p>
 </div>
 <div id="socioeconomic-contrasts-the-case-of-washington-d.c."
-class="section level3">
-<h3>Socioeconomic Contrasts: The Case of Washington, D.C.</h3>
+class="section level4">
+<h4><strong>Socioeconomic Contrasts: The Case of Washington,
+D.C.</strong>:</h4>
 <p>Washington, D.C., stood out as a particularly notable case, embodying
 stark socioeconomic contrasts. Despite its status as one of the
 wealthiest regions in the United States, with an estimated GDP per
@@ -416,8 +538,8 @@ inequality within a compact geographic region is a primary driver of
 D.C.’s dichotomous profile, characterized by both extraordinary wealth
 and pervasive criminality.</p>
 </div>
-<div id="anomalous-patterns-in-maine" class="section level3">
-<h3>Anomalous Patterns in Maine</h3>
+<div id="anomalous-patterns-in-maine" class="section level4">
+<h4><strong>Anomalous Patterns in Maine</strong>:</h4>
 <p>One of the more unexpected findings pertained to Maine. When
 examining the number of victims per incident without adjusting for state
 population (unscaled analysis), Maine presented a higher-than-expected
@@ -431,9 +553,102 @@ While this trend does not entirely deviate from national norms, it is
 notable in the context of Maine’s demographic and geographic
 composition.</p>
 </div>
+<div id="eda-limitations" class="section level4">
+<h4><strong>EDA Limitations</strong>:</h4>
+<p>Our analysis was constrained by several limitations in the data.
+First, the data did not distinguish between homicides and suicides,
+categorizing both as gun-related crimes. This lack of differentiation is
+significant, as the underlying factors driving suicide often differ
+markedly from those leading to homicide. While both are tragedies,
+suicides are typically influenced by a combination of life course
+events, individual personality traits, and economic conditions, whereas
+homicides often involve interpersonal conflict or criminal activity.</p>
+<p>Another major limitation was the lack of recent data. This gap made
+it impossible to analyze the effects of recent economic downturns caused
+by inflation and reduced economic activity. These dual challenges—wages
+losing value due to inflation and fewer income-generating
+opportunities—likely exacerbated economic pressures, potentially driving
+increases in criminal behavior. Addressing these limitations in future
+research would provide a clearer understanding of how contemporary
+economic and social factors influence gun-related violence.</p>
+</div>
+<div id="eda-summary" class="section level4">
+<h4><strong>EDA Summary</strong>:</h4>
+<p>Through an analysis of general trends and basic GIS mapping of the
+available data, our findings aligned with established patterns in public
+health. We observed that both the number of crimes and the number of
+individuals affected by these crimes have decreased over time,
+reflecting broader societal improvements in reducing violence and its
+impacts. This decline underscores the value of continued public health
+efforts to address the root causes of violence and promote safer
+communities.</p>
+</div>
+</div>
+<div id="discussion" class="section level3">
+<h3><strong>Discussion</strong></h3>
+<div id="limitations" class="section level4">
+<h4><strong>Limitations</strong>:</h4>
+<p>This project has limitations that should be considered when
+interpreting the findings. First, the dataset may suffer from reporting
+bias and incomplete records, as mass shooting incidents are not
+uniformly defined or reported across states, possibly skewing the
+analysis. The exploratory data analysis (EDA) and visualizations are
+constrained by the granularity of state-level data, which masks
+intra-state variations (e.g., differences between urban and rural
+areas). In the modeling phase, multicollinearity among socio-economic
+predictors may have influenced the reliability of individual variable
+coefficients despite mitigation efforts. The choice of linear regression
+is effective for understanding relationships. However, it assumes
+linearity and does not capture potential non-linear patterns or
+interactions between variables. Visualizations are informative but may
+oversimplify socio-economic relationships by presenting trends without
+accounting for the underlying variance or contextual factors. Finally,
+while bootstrapping and cross-validation provided robustness to model
+evaluation, the relatively small number of observations (limited by the
+number of states) weakens the statistical power and generalizability of
+the findings. Future work should explore more granular, longitudinal
+data and possible non-linear modeling techniques to better capture the
+fluctuations in mass shootings and their predictors.</p>
+</div>
+<div id="conclusion" class="section level4">
+<h4><strong>Conclusion</strong>:</h4>
+<p>The exploratory data analysis of the dataset (which covers related
+incidents in the U.S. from 2018 to 2024) reveals a few noteworthy trends
+and patterns. Incidents have generally increased over the years, peaking
+in 2022, with seasonal variations showing higher occurrences during
+summer months and weekends, particularly Sundays. Specific holidays like
+Independence Day and New Year’s Day also contribute to spikes in
+incidents. State-level analysis highlights Illinois, Texas, and
+California as having the highest absolute numbers, while
+population-adjusted rates show the District of Columbia, Louisiana, and
+Mississippi leading. Overall, we were able to observe the temporal,
+geographic, and demographic factors on gun violence, highlighting the
+importance of context in understanding trends for safety or preventative
+measures.</p>
+<p>The modeling section employed regression techniques to analyze total
+shootings across U.S. states, focusing on socioeconomic predictors.
+Initial data preprocessing included merging and scaling dataset for
+interpretability, following by correlation analysis revealing strong
+positive associations, especially between shootings and population size.
+Poisson regression identified predictors like
+<code>total_populationE</code> and <code>median_incomeE</code> but
+showed overdispersion, requiring a Negative Binomial model. This refined
+model addressed multicollinearity by excluding highly correlated
+variables like <code>poverty_rate</code> and
+<code>bachelors_and_higher</code> to improve interpretability and
+predictive accuracy. Validation through bootstrap sampling and Monte
+Carlo cross-validation confirmed the robustness of the model with
+consistent coefficients and reliable predictions. Model performance was
+further assessed via RMSE comparisons and visualized predictions which
+reinforced its application in understanding the relationship of
+state-level factors influencing shooting incidents.</p>
+</div>
+</div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -465,7 +680,41 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

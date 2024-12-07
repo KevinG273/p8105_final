@@ -7,13 +7,16 @@ output:
       code_folding: hide
 ---
 
-### Motivation
+### **Motivation**
+
 Gun violence remains a significant public health issue in the United States. Our project explores gun-related incidents (mass shootings) in the U.S. from 2018 to 2024. These events, unfortunately, have become increasingly common, with significant implications for public safety, policy, and mental health. This project aims to identify trends, patterns, and geographic hotspots associated with these tragic events. These insights can inform policymakers, law enforcement, and public health initiatives targeting gun violence reduction. The analysis includes temporal trends, geographic distribution, and incident severity. 
 
-### Related Work
+### **Related Work**
+
 Existing research on mass shootings has often focused on patterns of violence, gun control, and the social factors that influence the occurrence of these tragic events. Our project seeks to build on this body of research by employing statistical methods to reveal more refined insights into the data. The project draws inspiration from the Gun Violence Archive (GVA) website (which aggregates mass shooting data), and from recent academic literature focusing on geographic and temporal trends in gun violence. Classroom analyses of spatial data also guided this work.
 
-### Initial Questions 
+### **Initial Questions** 
+
 We started with basic questions such as:
 
 * What are the spatial and temporal trends in mass shootings from 2018-2024?
@@ -25,7 +28,8 @@ As the analysis progressed, additional questions emerged:
 * Are there clusters of high-casualty events in specific regions?
 * Can any seasonal patterns or significant changes across years be identified?
 
-### Data
+### **Data**
+
 **Sources**:
 
 * **Incident Data**: Mass shooting data was sourced from [Gun Violence Archive](https://www.gunviolencearchive.org/) and covers mass shootings from 2018 to 2024. 
@@ -34,15 +38,13 @@ As the analysis progressed, additional questions emerged:
 
 **Processing Steps**: 
 
-* Annual datasets obtained through webscraping (`mass_shootings_2018` to `mass_shootings_2024`) were merged to create a consolidated dataset, `mass_shootings_2018_2024_cleaned.csv`.The variables included in this dataset are `date`, `city`, `state`, `dead`, `injured`, `total`, `description` for each shooting event recorded (HOW MANY OBSERVATIONS?) 
+* Annual datasets obtained through webscraping (`mass_shootings_2018` to `mass_shootings_2024`) were merged to create a consolidated dataset, `mass_shootings_2018_2024_cleaned.csv`. The variables included in this dataset are `date`, `city`, `state`, `dead`, `injured`, `total`, `description` for each shooting event recorded from 2018 to 2024. 
 
 * Using data from the SimpleMaps US cities dataset, latitude (`lat`) and longitude (`lng`) variables were appended to each city represented in the dataset to create a new dataset `gun_df.csv`. This was to allow for spatial/geographical visualizations/analyses. 
 
-* CLEANINGSJDNGDSN Rows containing any `NA` values were removed. 
+* For state-level analysis, data for each state was extracted from the U.S. Census website. This process created the final dataset, `state_data.csv`. Each row in the state_data.csv dataset represents a specific state and its demographic, economic, and social statistics for a 5-year period ending in 2022. It provides information about the state's total population, median income, unemployment rate, percentage of residents with a bachelor's degree or higher, poverty rate, uninsured rate, and vacancy rate. 
 
-* For state-level analysis, data for each state was extracted from the U.S. Census website. This process created the final dataset, `state_data.csv`, which provides information on state-level demographics and statistics. Inlcuded are 5-year aggregated estimates ending in 2022 (i.e., the latest 5-year American Community Survey estimates). (WHAT DOES EACH ROW SHOW)
-
-## EDA and Dicussions 
+### **Exploratory Analysis**
 
 Our project focused on understanding trends in gun-related incidents by analyzing data across time and location. We began by identifying patterns year by year and then narrowed our focus to quarterly trends. Next, we examined geographic patterns, first by state and then by city, using GIS tools to map incident hotspots. Inspired by John Snow’s historical work on cholera mapping, we used this approach to uncover potential causes and effects of gun-related incidents across the United States. Finally, we analyzed details of individual incidents, including the number of victims, to differentiate between types of violence, such as suicides, intimate partner violence, and multi-victim crimes.
 
@@ -52,36 +54,42 @@ We also found that gun-related incidents tended to peak at the end of the year, 
 
 Overall, the findings emphasize the need for targeted mental health resources and community-based interventions tailored to both urban and rural settings. By combining trend analysis with GIS mapping and socioeconomic insights, our project highlights the complex factors driving gun violence and offers a foundation for informed policy and public health strategies.
 
-Some notable items from EDA include: 
+#### **Geographic Analysis Using “Hot Zones”**:
 
-### Geographic Analysis Using “Hot Zones”
 Beyond a traditional heat map representation, the analysis utilized an advanced “hot zone” mapping technique, which provided a nuanced understanding of crime distributions at a city-wide level. Unlike simple density-based visualizations,these hot zones highlighted regions with concentrated crime activity, offering a more granular perspective on geographic crime patterns. This approach illuminated the spatial heterogeneity of criminal activity, revealing stark contrasts between neighborhoods and cities. The visualizations were particularly insightful in demonstrating how crime clusters correspond to underlying socioeconomic realities, enabling an explanation of how such disparities are spatially distributed.
 
-### Exploratory Data Analysis and Public Health Correlations
+#### **Exploratory Data Analysis and Public Health Correlations**:
+
 The exploratory data analysis (EDA) underscored and solidified known public health trends through detailed tabular and graphical summaries. These tools provided a robust foundation for validating hypotheses regarding the intersection of socioeconomic conditions and crime rates. Key findings reaffirmed the strong correlation between poverty rates and crime prevalence. States and localities with high poverty levels exhibited the greatest frequency of crimes and the highest number of victims per incident. In contrast, areas with low poverty rates experienced significantly lower crime rates and fewer victims per crime. Among the states analyzed, Louisiana and Mississippi emerged as consistent outliers with high crime rates, reflecting systemic socioeconomic challenges. Conversely, New Hampshire, Vermont, and Connecticut demonstrated exemplary performance with some of the lowest crime statistics in the dataset.
 
-### Socioeconomic Contrasts: The Case of Washington, D.C.
+#### **Socioeconomic Contrasts: The Case of Washington, D.C.**:
+
 Washington, D.C., stood out as a particularly notable case, embodying stark socioeconomic contrasts. Despite its status as one of the wealthiest regions in the United States, with an estimated GDP per capita reaching as high as $295,000 annually in certain districts, this wealth is highly localized to the Capitol and adjacent affluent neighborhoods. The surrounding areas, including suburbs and communities such as Tanor Park and Silver Spring, are among the nation’s most impoverished and crime-affected zones. This extreme socioeconomic inequality within a compact geographic region is a primary driver of D.C.’s dichotomous profile, characterized by both extraordinary wealth and pervasive criminality.
 
-### Anomalous Patterns in Maine
+#### **Anomalous Patterns in Maine**:
+
 One of the more unexpected findings pertained to Maine. When examining the number of
 victims per incident without adjusting for state population (unscaled analysis), Maine presented a higher-than-expected rate compared to national averages. This anomaly can be attributed to the state’s unique mix of urbanized areas, such as Bangor, Augusta, and Bar Harbor, juxtaposed with its predominantly rural landscape. The data suggests that criminal activity in Maine follows a consistent pattern across both urban and rural areas, but this uniformity leads to elevated per- incident victim counts when state population is not accounted for. While this trend does not entirely deviate from national norms, it is notable in the context of Maine’s demographic and geographic composition.
 
-## EDA Limitations  
+#### **EDA Limitations**:
 
 Our analysis was constrained by several limitations in the data. First, the data did not distinguish between homicides and suicides, categorizing both as gun-related crimes. This lack of differentiation is significant, as the underlying factors driving suicide often differ markedly from those leading to homicide. While both are tragedies, suicides are typically influenced by a combination of life course events, individual personality traits, and economic conditions, whereas homicides often involve interpersonal conflict or criminal activity.  
 
 Another major limitation was the lack of recent data. This gap made it impossible to analyze the effects of recent economic downturns caused by inflation and reduced economic activity. These dual challenges—wages losing value due to inflation and fewer income-generating opportunities—likely exacerbated economic pressures, potentially driving increases in criminal behavior. Addressing these limitations in future research would provide a clearer understanding of how contemporary economic and social factors influence gun-related violence. 
 
-## EDA Summary
+#### **EDA Summary**:
 
 Through an analysis of general trends and basic GIS mapping of the available data, our findings aligned with established patterns in public health. We observed that both the number of crimes and the number of individuals affected by these crimes have decreased over time, reflecting broader societal improvements in reducing violence and its impacts. This decline underscores the value of continued public health efforts to address the root causes of violence and promote safer communities.
 
 
-### Limitations 
+### **Discussion**
+
+#### **Limitations**:
+
 This project has limitations that should be considered when interpreting the findings. First, the dataset may suffer from reporting bias and incomplete records, as mass shooting incidents are not uniformly defined or reported across states, possibly skewing the analysis. The exploratory data analysis (EDA) and visualizations are constrained by the granularity of state-level data, which masks intra-state variations (e.g., differences between urban and rural areas). In the modeling phase, multicollinearity among socio-economic predictors may have influenced the reliability of individual variable coefficients despite mitigation efforts. The choice of linear regression is effective for understanding relationships. However, it assumes linearity and does not capture potential non-linear patterns or interactions between variables. Visualizations are informative but may oversimplify socio-economic relationships by presenting trends without accounting for the underlying variance or contextual factors. Finally, while bootstrapping and cross-validation provided robustness to model evaluation, the relatively small number of observations (limited by the number of states) weakens the statistical power and generalizability of the findings. Future work should explore more granular, longitudinal data and possible non-linear modeling techniques to better capture the fluctuations in mass shootings and their predictors.
 
-### Conclusion 
+#### **Conclusion**:
+
 The exploratory data analysis of the dataset (which covers related incidents in the U.S. from 2018 to 2024) reveals a few noteworthy trends and patterns. Incidents have generally increased over the years, peaking in 2022, with seasonal variations showing higher occurrences during summer months and weekends, particularly Sundays. Specific holidays like Independence Day and New Year's Day also contribute to spikes in incidents. State-level analysis highlights Illinois, Texas, and California as having the highest absolute numbers, while population-adjusted rates show the District of Columbia, Louisiana, and Mississippi leading. Overall, we were able to observe the temporal, geographic, and demographic factors on gun violence, highlighting the importance of context in understanding trends for safety or preventative measures. 
 
 The modeling section employed regression techniques to analyze total shootings across U.S. states, focusing on socioeconomic predictors. Initial data preprocessing included merging and scaling dataset for interpretability, following by correlation analysis revealing strong positive associations, especially between shootings and population size. Poisson regression identified predictors like `total_populationE` and `median_incomeE` but showed overdispersion, requiring a Negative Binomial model. This refined model addressed multicollinearity by excluding highly correlated variables like `poverty_rate` and `bachelors_and_higher` to improve interpretability and predictive accuracy. Validation through bootstrap sampling and Monte Carlo cross-validation confirmed the robustness of the model with consistent coefficients and reliable predictions. Model performance was further assessed via RMSE comparisons and visualized predictions which reinforced its application in understanding the relationship of state-level factors influencing shooting incidents. 
