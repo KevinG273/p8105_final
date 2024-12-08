@@ -6,6 +6,9 @@ output:
     toc_float: true
     code_folding: hide
 ---
+
+<br>
+
 ## Modeling Total Shootings for each State using Regression
 
 ### Data Preprocessing
@@ -138,6 +141,8 @@ vif(negbin_model)
 
 The VIF results reveal multicollinearity, particularly for median_incomeE (VIF = 13.11) and poverty_rate (VIF = 15.17), suggesting their effects overlap with each other and unemployment_rate (VIF = 6.43). This multicollinearity may distort the coefficients, especially for poverty_rate, which shows a counterintuitive negative relationship.
 
+<br>
+
 ### Steps to Address Multicollinearity
 #### Test Reduced Models:
 - Exclude `poverty_rate`:
@@ -170,6 +175,7 @@ All VIF values are below 2, indicating that multicollinearity is no longer a con
 
 Removing `poverty_rate` and `bachelors_and_higher` resolved the previous collinearity issues, allowing for a more interpretable model.
 
+<br>
 
 ### Model Selection
 #### Stepwise Selection
@@ -194,6 +200,8 @@ anova(nested_model, model_no_poverty_educate, test = "Chisq")
 **Result:**
 
 Since the p-value is 0.5083, We fail to reject the null hypothesis (H₀). This means that adding `unemployment_rate` does not significantly improve the model fit.
+
+<br>
 
 ### Validation with Bootstrap and Cross-Validation
 #### Bootstrap
@@ -293,6 +301,9 @@ ggplot(rmse_comparison, aes(x = model, y = rmse)) +
 
 ```
 
+From the violin plot, `unemployment_rate` does not meaningfully improve the model, as seen in both RMSE and earlier statistical tests. So the simpler model (without `unemployment_rate`) is preferred for its parsimony and stability.
+
+<br>
 
 ### Visualize Predictions
 
@@ -316,6 +327,7 @@ ggplot(scaled_data, aes(x = total_shootings, y = predicted_shootings)) +
 
 The plot shows that the model predicts well for lower shooting counts, as many points align with the red 45-degree line. However, for higher observed values, the model tends to underpredict, as seen by the divergence of the blue trend line from the red reference line. Outliers with high observed or predicted values suggest the model struggles with extreme cases.
 
+<br>
 
 Finally, the Negative Binomial regression model is expressed as:
 
@@ -333,9 +345,11 @@ Interpretation of the coefficients:
 
 - Vacancy Rate: a 1-unit increase in scaled vacancy rate is associated with a 49% decrease in expected shootings 
 
+<br>
+
 ## Classifying Risk Levels of Regions Based on Shooting Data
 
-Now let's proceed to classify the regions into low-risk (<100), medium-risk (100-200), and high-risk (>200) categories and build a classification model based on this data. Since the dataset is small, we’ll use methods suitable for small datasets, such as Logistic Regression or Decision Trees.
+Now let's proceed to classify the regions into low-risk (<100), medium-risk (100-200), and high-risk (>200) categories and build a classification model based on this data.
 
 ### Data Preparation
 ```{r}
@@ -377,6 +391,10 @@ multinom_model <- multinom(risk_category ~ total_populationE + median_incomeE +
 summary(multinom_model)
 ```
 
+- The model fits the training data exceptionally well (Residual Deviance: 0.00087, AIC: 24.00), but large standard errors suggest potential multicollinearity or instability.
+
+- The coefficients for predictors like `total_populationE` and `uninsured_rate` differ significantly between the **Medium** and **High** risk categories. This implies that these variables are key drivers in distinguishing between risk levels.
+
 ### Evaluate the Model
 #### Use k-fold cross-validation to validate model performance.
 ```{r warning=FALSE, results = "hide"}
@@ -396,9 +414,12 @@ cv_model <- train(
 
 # View cross-validation results
 print(cv_model)
-
-
 ```
+
+- The model achieves an accuracy of 78.5% with a decay parameter of 0.1, selected as optimal based on cross-validation.
+
+- The Kappa score (0.39) indicates moderate agreement, suggesting the model is reasonably effective but could benefit from further refinement.
+
 #### Predict risk categories on the test dataset:
 ```{r}
 # Predict on the test set
@@ -406,8 +427,12 @@ predictions <- predict(multinom_model, newdata = test_data)
 
 # Confusion Matrix
 confusionMatrix(predictions, test_data$risk_category)
-
 ```
+- **Overall Accuracy:**
+The model achieved 70% accuracy, matching the No Information Rate (NIR) of 70%, indicating the model is not significantly better than random guessing (p-value = 0.6496).
+
+- **Kappa:**
+The Kappa score (0.4737) suggests moderate agreement beyond chance, indicating reasonable classification performance.
 
 #### Create a bar plot to compare actual and predicted categories
 ```{r}
@@ -424,7 +449,6 @@ ggplot(scaled_data, aes(x = risk_category, fill = predicted_category)) +
     fill = "Predicted Category"
   ) +
   theme_minimal()
-
 ```
 
 #### ROC Curves for Multinomial Logistic Regression
@@ -470,6 +494,13 @@ ggroc(map(roc_list$roc_curve, as.list)) +
 
 ```
 
+- **Red (High Risk):** The ROC curve shows strong performance for the "High" class, with high sensitivity and specificity.
+
+- **Green (Low Risk):** The curve demonstrates excellent performance for the "Low" class, nearly perfect.
+
+- **Blue (Medium Risk):** Moderate performance is observed for the "Medium" class, reflecting challenges in distinguishing this category.
+
+<br>
 
 ## Text Analysis of the Mass Shootings
 ### Word Frequency Analysis
@@ -507,6 +538,15 @@ word_counts |>
 
 ```
 
+- **Human Impact:**
+Words like "people" (2067), "killed" (1600), "injured" (1587), and "wounded" (1502) underscore the severe toll these incidents take on human lives.
+- **Settings and Circumstances:**
+Terms such as "neighborhood" (526), "party" (466), "home" (326), and "park" (230) suggest that many shootings occur in community or domestic settings, indicating potential hotspots for intervention.
+- **Incident Dynamics:**
+Words like "police" (409), "escalated" (231), and "drive" (290) imply law enforcement involvement and potential escalation dynamics in certain cases.
+- **Demographics:**
+Mentions of "woman" (251) and "adults" (231) may provide clues about the affected population.
+
 ### Sentiment Analysis
 Measure the overall sentiment (positive/negative/neutral) of the descriptions.
 
@@ -536,13 +576,14 @@ sentiment_analysis |>
 
 ```
 
+The sentiment analysis shows that the majority of the descriptions are negative, reflecting the tragic and violent nature of mass shooting events. The minimal positive sentiment likely stems from contextual or incidental language rather than any uplifting aspects.
+
 ### Topic Modeling (LDA)
 Identify underlying topics/themes in the descriptions.
 - Convert text into a document-term matrix.
 - Apply LDA to find clusters of words (topics).
 ```{r}
 library(topicmodels)
-library(tidytext)
 
 # Create document-term matrix
 dtm <- mass_shootings |> 
@@ -579,6 +620,14 @@ top_terms |>
   theme_minimal()
 
 ```
+
+The topics capture different dimensions of mass shootings, from settings and victims to consequences.
+
+- **Topic 1:** Focuses on **shootings in community settings**, with terms like "shooting," "wounded," "party," and "neighborhood," suggesting events often occur in social or residential areas.
+
+- **Topic 2:** Highlights the **human impact**, with words like "people," "injured," "wounded," and "police," indicating a focus on victims and law enforcement involvement.
+
+- **Topic 3:** Centers on **fatalities and violence**, with key terms "killed," "fire," and "shot," emphasizing the severity and outcomes of these incidents.
 
 ### Word Cloud
 Create a visual representation of the most frequent words.

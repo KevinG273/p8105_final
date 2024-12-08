@@ -372,6 +372,7 @@ div.tocify {
 </div>
 
 
+<p><br></p>
 <div id="modeling-total-shootings-for-each-state-using-regression"
 class="section level2">
 <h2>Modeling Total Shootings for each State using Regression</h2>
@@ -592,6 +593,7 @@ their effects overlap with each other and unemployment_rate (VIF =
 6.43). This multicollinearity may distort the coefficients, especially
 for poverty_rate, which shows a counterintuitive negative
 relationship.</p>
+<p><br></p>
 </div>
 <div id="steps-to-address-multicollinearity" class="section level3">
 <h3>Steps to Address Multicollinearity</h3>
@@ -692,6 +694,7 @@ longer a concern in the model.</p>
 <p>Removing <code>poverty_rate</code> and
 <code>bachelors_and_higher</code> resolved the previous collinearity
 issues, allowing for a more interpretable model.</p>
+<p><br></p>
 </div>
 </div>
 <div id="model-selection" class="section level3">
@@ -780,6 +783,7 @@ anova(nested_model, model_no_poverty_educate, test = &quot;Chisq&quot;)</code></
 <p>Since the p-value is 0.5083, We fail to reject the null hypothesis
 (H₀). This means that adding <code>unemployment_rate</code> does not
 significantly improve the model fit.</p>
+<p><br></p>
 </div>
 </div>
 <div id="validation-with-bootstrap-and-cross-validation"
@@ -887,6 +891,12 @@ ggplot(rmse_comparison, aes(x = model, y = rmse)) +
   ) +
   theme_minimal()</code></pre>
 <p><img src="modeling_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>From the violin plot, <code>unemployment_rate</code> does not
+meaningfully improve the model, as seen in both RMSE and earlier
+statistical tests. So the simpler model (without
+<code>unemployment_rate</code>) is preferred for its parsimony and
+stability.</p>
+<p><br></p>
 </div>
 </div>
 <div id="visualize-predictions" class="section level3">
@@ -914,6 +924,7 @@ higher observed values, the model tends to underpredict, as seen by the
 divergence of the blue trend line from the red reference line. Outliers
 with high observed or predicted values suggest the model struggles with
 extreme cases.</p>
+<p><br></p>
 <p>Finally, the Negative Binomial regression model is expressed as:</p>
 <p><span class="math display">\[
 \log(\text{E}[\text{Total Shootings}_i]) = 3.72 + 0.64 \cdot
@@ -931,6 +942,7 @@ associated with a 56% decrease in expected shootings</p></li>
 <li><p>Vacancy Rate: a 1-unit increase in scaled vacancy rate is
 associated with a 49% decrease in expected shootings</p></li>
 </ul>
+<p><br></p>
 </div>
 </div>
 <div id="classifying-risk-levels-of-regions-based-on-shooting-data"
@@ -938,9 +950,7 @@ class="section level2">
 <h2>Classifying Risk Levels of Regions Based on Shooting Data</h2>
 <p>Now let’s proceed to classify the regions into low-risk (&lt;100),
 medium-risk (100-200), and high-risk (&gt;200) categories and build a
-classification model based on this data. Since the dataset is small,
-we’ll use methods suitable for small datasets, such as Logistic
-Regression or Decision Trees.</p>
+classification model based on this data.</p>
 <div id="data-preparation" class="section level3">
 <h3>Data Preparation</h3>
 <pre class="r"><code># Add risk categories
@@ -1012,6 +1022,16 @@ multinom_model &lt;- multinom(risk_category ~ total_populationE + median_incomeE
 ## 
 ## Residual Deviance: 0.0008703844 
 ## AIC: 24.00087</code></pre>
+<ul>
+<li><p>The model fits the training data exceptionally well (Residual
+Deviance: 0.00087, AIC: 24.00), but large standard errors suggest
+potential multicollinearity or instability.</p></li>
+<li><p>The coefficients for predictors like
+<code>total_populationE</code> and <code>uninsured_rate</code> differ
+significantly between the <strong>Medium</strong> and
+<strong>High</strong> risk categories. This implies that these variables
+are key drivers in distinguishing between risk levels.</p></li>
+</ul>
 </div>
 <div id="evaluate-the-model" class="section level3">
 <h3>Evaluate the Model</h3>
@@ -1034,6 +1054,13 @@ cv_model &lt;- train(
 
 # View cross-validation results
 print(cv_model)</code></pre>
+<ul>
+<li><p>The model achieves an accuracy of 78.5% with a decay parameter of
+0.1, selected as optimal based on cross-validation.</p></li>
+<li><p>The Kappa score (0.39) indicates moderate agreement, suggesting
+the model is reasonably effective but could benefit from further
+refinement.</p></li>
+</ul>
 </div>
 <div id="predict-risk-categories-on-the-test-dataset"
 class="section level4">
@@ -1073,6 +1100,15 @@ confusionMatrix(predictions, test_data$risk_category)</code></pre>
 ## Detection Rate           0.5000        0.1000      0.1000
 ## Detection Prevalence     0.5000        0.3000      0.2000
 ## Balanced Accuracy        0.8571        0.6250      0.9444</code></pre>
+<ul>
+<li><p><strong>Overall Accuracy:</strong> The model achieved 70%
+accuracy, matching the No Information Rate (NIR) of 70%, indicating the
+model is not significantly better than random guessing (p-value =
+0.6496).</p></li>
+<li><p><strong>Kappa:</strong> The Kappa score (0.4737) suggests
+moderate agreement beyond chance, indicating reasonable classification
+performance.</p></li>
+</ul>
 </div>
 <div id="create-a-bar-plot-to-compare-actual-and-predicted-categories"
 class="section level4">
@@ -1134,6 +1170,17 @@ ggroc(map(roc_list$roc_curve, as.list)) +
   ) +
   theme_minimal()</code></pre>
 <p><img src="modeling_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<ul>
+<li><p><strong>Red (High Risk):</strong> The ROC curve shows strong
+performance for the “High” class, with high sensitivity and
+specificity.</p></li>
+<li><p><strong>Green (Low Risk):</strong> The curve demonstrates
+excellent performance for the “Low” class, nearly perfect.</p></li>
+<li><p><strong>Blue (Medium Risk):</strong> Moderate performance is
+observed for the “Medium” class, reflecting challenges in distinguishing
+this category.</p></li>
+</ul>
+<p><br></p>
 </div>
 </div>
 </div>
@@ -1190,6 +1237,20 @@ word_counts |&gt;
        x = &quot;Word&quot;,
        y = &quot;Frequency&quot;)</code></pre>
 <p><img src="modeling_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<ul>
+<li><strong>Human Impact:</strong> Words like “people” (2067), “killed”
+(1600), “injured” (1587), and “wounded” (1502) underscore the severe
+toll these incidents take on human lives.</li>
+<li><strong>Settings and Circumstances:</strong> Terms such as
+“neighborhood” (526), “party” (466), “home” (326), and “park” (230)
+suggest that many shootings occur in community or domestic settings,
+indicating potential hotspots for intervention.</li>
+<li><strong>Incident Dynamics:</strong> Words like “police” (409),
+“escalated” (231), and “drive” (290) imply law enforcement involvement
+and potential escalation dynamics in certain cases.</li>
+<li><strong>Demographics:</strong> Mentions of “woman” (251) and
+“adults” (231) may provide clues about the affected population.</li>
+</ul>
 </div>
 <div id="sentiment-analysis" class="section level3">
 <h3>Sentiment Analysis</h3>
@@ -1222,6 +1283,10 @@ sentiment_analysis |&gt;
        x = &quot;Sentiment&quot;,
        y = &quot;Percentage&quot;)</code></pre>
 <p><img src="modeling_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p>The sentiment analysis shows that the majority of the descriptions
+are negative, reflecting the tragic and violent nature of mass shooting
+events. The minimal positive sentiment likely stems from contextual or
+incidental language rather than any uplifting aspects.</p>
 </div>
 <div id="topic-modeling-lda" class="section level3">
 <h3>Topic Modeling (LDA)</h3>
@@ -1229,7 +1294,6 @@ sentiment_analysis |&gt;
 into a document-term matrix. - Apply LDA to find clusters of words
 (topics).</p>
 <pre class="r"><code>library(topicmodels)
-library(tidytext)
 
 # Create document-term matrix
 dtm &lt;- mass_shootings |&gt; 
@@ -1278,6 +1342,21 @@ top_terms</code></pre>
        y = &quot;Beta&quot;) +
   theme_minimal()</code></pre>
 <p><img src="modeling_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p>The topics capture different dimensions of mass shootings, from
+settings and victims to consequences.</p>
+<ul>
+<li><p><strong>Topic 1:</strong> Focuses on <strong>shootings in
+community settings</strong>, with terms like “shooting,” “wounded,”
+“party,” and “neighborhood,” suggesting events often occur in social or
+residential areas.</p></li>
+<li><p><strong>Topic 2:</strong> Highlights the <strong>human
+impact</strong>, with words like “people,” “injured,” “wounded,” and
+“police,” indicating a focus on victims and law enforcement
+involvement.</p></li>
+<li><p><strong>Topic 3:</strong> Centers on <strong>fatalities and
+violence</strong>, with key terms “killed,” “fire,” and “shot,”
+emphasizing the severity and outcomes of these incidents.</p></li>
+</ul>
 </div>
 </div>
 <div id="word-cloud" class="section level3">
