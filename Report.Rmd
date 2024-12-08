@@ -32,9 +32,11 @@ As the analysis progressed, additional questions emerged:
 
 **Sources**:
 
-* Incident Date: Mass shooting data was sourced from [Gun Violence Archive](https://www.gunviolencearchive.org/) and covers mass shootings from 2018 to 2024. 
-* City-Level Geographic Data: The SimpleMaps US cities dataset provided latitude (`lat`) and longitude (`lng`) for cities represented in the mass shooting data.
-* State-Level Demographics: State-level demographic and socioeconomic data were obtained from the U.S. Census website for analysis. 
+* **Wikipedia Mass Shootings in the US (2018–2024)**: Incident data including dates, locations, and casualty numbers. ([Source](https://en.wikipedia.org/wiki/List_of_mass_shootings_in_the_United_States_in_2024))
+
+   The link https://en.wikipedia.org/wiki/List_of_mass_shootings_in_the_United_States_in_2024 can be modified by replacing 2024 with a specific year (e.g., 2018, 2019, etc.) to navigate to separate pages and access data for different years.
+* **City-Level Geographic Data:** The SimpleMaps US cities dataset provided latitude (`lat`) and longitude (`lng`) for cities represented in the mass shooting data.
+* **State-Level Demographics:** State-level demographic and socioeconomic data were obtained from the U.S. Census website(Using API) for analysis.
 
 **Processing Steps**: 
 

@@ -22,21 +22,22 @@ Gun violence is a public health and safety issue in the United States, which con
 
 - **Analyze Temporal Trends**: Investigate changes in gun violence incidents over time (yearly and seasonal trends).
 - **Examine Geographic Disparities**: Identify high-risk states and cities, adjusting for population size to assess disparities.
-- **Assess Demographic Characteristics**: Explore victim demographics and incident characteristics (e.g., gang involvement, severity).
+- **Assess Demographic Characteristics**: Conduct statistical tests and modeling to explore the relationship between mass shootings and demographic factors in each state.
 - **Present Findings**: Use interactive visualizations and maps to communicate findings and raise awareness.
 
-### Methods
-We used publicly available data on gun violence incidents from 2018 to 2024. Key steps included:
+<br>
 
-- **Data Cleaning**: Standardizing and preparing data for analysis.
-- **Visualization**: Using advanced statistical tools and interactive visualizations to explore trends and patterns.
-- **Statistical Analysis**: Conducting tests to assess geographic and temporal differences, as well as associations with demographic factors.
+### Screencast
 
-### Data Sources
-We used publicly available datasets to analyze gun violence in the United States:
 
-- **Wikipedia Mass Shootings in thw US (2018–2024)**: Incident data including dates, locations, and demographics. ([Source](https://en.wikipedia.org/wiki/List_of_mass_shootings_in_the_United_States_in_2024))
+<iframe width="720" height="460" src="https://www.youtube.com/embed/tgfED5JzA_E" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-   The link https://en.wikipedia.org/wiki/List_of_mass_shootings_in_the_United_States_in_{2018-2024} can be modified by replacing {2018-2024} with a specific year (e.g., 2018, 2019, etc.) to navigate to separate pages and access data for different years.
 
-- **U.S. Census Bureau**: Population estimates for spatial normalization. ([Source](https://www2.census.gov/programs-surveys/popest/datasets/))
+
+
+
+
+
+
+
+
