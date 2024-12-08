@@ -714,6 +714,153 @@ class="section level4">
 </div>
 </div>
 </div>
+<div id="modeling" class="section level2">
+<h2>Modeling</h2>
+<p><br></p>
+<div id="modeling-total-shootings-for-each-state-using-regression"
+class="section level3">
+<h3>Modeling Total Shootings for Each State Using Regression</h3>
+<p><strong>Objective:</strong></p>
+<p>To identify key socioeconomic predictors of mass shootings across
+states.</p>
+<p><strong>Approach:</strong></p>
+<ul>
+<li>Performed Poisson regression and addressed overdispersion with
+Negative Binomial regression.</li>
+<li>Included predictors such as population, median income, unemployment
+rate, uninsured rate, and vacancy rate.</li>
+</ul>
+<p><strong>Key Findings:</strong></p>
+<ul>
+<li><p><strong>Significant Predictors:</strong></p>
+<ul>
+<li><p>Higher <strong>total population</strong> and <strong>uninsured
+rate</strong> are positively associated with mass shootings.</p></li>
+<li><p><strong>Median income</strong> and <strong>vacancy rate</strong>
+show negative associations.</p></li>
+</ul></li>
+<li><p><strong>Class Imbalance:</strong> Medium-risk and high-risk
+regions were harder to classify accurately due to data
+imbalance.</p></li>
+<li><p>Overdispersion was resolved using Negative Binomial regression,
+resulting in improved model fit (AIC = 480.16).</p></li>
+</ul>
+<p><br></p>
+</div>
+<div id="classifying-risk-levels-of-regions-based-on-shooting-data"
+class="section level3">
+<h3>Classifying Risk Levels of Regions Based on Shooting Data</h3>
+<p><strong>Objective:</strong></p>
+<p>To categorize states into <strong>Low</strong>,
+<strong>Medium</strong>, and <strong>High</strong> risk based on total
+shootings and predict their risk levels.</p>
+<p><strong>Approach:</strong></p>
+<ul>
+<li>Multinomial logistic regression was used for classification.</li>
+<li>Cross-validation and test set evaluation were performed to validate
+the model.</li>
+</ul>
+<p><strong>Key Findings:</strong></p>
+<ul>
+<li><p><strong>Model Accuracy:</strong></p>
+<ul>
+<li><p>Training accuracy was 78.5% (validated via k-fold
+cross-validation with decay = 0.1).</p></li>
+<li><p>Test accuracy was 70%, with moderate performance for minority
+classes (Medium and High risk).</p></li>
+</ul></li>
+<li><p><strong>Class-Wise Performance:</strong></p>
+<ul>
+<li><p><strong>Low Risk:</strong> Predicted with high sensitivity and
+specificity.</p></li>
+<li><p><strong>Medium Risk:</strong> Performance was moderate, with
+challenges in distinguishing this class.</p></li>
+<li><p><strong>High Risk:</strong> High sensitivity but low precision
+due to misclassifications.</p></li>
+</ul></li>
+<li><p><strong>ROC Analysis:</strong></p>
+<ul>
+<li><p>“Low” and “High” risk categories had near-perfect ROC
+curves.</p></li>
+<li><p>“Medium” showed weaker separability, highlighting the need for
+better representation of this class.</p></li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="text-analysis-of-the-mass-shootings" class="section level3">
+<h3>Text Analysis of the Mass Shootings</h3>
+<p><strong>Objective:</strong></p>
+<p>To extract insights and themes from the description of each shooting
+incident.</p>
+<p><strong>Approach:</strong></p>
+<ul>
+<li>Conducted word frequency analysis, sentiment analysis, topic
+modeling (LDA), and Named Entity Recognition (NER).</li>
+</ul>
+<p><strong>Key Findings:</strong></p>
+<ul>
+<li><p><strong>Word Frequency:</strong> Common terms include “shooting,”
+“wounded,” “police,” and “neighborhood,” emphasizing event descriptions
+and locations.</p></li>
+<li><p><strong>Sentiment Analysis:</strong> Text was predominantly
+negative, reflecting the tragic nature of the incidents.</p></li>
+<li><p><strong>Topic Modeling:</strong></p>
+<ul>
+<li><p><strong>Neighborhood shootings and disputes.</strong></p></li>
+<li><p><strong>Casualties and injuries during specific
+events.</strong></p></li>
+<li><p><strong>Fatalities and police involvement in severe
+incidents.</strong></p></li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+<div id="policy-implications" class="section level3">
+<h3>Policy Implications</h3>
+<p><strong>1. Targeted Interventions:</strong></p>
+<ul>
+<li>Regions with higher uninsured rates or lower incomes may benefit
+from increased community support and healthcare access.</li>
+<li>Medium-risk regions require specific strategies, as their
+classification posed challenges.</li>
+</ul>
+<p><strong>2. Event-Specific Policies:</strong></p>
+<ul>
+<li>Frequent mentions of shootings at gatherings (e.g., parties,
+neighborhoods) suggest the need for enhanced event security
+measures.</li>
+</ul>
+<p><strong>3. Awareness and Prevention:</strong></p>
+<ul>
+<li>Negative sentiment and recurring themes highlight the importance of
+public education on conflict resolution and mental health.</li>
+</ul>
+<p><br></p>
+</div>
+<div id="future-directions" class="section level3">
+<h3>Future Directions</h3>
+<ul>
+<li><p><strong>Enhanced Modeling:</strong></p>
+<ul>
+<li>Explore advanced models (e.g., Random Forests or XGBoost) to improve
+classification accuracy, especially for underrepresented risk
+levels.</li>
+</ul></li>
+<li><p><strong>Data Enrichment:</strong></p>
+<ul>
+<li>Combine shooting data with additional demographic or crime-related
+datasets to enhance model performance.</li>
+</ul></li>
+<li><p><strong>Text Analysis Expansion:</strong></p>
+<ul>
+<li>Use embeddings (e.g., word2vec, BERT) to capture deeper contextual
+meaning in descriptions for improved insights.</li>
+</ul></li>
+</ul>
+<p><br></p>
+</div>
+</div>
 <div id="discussion" class="section level2">
 <h2>Discussion</h2>
 <p>Our project focused on understanding trends in gun-related incidents

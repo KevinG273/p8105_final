@@ -189,6 +189,129 @@ The table above shows the 13 most severe gun-related incidents in the dataset, r
 
 ![](EDA_code_files/figure-html/map3.png)
 
+## Modeling
+
+<br>
+
+### Modeling Total Shootings for Each State Using Regression
+
+**Objective:**
+
+To identify key socioeconomic predictors of mass shootings across states.
+
+**Approach:**
+
+- Performed Poisson regression and addressed overdispersion with Negative Binomial regression.
+- Included predictors such as population, median income, unemployment rate, uninsured rate, and vacancy rate.
+
+**Key Findings:**
+
+- **Significant Predictors:**
+
+  - Higher **total population** and **uninsured rate** are positively associated with mass shootings.
+
+  - **Median income** and **vacancy rate** show negative associations.
+
+- **Class Imbalance:** Medium-risk and high-risk regions were harder to classify accurately due to data imbalance.
+
+- Overdispersion was resolved using Negative Binomial regression, resulting in improved model fit (AIC = 480.16).
+
+<br>
+
+### Classifying Risk Levels of Regions Based on Shooting Data
+
+**Objective:**
+
+To categorize states into **Low**, **Medium**, and **High** risk based on total shootings and predict their risk levels.
+
+**Approach:**
+
+- Multinomial logistic regression was used for classification.
+- Cross-validation and test set evaluation were performed to validate the model.
+
+**Key Findings:**
+
+- **Model Accuracy:**
+
+  - Training accuracy was 78.5% (validated via k-fold cross-validation with decay = 0.1).
+
+  - Test accuracy was 70%, with moderate performance for minority classes (Medium and High risk).
+  
+- **Class-Wise Performance:**
+
+  - **Low Risk:** Predicted with high sensitivity and specificity.
+
+  - **Medium Risk:** Performance was moderate, with challenges in distinguishing this class.
+
+  - **High Risk:** High sensitivity but low precision due to misclassifications.
+
+- **ROC Analysis:**
+
+  - "Low" and "High" risk categories had near-perfect ROC curves.
+
+  - "Medium" showed weaker separability, highlighting the need for better representation of this class.
+
+<br>
+
+### Text Analysis of the Mass Shootings
+
+**Objective:**
+
+To extract insights and themes from the description of each shooting incident.
+
+**Approach:**
+
+- Conducted word frequency analysis, sentiment analysis, topic modeling (LDA), and Named Entity Recognition (NER).
+
+**Key Findings:**
+
+- **Word Frequency:** Common terms include "shooting," "wounded," "police," and "neighborhood," emphasizing event descriptions and locations.
+
+- **Sentiment Analysis:** Text was predominantly negative, reflecting the tragic nature of the incidents.
+
+- **Topic Modeling:**
+
+  - **Neighborhood shootings and disputes.**
+
+  - **Casualties and injuries during specific events.**
+
+  - **Fatalities and police involvement in severe incidents.**
+
+<br>
+
+### Policy Implications
+
+**1. Targeted Interventions:**
+
+- Regions with higher uninsured rates or lower incomes may benefit from increased community support and healthcare access.
+- Medium-risk regions require specific strategies, as their classification posed challenges.
+
+**2. Event-Specific Policies:**
+
+- Frequent mentions of shootings at gatherings (e.g., parties, neighborhoods) suggest the need for enhanced event security measures.
+
+**3. Awareness and Prevention:**
+
+- Negative sentiment and recurring themes highlight the importance of public education on conflict resolution and mental health.
+
+<br>
+
+### Future Directions
+
+- **Enhanced Modeling:**
+
+  - Explore advanced models (e.g., Random Forests or XGBoost) to improve classification accuracy, especially for underrepresented risk levels.
+
+- **Data Enrichment:**
+
+  - Combine shooting data with additional demographic or crime-related datasets to enhance model performance.
+
+- **Text Analysis Expansion:**
+
+  - Use embeddings (e.g., word2vec, BERT) to capture deeper contextual meaning in descriptions for improved insights.
+
+<br>
+
 ## Discussion
 
 Our project focused on understanding trends in gun-related incidents by analyzing data across time and location. We began by identifying patterns year by year and then narrowed our focus to quarterly trends. Next, we examined geographic patterns, first by state and then by city, using GIS tools to map incident hotspots. Inspired by John Snow’s historical work on cholera mapping, we used this approach to uncover potential causes and effects of gun-related incidents across the United States. Finally, we analyzed details of individual incidents, including the number of victims, to differentiate between types of violence, such as suicides, intimate partner violence, and multi-victim crimes.
