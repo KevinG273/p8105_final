@@ -13,7 +13,7 @@ Gun violence remains a significant public health issue in the United States. Our
 
 ## Related Work
 
-Existing research on mass shootings has often focused on patterns of violence, gun control, and the social factors that influence the occurrence of these tragic events. Our project seeks to build on this body of research by employing statistical methods to reveal more refined insights into the data. The project draws inspiration from the Gun Violence Archive (GVA) website (which aggregates mass shooting data), and from recent academic literature focusing on geographic and temporal trends in gun violence. Classroom analyses of spatial data also guided this work.
+Existing research on mass shootings has often focused on patterns of violence, gun control, and the social factors that influence the occurrence of these tragic events. Our project seeks to build on this body of research by employing statistical methods to reveal more refined insights into the data. The project draws inspiration from the Gun Violence Archive (GVA) website (which aggregates mass shooting data), and from recent academic literature focusing on geographic and temporal trends in gun violence. 
 
 ## Initial Questions
 
